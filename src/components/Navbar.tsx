@@ -30,7 +30,6 @@ function Navbar() {
 		},
 		{
 			fallback: 'md',
-			ssr: false,
 		}
 	);
 
