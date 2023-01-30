@@ -12,6 +12,7 @@ import {
 	LinkBox,
 	LinkOverlay,
 	Stack,
+	StackDirection,
 	useBreakpointValue,
 	useDisclosure,
 } from '@chakra-ui/react';
@@ -22,7 +23,7 @@ import { useRef } from 'react';
 function Navbar() {
 	const btnRef = useRef();
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const direction = useBreakpointValue(
+	const directionResp = useBreakpointValue(
 		{
 			base: 'column',
 			md: 'row',
@@ -50,18 +51,18 @@ function Navbar() {
 			<Container
 				maxWidth="100%"
 				display="flex"
-				justifyContent={direction === 'row' ? 'space-between' : 'start'}
-				ps={direction === 'row' ? '5' : '0'}
+				justifyContent={directionResp === 'row' ? 'space-between' : 'start'}
+				ps={directionResp === 'row' ? '5' : '0'}
 				alignItems="center"
 				gap="5"
 				opacity="1"
 			>
-				<Box display={direction === 'row' ? 'none' : 'block'}>
+				<Box display={directionResp === 'row' ? 'none' : 'block'}>
 					<Box ref={btnRef.current} onClick={onOpen} role="button">
 						<HamburgerIcon boxSize={5} />
 					</Box>
 					<Drawer
-						isOpen={direction === 'row' ? false : isOpen}
+						isOpen={directionResp === 'row' ? false : isOpen}
 						placement="left"
 						onClose={onClose}
 						finalFocusRef={btnRef.current}
@@ -95,8 +96,8 @@ function Navbar() {
 					</LinkOverlay>
 				</LinkBox>
 				<Stack
-					direction={direction}
-					display={direction === 'row' ? 'block' : 'none'}
+					direction={directionResp as StackDirection}
+					display={directionResp === 'row' ? 'block' : 'none'}
 				>
 					<Link as={NextLink} href="/product">
 						<Button variant="ghost" colorScheme="teal">
