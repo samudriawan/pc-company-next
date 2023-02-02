@@ -19,9 +19,20 @@ const theme = extendTheme({
 				bg: 'black',
 				color: 'white',
 			},
-			main: {
-				paddingBlock: '2rem',
-			},
+		},
+	},
+	colors: {
+		neon: {
+			blue: '#4d4dff',
+			shadeBlue: '#7669ff',
+			magenta: '#ea00ff',
+			shadeMagenta: '#c700de',
+		},
+		accent: {
+			lemon: '#ffff4d',
+			green: '#4dffa6',
+			grey: '#3e4756',
+			shadeGrey: '#5f6878',
 		},
 	},
 });
