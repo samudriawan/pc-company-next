@@ -1,4 +1,5 @@
 // import '@/styles/globals.css'
+import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { ChakraProvider, CSSReset } from '@chakra-ui/react';
 import { SkipNavLink } from '@chakra-ui/skip-nav';
@@ -12,6 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
 			<SkipNavLink zIndex="99999">Skip to content</SkipNavLink>
 			<Navbar />
 			<Component {...pageProps} />
+			<Footer />
 		</ChakraProvider>
 	);
 }
