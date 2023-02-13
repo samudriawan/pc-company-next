@@ -91,9 +91,9 @@ export default function Footer() {
 					</Stack>
 				</SimpleGrid>
 			</Container>
-			<Box py={10}>
+			<Box mt={20} pt={10} pb={8}>
 				<Divider />
-				<Text pt={6} fontSize={'sm'} textAlign={'center'}>
+				<Text pt={8} fontSize={'sm'} textAlign={'center'}>
 					© 2022 Chakra Templates. All rights reserved
 				</Text>
 			</Box>

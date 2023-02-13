@@ -30,14 +30,6 @@ function Product() {
 					paddingTop="2rem"
 					paddingBottom="3rem"
 				>
-					<Button
-						colorScheme="cyan"
-						onClick={() => router.push('/')}
-						position="sticky"
-					>
-						Back
-					</Button>
-
 					{/* starter pc series card */}
 					<Box>
 						<Heading marginBottom="2rem">Starter Series</Heading>
