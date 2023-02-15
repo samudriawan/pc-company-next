@@ -15,6 +15,10 @@ import {
 	Heading,
 	Icon,
 	LinkOverlay,
+	Popover,
+	PopoverBody,
+	PopoverContent,
+	PopoverTrigger,
 	Select,
 	Stack,
 	Tab,
@@ -23,14 +27,16 @@ import {
 	TabPanels,
 	Tabs,
 	Text,
+	Tooltip,
 	VStack,
 } from '@chakra-ui/react';
 import { HiThumbDown, HiThumbUp } from 'react-icons/hi';
+import { FaTwitter, FaInstagram } from 'react-icons/fa';
 import Head from 'next/head';
 import Image from 'next/image';
 import { default as NextLink } from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { GetStaticPropsContext, GetStaticPropsResult } from 'next';
 
 type slugProps = {
@@ -41,10 +47,7 @@ type pageParams = {
 };
 
 export default function ProductInfo(props: slugProps) {
-	const [reviewsLikeCount, setReviewsLikeCount] = useState({
-		clicked: false,
-		value: 0,
-	});
+	const [reviewsLikeCount, setReviewsLikeCount] = useState(false);
 	const [reviewsDisikeCount, setReviewsDislikeCount] = useState(false);
 	const qtyRef = useRef(null);
 	const router = useRouter();
@@ -71,15 +74,13 @@ export default function ProductInfo(props: slugProps) {
 	const handleReviewsLikeBtn = (action: string): void => {
 		switch (action) {
 			case 'like':
-				setReviewsLikeCount({
-					...reviewsLikeCount,
-					clicked: !reviewsLikeCount.clicked,
-				});
-				// console.log(reviewsLikeCount);
+				setReviewsLikeCount((prev) => !prev);
+				if (reviewsDisikeCount) setReviewsDislikeCount(false);
 				break;
 
 			case 'dislike':
 				setReviewsDislikeCount((prev) => !prev);
+				if (reviewsLikeCount) setReviewsLikeCount(false);
 				break;
 
 			default:
@@ -819,8 +820,10 @@ export default function ProductInfo(props: slugProps) {
 
 						{/* reviews */}
 						<TabPanel>
-							<Stack direction="row" alignItems="center">
-								<Heading>4</Heading>
+							<Stack direction="row" alignItems="center" gap="2">
+								<Text fontSize={'2.5rem'} fontWeight={'bold'}>
+									4
+								</Text>
 								<Box display="flex" mt="2" alignItems="center">
 									{Array(5)
 										.fill('')
@@ -828,14 +831,18 @@ export default function ProductInfo(props: slugProps) {
 											<StarIcon
 												key={i}
 												color={i < 4 ? 'neon.blue' : 'gray.300'}
+												fontSize={'1.3rem'}
 											/>
 										))}
 								</Box>
-								<Text>Total Reviews</Text>
+								<Text color={'whiteAlpha.700'}>Total Reviews</Text>
 							</Stack>
 							<Box>
-								<Text>Filter Reviews</Text>
-								<Select w={{ base: '100%', md: 'fit-content' }}>
+								<Select
+									w={{ base: '100%', md: 'fit-content' }}
+									my="1.5rem"
+									defaultValue={'all'}
+								>
 									<option value="all">All</option>
 									<option value="5">5</option>
 									<option value="4">4</option>
@@ -846,8 +853,11 @@ export default function ProductInfo(props: slugProps) {
 								<Divider />
 							</Box>
 
-							<Text>Total Reviews</Text>
-							<Grid templateColumns={{ sm: '1fr', md: '1fr 1fr' }} gap="1rem">
+							<Grid
+								templateColumns={{ sm: '1fr', md: '1fr 1fr' }}
+								gap="1rem"
+								my="1.5rem"
+							>
 								{Array(10)
 									.fill('')
 									.map((_, i) => (
@@ -881,13 +891,66 @@ export default function ProductInfo(props: slugProps) {
 												</CardBody>
 
 												<CardFooter justify="space-between" flexWrap="wrap">
-													<Button
-														size="sm"
-														variant="ghost"
-														leftIcon={<ExternalLinkIcon />}
-													>
-														Share
-													</Button>
+													<Popover placement="right" isLazy gutter={3}>
+														<PopoverTrigger>
+															<Button
+																size="sm"
+																variant="ghost"
+																leftIcon={<ExternalLinkIcon />}
+															>
+																Share
+															</Button>
+														</PopoverTrigger>
+														<PopoverContent w={'fit-content'}>
+															<PopoverBody>
+																<Flex gap="5">
+																	<Tooltip
+																		label="twitter"
+																		placement="top"
+																		shouldWrapChildren
+																	>
+																		<NextLink
+																			href={
+																				'https://twitter.com/intent/tweet?url=dzpc.com&text=reviews&via=dzpc&hashtags=prebuilt,gamingpc,dzpc'
+																			}
+																			passHref
+																			legacyBehavior
+																		>
+																			<a
+																				href="https://twitter.com/intent/tweet?url=dzpc.com&text=reviews&via=dzpc&hashtags=prebuilt,gamingpc,dzpc"
+																				target="_blank"
+																				rel="noopener noreferrer"
+																			>
+																				<FaTwitter />
+																			</a>
+																		</NextLink>
+																	</Tooltip>
+																	<Tooltip
+																		label="instagram"
+																		placement="top"
+																		shouldWrapChildren
+																	>
+																		<NextLink
+																			href={
+																				'https://twitter.com/intent/tweet?url=dzpc.com&text=reviews&via=dzpc&hashtags=prebuilt,gamingpc,dzpc'
+																			}
+																			passHref
+																			legacyBehavior
+																		>
+																			<a
+																				href="https://twitter.com/intent/tweet?url=dzpc.com&text=reviews&via=dzpc&hashtags=prebuilt,gamingpc,dzpc"
+																				target="_blank"
+																				rel="noopener noreferrer"
+																			>
+																				<FaInstagram />
+																			</a>
+																		</NextLink>
+																	</Tooltip>
+																</Flex>
+															</PopoverBody>
+														</PopoverContent>
+													</Popover>
+
 													<Flex alignItems="center" gap={4}>
 														<Flex gap={1}>
 															<Icon
@@ -900,7 +963,7 @@ export default function ProductInfo(props: slugProps) {
 																Like
 															</Icon>
 															<Text alignSelf="center">
-																{reviewsLikeCount.clicked ? 1 : 0}
+																{reviewsLikeCount ? 1 : 0}
 															</Text>
 														</Flex>
 														<Flex gap={1}>
