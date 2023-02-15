@@ -83,7 +83,7 @@ export default function Footer() {
 						<ListHeader>Product</ListHeader>
 						<Link href={'#'}>Prebuilt PC</Link>
 						<Link href={'#'}>FAQ</Link>
-						<Link href={'#'}>Reviews</Link>
+						<Link href={'/reviews'}>Reviews</Link>
 					</Stack>
 					<Stack align={'flex-start'}>
 						<ListHeader>Account</ListHeader>
