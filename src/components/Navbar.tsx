@@ -67,7 +67,7 @@ function Navbar() {
 						finalFocusRef={btnRef.current}
 					>
 						<DrawerOverlay />
-						<DrawerContent>
+						<DrawerContent bgColor={'accent.grey'}>
 							<DrawerCloseButton top="5" left="4" />
 
 							<DrawerBody
@@ -89,6 +89,7 @@ function Navbar() {
 						</DrawerContent>
 					</Drawer>
 				</Box>
+
 				<LinkBox h="100%">
 					<LinkOverlay as={NextLink} href="/">
 						<Heading size="lg">DZ PC</Heading>
@@ -101,11 +102,6 @@ function Navbar() {
 					<Link as={NextLink} href="/product">
 						<Button variant="ghost" colorScheme="teal">
 							Prebuilt Gaming PCs
-						</Button>
-					</Link>
-					<Link as={NextLink} href="/product">
-						<Button variant="ghost" colorScheme="teal">
-							Build A Custom PC
 						</Button>
 					</Link>
 					<Link as={NextLink} href="/about">

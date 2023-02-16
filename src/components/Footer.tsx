@@ -55,10 +55,7 @@ const ListHeader = ({ children }: { children: ReactNode }) => {
 
 export default function Footer() {
 	return (
-		<Box
-			bg={useColorModeValue('gray.50', 'gray.900')}
-			color={useColorModeValue('gray.700', 'gray.200')}
-		>
+		<Box bg={'whiteAlpha.200'}>
 			<Container as={Stack} maxW={'6xl'} py={10} marginInline={5}>
 				<Stack direction={'row'} spacing={6} mb={8}>
 					<SocialButton label={'Twitter'} href={'#'}>
@@ -75,13 +72,13 @@ export default function Footer() {
 				<SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={8}>
 					<Stack align={'flex-start'}>
 						<ListHeader>Contact</ListHeader>
-						<Link href={'#'}>About</Link>
+						<Link href={'/about'}>About</Link>
 						<Link href={'#'}>Customer Support</Link>
 						<Link href={'#'}>Submit a Request</Link>
 					</Stack>
 					<Stack align={'flex-start'}>
 						<ListHeader>Product</ListHeader>
-						<Link href={'#'}>Prebuilt PC</Link>
+						<Link href={'/product'}>Prebuilt PC</Link>
 						<Link href={'#'}>FAQ</Link>
 						<Link href={'/reviews'}>Reviews</Link>
 					</Stack>
@@ -91,7 +88,7 @@ export default function Footer() {
 					</Stack>
 				</SimpleGrid>
 			</Container>
-			<Box mt={20} pt={10} pb={8}>
+			<Box mt={20} pt={6} pb={8}>
 				<Divider />
 				<Text pt={8} fontSize={'sm'} textAlign={'center'}>
 					© 2022 Chakra Templates. All rights reserved
