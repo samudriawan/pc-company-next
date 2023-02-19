@@ -9,6 +9,12 @@ import {
 	Center,
 	Container,
 	Divider,
+	Drawer,
+	DrawerBody,
+	DrawerCloseButton,
+	DrawerContent,
+	DrawerHeader,
+	DrawerOverlay,
 	Flex,
 	Grid,
 	GridItem,
@@ -28,6 +34,7 @@ import {
 	Tabs,
 	Text,
 	Tooltip,
+	useDisclosure,
 	VStack,
 } from '@chakra-ui/react';
 import { HiThumbDown, HiThumbUp } from 'react-icons/hi';
@@ -49,8 +56,10 @@ type pageParams = {
 export default function ProductInfo(props: slugProps) {
 	const [reviewsLikeCount, setReviewsLikeCount] = useState(false);
 	const [reviewsDisikeCount, setReviewsDislikeCount] = useState(false);
+	const addToCartBtnRef = useRef(null);
 	const qtyRef = useRef(null);
 	const router = useRouter();
+	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const queryUrl = router.query.slug;
 	const series: string = (queryUrl as string).split('-')[0];
@@ -294,15 +303,89 @@ export default function ProductInfo(props: slugProps) {
 							</Stack>
 							<Button
 								w="100%"
+								size="lg"
 								bg="neon.blue"
-								paddingBlock="1.3rem"
 								marginBlock="3rem"
 								transition="transform 200ms ease"
 								fontSize="1.1rem"
-								_hover={{ transform: 'scale(1.02)' }}
+								_hover={{ transform: 'scale(1.03)' }}
+								_active={{ transform: 'scale(0.97)' }}
+								ref={addToCartBtnRef}
+								onClick={onOpen}
 							>
 								Add to cart
 							</Button>
+
+							{/* start of add to cart drawer */}
+							<Drawer
+								isOpen={isOpen}
+								placement="right"
+								onClose={onClose}
+								finalFocusRef={addToCartBtnRef}
+								size={{ base: 'xs', md: 'sm' }}
+							>
+								<DrawerOverlay />
+								<DrawerContent>
+									<DrawerHeader>
+										Added to cart
+										<DrawerCloseButton top="4" right="6" />
+									</DrawerHeader>
+									<Divider />
+
+									<DrawerBody position={'relative'} py="4">
+										<Flex
+											gap={{ base: 2, md: 8 }}
+											w="100%"
+											height={'max-content'}
+											justifyContent={'space-between'}
+										>
+											<Box w={'64px'} h="64px" position="relative">
+												<Image
+													alt="image placeholder"
+													fill
+													src={
+														'https://via.placeholder.com/1000x1000.png/09f/fff'
+													}
+												/>
+											</Box>
+											<Stack flexGrow={1}>
+												<Text
+													as={'span'}
+													fontSize={'1.1rem'}
+													fontWeight={'bold'}
+												>
+													Product name
+												</Text>
+											</Stack>
+											<Text color={'whiteAlpha.700'}>
+												{new Intl.NumberFormat('id-ID', {
+													style: 'currency',
+													currency: 'IDR',
+												}).format(17000000)}
+											</Text>
+										</Flex>
+										<Button
+											position={'fixed'}
+											bottom="5.5rem"
+											w="calc(100% - 48px)"
+											bg="neon.blue"
+											transition="transform 200ms ease"
+											fontSize="1.1rem"
+											size="lg"
+											_hover={{ transform: 'scale(1.02)' }}
+											_active={{ transform: 'scale(0.97)' }}
+											onClick={() => {
+												router.push('/cart');
+												onClose();
+											}}
+										>
+											View Cart
+										</Button>
+									</DrawerBody>
+								</DrawerContent>
+							</Drawer>
+							{/* end of add to cart drawer */}
+
 							<Box alignSelf="center">
 								<Stack direction="row" justifyContent="center" fontSize="lg">
 									<Text>Warranty - Parts & Services: 2 Years</Text>

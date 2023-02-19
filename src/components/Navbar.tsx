@@ -8,15 +8,19 @@ import {
 	DrawerContent,
 	DrawerOverlay,
 	Heading,
+	Icon,
 	Link,
 	LinkBox,
 	LinkOverlay,
 	Stack,
 	StackDirection,
+	Tag,
 	useBreakpointValue,
 	useDisclosure,
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
+import { BsCart2 } from 'react-icons/bs';
+import { FiUser } from 'react-icons/fi';
 import { default as NextLink } from 'next/link';
 import { useRef } from 'react';
 
@@ -105,8 +109,37 @@ function Navbar() {
 						</Button>
 					</Link>
 					<Link as={NextLink} href="/about">
-						<Button variant="ghost" colorScheme="teal">
+						<Button variant="ghost" colorScheme="teal" m="auto">
 							About
+						</Button>
+					</Link>
+					{/* <Link as={NextLink} href="#">
+						<Button variant="unstyled" _hover={{ color: 'neon.blue' }}>
+							<Icon as={FiUser} fontSize="1.7rem" />
+						</Button>
+					</Link> */}
+					<Link as={NextLink} href="/cart">
+						<Button
+							variant="unstyled"
+							_hover={{ color: 'neon.blue' }}
+							position="relative"
+						>
+							<Icon as={BsCart2} fontSize="1.7rem" />
+							<Tag
+								size={'sm'}
+								variant="solid"
+								rounded={'full'}
+								position="absolute"
+								top="0"
+								right="0"
+								bg={'white'}
+								color="black"
+								px="1.5"
+								fontSize={'1rem'}
+								fontWeight={'bold'}
+							>
+								1
+							</Tag>
 						</Button>
 					</Link>
 				</Stack>
