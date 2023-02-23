@@ -1,6 +1,7 @@
 // import '@/styles/globals.css'
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
+import CartContextProvider from '@/context/cartContext';
 import { ChakraProvider, CSSReset } from '@chakra-ui/react';
 import { SkipNavLink } from '@chakra-ui/skip-nav';
 import type { AppProps } from 'next/app';
@@ -11,9 +12,11 @@ export default function App({ Component, pageProps }: AppProps) {
 		<ChakraProvider theme={theme}>
 			<CSSReset />
 			<SkipNavLink zIndex="99999">Skip to content</SkipNavLink>
-			<Navbar />
-			<Component {...pageProps} />
-			<Footer />
+			<CartContextProvider>
+				<Navbar />
+				<Component {...pageProps} />
+				<Footer />
+			</CartContextProvider>
 		</ChakraProvider>
 	);
 }
