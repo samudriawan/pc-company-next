@@ -25,19 +25,26 @@ import {
 import Head from 'next/head';
 import Image from 'next/image';
 import { default as NextLink } from 'next/link';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
+import { CartContext, CART_ACTION } from '@/context/cartContext';
 
 export default function Cart() {
-	const [qty, setQty] = useState(1);
-	const [price, setPrice] = useState(17000000);
+	const { state: cartItems, dispatch } = useContext(CartContext);
+	// const [price, setPrice] = useState(() =>
+	// 	cartItems.map((item) => item.productPrice)
+	// );
 	const [subTotal, setSubTotal] = useState(0);
 	const qtyInputRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
-		setSubTotal(qty * price);
-	}, [qty]);
+		setSubTotal(() => {
+			return cartItems
+				.map((item) => item.qty * item.productPrice)
+				.reduce((acc, curr) => acc + curr, 0);
+		});
+	}, [cartItems]);
 
-	if (!qty)
+	if (cartItems.length === 0)
 		return (
 			<>
 				<Head>
@@ -220,113 +227,151 @@ export default function Cart() {
 				>
 					<Grid
 						templateColumns={{ sm: '1', md: 'repeat(12,minmax(0,1fr))' }}
-						gap={4}
+						gap={8}
 						my={6}
 					>
 						{/* item info */}
-						<GridItem pb={20} gridColumn={{ base: '1fr', md: 'span 7' }}>
+						<GridItem
+							pb={{ base: 10, md: 20 }}
+							gridColumn={{ base: '1fr', md: 'span 7' }}
+						>
 							<Stack
 								direction={'row'}
 								justifyContent={'space-between'}
 								alignItems={'center'}
 							>
 								<Heading>Cart</Heading>
-								<Text fontSize={'1.2rem'} letterSpacing="4px">
-									({qty})
+								<Text fontSize={'1.2rem'} letterSpacing="2px">
+									(
+									<Text as="span">
+										{cartItems
+											.map((item) => item.qty)
+											.reduce((acc, curr) => acc + curr, 0)}
+									</Text>
+									)
 								</Text>
 							</Stack>
 							<Divider my={4} />
 
-							<Flex
-								gap={{ base: 4, md: 8 }}
-								w="100%"
-								height={'max-content'}
-								justifyContent={'space-between'}
-							>
-								<Box w={'64px'} h="64px">
-									<Image
-										alt="image placeholder"
-										width={64}
-										height={64}
-										src={'https://via.placeholder.com/1000x1000.png/09f/fff'}
-									/>
-								</Box>
-								<Stack flexGrow={1}>
-									<Text
-										as={'span'}
-										mb={4}
-										fontSize={'1.1rem'}
-										fontWeight={'bold'}
-									>
-										Product name
-									</Text>
+							{/* TODO: refactor */}
+							{cartItems.map((item, i) => (
+								<Flex
+									key={i}
+									gap={{ base: 4, md: 8 }}
+									w="100%"
+									// mb="4"
+									pt={i === 0 ? 0 : 6}
+									pb={6}
+									height={'max-content'}
+									justifyContent={'space-between'}
+									borderTop={i === 0 ? '' : '1px solid grey'}
+								>
+									<Box w={'64px'} h="64px">
+										<Image
+											alt="image placeholder"
+											width={64}
+											height={64}
+											src={'https://via.placeholder.com/1000x1000.png/09f/fff'}
+										/>
+									</Box>
+									<Stack flexGrow={1}>
+										<Text
+											as={'span'}
+											mb={4}
+											fontSize={'1.1rem'}
+											fontWeight={'bold'}
+										>
+											{/* Product name */}
+											{item.productName}
+										</Text>
 
-									<Stack>
-										<InputGroup verticalAlign={'center'}>
-											<InputLeftAddon p={0}>
-												<Button
-													variant={'unstyled'}
-													roundedRight={0}
-													lineHeight="2"
-													onClick={() => setQty((prev) => prev - 1)}
-												>
-													-
-												</Button>
-											</InputLeftAddon>
-											<Input
-												type="number"
-												min={1}
-												ref={qtyInputRef}
-												value={qty}
-												onChange={(e) => {
-													const stripNonNumber = e.target.value.replace(
-														/\D/g,
-														''
-													);
-													if (!stripNonNumber) {
-														return;
-													} else {
-														setQty(parseInt(e.target.value));
-													}
-												}}
-												rounded={0}
-												textAlign="center"
-												w={10}
-												p={2}
-											/>
-											<InputRightAddon p={0}>
-												<Button
-													variant={'unstyled'}
-													roundedLeft={0}
-													onClick={() => setQty((prev) => prev + 1)}
-												>
-													+
-												</Button>
-											</InputRightAddon>
-										</InputGroup>
+										<Stack>
+											<InputGroup verticalAlign={'center'}>
+												<InputLeftAddon p={0}>
+													<Button
+														variant={'unstyled'}
+														roundedRight={0}
+														lineHeight="2"
+														onClick={() => {
+															if (item.qty === 1) return;
+
+															dispatch({
+																type: CART_ACTION.SUBSTRACT_QTY,
+																payload: item,
+															});
+														}}
+													>
+														-
+													</Button>
+												</InputLeftAddon>
+												<Input
+													type="number"
+													min={1}
+													ref={qtyInputRef}
+													value={item.qty.toString()}
+													onChange={(e) => {
+														const stripNonNumber = e.target.value.replace(
+															/\D/g,
+															''
+														);
+														if (!stripNonNumber) {
+															return;
+														} else {
+															dispatch({
+																type: CART_ACTION.SET_QTY,
+																payload: { ...item, qty: +e.target.value },
+															});
+														}
+													}}
+													rounded={0}
+													textAlign="center"
+													w={10}
+													p={2}
+												/>
+												<InputRightAddon p={0}>
+													<Button
+														variant={'unstyled'}
+														roundedLeft={0}
+														onClick={() =>
+															dispatch({
+																type: CART_ACTION.ADD_QTY,
+																payload: item,
+															})
+														}
+													>
+														+
+													</Button>
+												</InputRightAddon>
+											</InputGroup>
+										</Stack>
 									</Stack>
-								</Stack>
-								<Stack justifyContent={'space-between'} alignItems={'center'}>
-									<Button
-										rightIcon={<DeleteIcon />}
-										variant={'ghost'}
-										alignSelf="end"
-										_hover={{
-											bgColor: 'none',
-										}}
-										_active={{
-											bgColor: 'none',
-										}}
-										onClick={() => setQty(0)}
-									></Button>
-									<Text color={'whiteAlpha.700'}>
-										{new Intl.NumberFormat('id-ID', {
-											style: 'currency',
-											currency: 'IDR',
-										}).format(price)}
-									</Text>
-								</Stack>
-							</Flex>
+									<Stack justifyContent={'space-between'} alignItems={'center'}>
+										<Button
+											rightIcon={<DeleteIcon />}
+											variant={'ghost'}
+											alignSelf="end"
+											_hover={{
+												bgColor: 'none',
+											}}
+											_active={{
+												bgColor: 'none',
+											}}
+											onClick={() =>
+												dispatch({
+													type: CART_ACTION.DELETE_ITEM,
+													payload: item,
+												})
+											}
+										></Button>
+										<Text color={'whiteAlpha.700'}>
+											{new Intl.NumberFormat('id-ID', {
+												style: 'currency',
+												currency: 'IDR',
+											}).format(item.productPrice)}
+										</Text>
+									</Stack>
+								</Flex>
+							))}
 						</GridItem>
 
 						{/* summary */}

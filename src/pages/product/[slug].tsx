@@ -43,8 +43,9 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { default as NextLink } from 'next/link';
 import { useRouter } from 'next/router';
-import { useRef, useState } from 'react';
+import { useRef, useState, useContext } from 'react';
 import { GetStaticPropsContext, GetStaticPropsResult } from 'next';
+import { CartContext, CART_ACTION, Cart } from '@/context/cartContext';
 
 type slugProps = {
 	slug: string | undefined;
@@ -54,19 +55,25 @@ type pageParams = {
 };
 
 export default function ProductInfo(props: slugProps) {
+	const [itemInfo, setItemInfo] = useState<Cart>({
+		productName: '',
+		productImgUrl: '',
+		productPrice: 0,
+		qty: 0,
+	});
 	const [reviewsLikeCount, setReviewsLikeCount] = useState(false);
 	const [reviewsDisikeCount, setReviewsDislikeCount] = useState(false);
 	const addToCartBtnRef = useRef(null);
-	const qtyRef = useRef(null);
+	const qtyRef = useRef<HTMLSelectElement>(null);
 	const router = useRouter();
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { state: cartItems, dispatch } = useContext(CartContext);
 
 	const queryUrl = router.query.slug;
 	const series: string = (queryUrl as string).split('-')[0];
 	const seriesCapitalize: string =
 		series.charAt(0).toUpperCase() + series.slice(1);
 	// starter-plus-pc
-
 	// console.log(props?.slug?.includes('plus'));
 
 	const formatQueryString = (query: string | undefined): string => {
@@ -79,6 +86,27 @@ export default function ProductInfo(props: slugProps) {
 
 		return result.join(' ');
 	};
+
+	function handleAddToCart() {
+		if (qtyRef.current) {
+			let newItem: Cart = {
+				productName: formatQueryString(queryUrl as string),
+				productImgUrl: 'https://via.placeholder.com/1000x1000.png/09f/fff',
+				productPrice: 17000000,
+				qty: +qtyRef.current.value,
+			};
+			dispatch({ type: CART_ACTION.ADD_CART, payload: newItem });
+			setItemInfo(newItem);
+
+			if (parseInt(qtyRef?.current?.value) === 1) {
+				onOpen();
+				return;
+			} else {
+				router.push('/cart');
+				return;
+			}
+		}
+	}
 
 	const handleReviewsLikeBtn = (action: string): void => {
 		switch (action) {
@@ -194,10 +222,6 @@ export default function ProductInfo(props: slugProps) {
 		return items;
 	}
 
-	// recommendItems();
-
-	// console.log(prefersReducedMotion);
-
 	return (
 		<>
 			<Head>
@@ -288,7 +312,7 @@ export default function ProductInfo(props: slugProps) {
 								marginBlock="3rem"
 							>
 								<Center>Qty:</Center>
-								<Select ref={qtyRef}>
+								<Select ref={qtyRef} defaultValue={'1'}>
 									<option value="1">1</option>
 									<option value="2">2</option>
 									<option value="3">3</option>
@@ -311,7 +335,7 @@ export default function ProductInfo(props: slugProps) {
 								_hover={{ transform: 'scale(1.03)' }}
 								_active={{ transform: 'scale(0.97)' }}
 								ref={addToCartBtnRef}
-								onClick={onOpen}
+								onClick={handleAddToCart}
 							>
 								Add to cart
 							</Button>
@@ -354,14 +378,15 @@ export default function ProductInfo(props: slugProps) {
 													fontSize={'1.1rem'}
 													fontWeight={'bold'}
 												>
-													Product name
+													{/* Product name */}
+													{itemInfo.productName}
 												</Text>
 											</Stack>
 											<Text color={'whiteAlpha.700'}>
 												{new Intl.NumberFormat('id-ID', {
 													style: 'currency',
 													currency: 'IDR',
-												}).format(17000000)}
+												}).format(itemInfo.productPrice)}
 											</Text>
 										</Flex>
 										<Button
