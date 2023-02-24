@@ -35,8 +35,6 @@ function Navbar() {
 		}
 	);
 
-	// console.log(cartQty);
-
 	return (
 		<Box
 			position="sticky"
@@ -115,7 +113,7 @@ function Navbar() {
 							About
 						</Button>
 					</Link>
-					<Link as={NextLink} href="/user/settings">
+					<Link as={NextLink} href="/auth/signin">
 						<Button variant="unstyled" _hover={{ color: 'neon.blue' }}>
 							<Icon as={FiUser} fontSize="1.7rem" />
 						</Button>
