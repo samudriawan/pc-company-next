@@ -4,7 +4,11 @@ import { default as NextLink } from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 import { BsCart2 } from 'react-icons/bs';
 
-export default function CartButton() {
+type Props = {
+	direction?: string;
+};
+
+export default function CartButton({ direction }: Props) {
 	const { state: carts } = useContext(CartContext);
 	const [cartQty, setCartQty] = useState(() => {
 		return carts.reduce((acc, curr) => acc + curr.qty, 0);
@@ -20,6 +24,13 @@ export default function CartButton() {
 				variant="unstyled"
 				_hover={{ color: 'neon.blue' }}
 				position="relative"
+				// sx={{
+				// 	position: direction === 'row' ? 'relative' : 'fixed',
+				// 	// position: 'fixed',
+				// 	top: 0,
+				// 	right: 0,
+				// 	display: 'block',
+				// }}
 			>
 				<Icon as={BsCart2} fontSize="1.7rem" />
 				<Tag

@@ -13,12 +13,11 @@ import {
 	LinkBox,
 	LinkOverlay,
 	Stack,
-	StackDirection,
 	useBreakpointValue,
 	useDisclosure,
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
-// import { FiUser } from 'react-icons/fi';
+import { FiUser } from 'react-icons/fi';
 import { default as NextLink } from 'next/link';
 import { useRef } from 'react';
 import CartButton from './CartButton';
@@ -101,8 +100,10 @@ function Navbar() {
 					</LinkOverlay>
 				</LinkBox>
 				<Stack
-					direction={directionResp as StackDirection}
-					display={directionResp === 'row' ? 'block' : 'none'}
+					direction={'row'}
+					display={directionResp === 'row' ? 'flex' : 'none'}
+					justifySelf={'end'}
+					alignSelf="end"
 				>
 					<Link as={NextLink} href="/product">
 						<Button variant="ghost" colorScheme="teal">
@@ -114,14 +115,16 @@ function Navbar() {
 							About
 						</Button>
 					</Link>
-					{/* <Link as={NextLink} href="#">
+					<Link as={NextLink} href="/user/settings">
 						<Button variant="unstyled" _hover={{ color: 'neon.blue' }}>
 							<Icon as={FiUser} fontSize="1.7rem" />
 						</Button>
-					</Link> */}
-
-					<CartButton />
+					</Link>
+					<CartButton direction={directionResp} />
 				</Stack>
+				<Box display={directionResp === 'row' ? 'none' : 'block'} ms="auto">
+					<CartButton direction={directionResp} />
+				</Box>
 			</Container>
 		</Box>
 	);
