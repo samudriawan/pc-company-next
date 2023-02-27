@@ -13,12 +13,10 @@ import {
 	Stack,
 	Text,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
 
 function Product() {
-	const router = useRouter();
 	return (
 		<>
 			<Head>
@@ -47,6 +45,7 @@ function Product() {
 								overflow="hidden"
 								border="1px solid grey"
 								flex="1 0 100%"
+								data-testid="product-card"
 							>
 								<CardHeader
 									position="relative"
@@ -55,6 +54,7 @@ function Product() {
 									marginInline="auto"
 									marginBlock="2rem"
 									padding="0"
+									data-testid="product-card-header"
 								>
 									<Image
 										src="https://images.unsplash.com/photo-1627281795244-0f5db916344a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
@@ -67,7 +67,11 @@ function Product() {
 										}}
 									/>
 								</CardHeader>
-								<CardBody paddingBlock="2" bg="accent.shadeGrey">
+								<CardBody
+									paddingBlock="2"
+									bg="accent.shadeGrey"
+									data-testid="product-card-body"
+								>
 									<LinkOverlay as={NextLink} href={'/product/starter-pc'}>
 										<Stack>
 											<Heading size="md">Starter PC</Heading>
@@ -75,7 +79,11 @@ function Product() {
 										</Stack>
 									</LinkOverlay>
 								</CardBody>
-								<CardFooter paddingTop="3" bg="accent.shadeGrey">
+								<CardFooter
+									paddingTop="3"
+									bg="accent.shadeGrey"
+									data-testid="product-card-footer"
+								>
 									<Text>
 										{new Intl.NumberFormat('id-ID', {
 											style: 'currency',

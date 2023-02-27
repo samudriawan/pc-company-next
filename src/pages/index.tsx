@@ -24,6 +24,7 @@ import {
 import { SkipNavContent } from '@chakra-ui/skip-nav';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
 	return (
@@ -42,7 +43,7 @@ export default function Home() {
 					paddingBlock="3rem"
 					bgColor="neon.blue"
 				>
-					<Heading fontSize="5xl" textAlign="center">
+					<Heading fontSize="5xl" textAlign="center" data-testid="hero_text">
 						Prebuilt Gaming PCs
 					</Heading>
 				</Center>
@@ -54,14 +55,23 @@ export default function Home() {
 					paddingTop="10rem"
 					paddingBottom="3rem"
 				>
-					<Heading textAlign="center">Prebuilt PC Collection</Heading>
+					<Heading textAlign="center" data-testid="product_heading">
+						Prebuilt PC Collection
+					</Heading>
 					<SimpleGrid
 						columns={{ sm: 1, lg: 3 }}
 						spacing="1rem"
 						paddingTop="2rem"
 						marginTop="2rem"
 					>
-						<Card maxW="100%" textAlign="center" border="1px" bg="transparent">
+						<Card
+							maxW="100%"
+							textAlign="center"
+							border="1px"
+							bg="transparent"
+							color="white"
+							data-testid="product_card"
+						>
 							<CardHeader>
 								<Stack mt="6" spacing="3">
 									<Heading size="md">Starter Series</Heading>
@@ -84,10 +94,18 @@ export default function Home() {
 								/>
 							</CardBody>
 							<CardFooter mx="auto">
-								<Button variant="outline">Buy now</Button>
+								<Link href={'/product/starter-pc'}>
+									<Button variant="outline">Buy now</Button>
+								</Link>
 							</CardFooter>
 						</Card>
-						<Card maxW="100%" textAlign="center" border="1px" bg="transparent">
+						<Card
+							maxW="100%"
+							textAlign="center"
+							border="1px"
+							bg="transparent"
+							color="white"
+						>
 							<CardHeader>
 								<Stack mt="6" spacing="3">
 									<Heading size="md">Streaming Series</Heading>
@@ -109,10 +127,18 @@ export default function Home() {
 								/>
 							</CardBody>
 							<CardFooter mx="auto">
-								<Button variant="outline">Buy now</Button>
+								<Link href={'/product/streaming-pc'}>
+									<Button variant="outline">Buy now</Button>
+								</Link>
 							</CardFooter>
 						</Card>
-						<Card maxW="100%" textAlign="center" border="1px" bg="transparent">
+						<Card
+							maxW="100%"
+							textAlign="center"
+							border="1px"
+							bg="transparent"
+							color="white"
+						>
 							<CardHeader>
 								<Stack mt="6" spacing="3">
 									<Heading size="md">Creator Series</Heading>
@@ -135,7 +161,9 @@ export default function Home() {
 								/>
 							</CardBody>
 							<CardFooter mx="auto">
-								<Button variant="outline">Buy now</Button>
+								<Link href={'/product/creator-pc'}>
+									<Button variant="outline">Buy now</Button>
+								</Link>
 							</CardFooter>
 						</Card>
 					</SimpleGrid>
@@ -148,6 +176,7 @@ export default function Home() {
 						paddingBlock="5"
 						marginTop="8rem"
 						gap="3"
+						data-testid="why_section"
 					>
 						<Box>
 							<Heading>Kenapa pilih Prebuild?</Heading>
@@ -190,7 +219,7 @@ export default function Home() {
 					</Stack>
 
 					{/* faq section */}
-					<Box marginTop="8rem">
+					<Box marginTop="8rem" data-testid="faq_section">
 						<Center marginBlock="2rem">
 							<Heading>Prebuild PC FAQ</Heading>
 						</Center>

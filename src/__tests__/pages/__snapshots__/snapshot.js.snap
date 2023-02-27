@@ -1,0 +1,405 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`render homepage unchanged 1`] = `
+<div>
+  <main>
+    <div
+      class="css-1dsqpr3"
+    >
+      <h2
+        class="chakra-heading css-1kn0kfh"
+        data-testid="hero_text"
+      >
+        Prebuilt Gaming PCs
+      </h2>
+    </div>
+    <div
+      class="css-0"
+      id="chakra-skip-nav"
+      style="outline: 0;"
+      tabindex="-1"
+    />
+    <div
+      class="chakra-container css-o4sfmu"
+    >
+      <h2
+        class="chakra-heading css-xi606m"
+        data-testid="product_heading"
+      >
+        Prebuilt PC Collection
+      </h2>
+      <div
+        class="css-1q63qja"
+      >
+        <div
+          class="chakra-card css-15plm06"
+          data-testid="product_card"
+        >
+          <div
+            class="chakra-card__header css-0"
+          >
+            <div
+              class="chakra-stack css-10aolb9"
+            >
+              <h2
+                class="chakra-heading css-0"
+              >
+                Starter Series
+              </h2>
+              <p
+                class="chakra-text css-0"
+              >
+                Competitive gaming dan yang membutuhkan PC pertama untuk memulai perjalanan gaming dengan ruang untuk upgrade.
+              </p>
+            </div>
+          </div>
+          <div
+            class="chakra-card__body css-0"
+          >
+            <img
+              alt="Green double couch with wooden legs"
+              data-nimg="1"
+              decoding="async"
+              height="100"
+              loading="lazy"
+              src="/_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1627281795244-0f5db916344a%3Fixlib%3Drb-4.0.3%26ixid%3DMnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8%26auto%3Dformat%26fit%3Dcrop%26w%3D500%26q%3D60&w=640&q=75"
+              srcset="/_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1627281795244-0f5db916344a%3Fixlib%3Drb-4.0.3%26ixid%3DMnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8%26auto%3Dformat%26fit%3Dcrop%26w%3D500%26q%3D60&w=256&q=75 1x, /_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1627281795244-0f5db916344a%3Fixlib%3Drb-4.0.3%26ixid%3DMnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8%26auto%3Dformat%26fit%3Dcrop%26w%3D500%26q%3D60&w=640&q=75 2x"
+              style="color: transparent; object-fit: contain; margin-inline: auto;"
+              width="200"
+            />
+          </div>
+          <div
+            class="chakra-card__footer css-hnjrik"
+          >
+            <a
+              href="/product/starter-pc"
+            >
+              <button
+                class="chakra-button css-4xx2wk"
+                type="button"
+              >
+                Buy now
+              </button>
+            </a>
+          </div>
+        </div>
+        <div
+          class="chakra-card css-15plm06"
+        >
+          <div
+            class="chakra-card__header css-0"
+          >
+            <div
+              class="chakra-stack css-10aolb9"
+            >
+              <h2
+                class="chakra-heading css-0"
+              >
+                Streaming Series
+              </h2>
+              <p
+                class="chakra-text css-0"
+              >
+                Gaming dan streaming bersamaan secara terus menerus.
+              </p>
+            </div>
+          </div>
+          <div
+            class="chakra-card__body css-1yl4gnp"
+          >
+            <img
+              alt="Green double couch with wooden legs"
+              data-nimg="1"
+              decoding="async"
+              height="100"
+              loading="lazy"
+              src="/_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1627281795244-0f5db916344a%3Fixlib%3Drb-4.0.3%26ixid%3DMnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8%26auto%3Dformat%26fit%3Dcrop%26w%3D500%26q%3D60&w=640&q=75"
+              srcset="/_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1627281795244-0f5db916344a%3Fixlib%3Drb-4.0.3%26ixid%3DMnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8%26auto%3Dformat%26fit%3Dcrop%26w%3D500%26q%3D60&w=256&q=75 1x, /_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1627281795244-0f5db916344a%3Fixlib%3Drb-4.0.3%26ixid%3DMnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8%26auto%3Dformat%26fit%3Dcrop%26w%3D500%26q%3D60&w=640&q=75 2x"
+              style="color: transparent; object-fit: contain; margin-inline: auto;"
+              width="200"
+            />
+          </div>
+          <div
+            class="chakra-card__footer css-hnjrik"
+          >
+            <a
+              href="/product/streaming-pc"
+            >
+              <button
+                class="chakra-button css-4xx2wk"
+                type="button"
+              >
+                Buy now
+              </button>
+            </a>
+          </div>
+        </div>
+        <div
+          class="chakra-card css-15plm06"
+        >
+          <div
+            class="chakra-card__header css-0"
+          >
+            <div
+              class="chakra-stack css-10aolb9"
+            >
+              <h2
+                class="chakra-heading css-0"
+              >
+                Creator Series
+              </h2>
+              <p
+                class="chakra-text css-0"
+              >
+                Competitive gaming dan yang membutuhkan PC pertama untuk memulai perjalanan gaming dengan ruang untuk upgrade.
+              </p>
+            </div>
+          </div>
+          <div
+            class="chakra-card__body css-1yl4gnp"
+          >
+            <img
+              alt="Green double couch with wooden legs"
+              data-nimg="1"
+              decoding="async"
+              height="70"
+              loading="lazy"
+              src="/_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1627281795244-0f5db916344a%3Fixlib%3Drb-4.0.3%26ixid%3DMnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8%26auto%3Dformat%26fit%3Dcrop%26w%3D500%26q%3D60&w=640&q=75"
+              srcset="/_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1627281795244-0f5db916344a%3Fixlib%3Drb-4.0.3%26ixid%3DMnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8%26auto%3Dformat%26fit%3Dcrop%26w%3D500%26q%3D60&w=256&q=75 1x, /_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1627281795244-0f5db916344a%3Fixlib%3Drb-4.0.3%26ixid%3DMnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8%26auto%3Dformat%26fit%3Dcrop%26w%3D500%26q%3D60&w=640&q=75 2x"
+              style="color: transparent; object-fit: contain; margin-inline: auto;"
+              width="200"
+            />
+          </div>
+          <div
+            class="chakra-card__footer css-hnjrik"
+          >
+            <a
+              href="/product/creator-pc"
+            >
+              <button
+                class="chakra-button css-4xx2wk"
+                type="button"
+              >
+                Buy now
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div
+        class="chakra-stack css-18zewur"
+        data-testid="why_section"
+      >
+        <div
+          class="css-0"
+        >
+          <h2
+            class="chakra-heading css-0"
+          >
+            Kenapa pilih Prebuild?
+          </h2>
+          <p
+            class="chakra-text css-0"
+          >
+            PCs ini dirakit dan dipilih berdasarkan budget serta memenuhi semua kebutuhan kelas mid-range.
+          </p>
+        </div>
+        <div
+          class="chakra-stack css-lg69hp"
+        >
+          <div
+            class="css-hl1idw"
+          >
+            <svg
+              class="chakra-icon css-ds7r2t"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              stroke="currentColor"
+              stroke-width="0"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M0 0h24v24H0V0z"
+                fill="none"
+              />
+              <path
+                d="M12 13V9c0-.55-.45-1-1-1H7V6h5V4H9.5V3h-2v1H6c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h4v2H5v2h2.5v1h2v-1H11c.55 0 1-.45 1-1zM19.59 12.52l-5.66 5.65-2.83-2.83-1.41 1.42L13.93 21 21 13.93z"
+              />
+            </svg>
+            <div
+              class="css-0"
+            >
+              <h2
+                class="chakra-heading css-0"
+              >
+                Harga
+              </h2>
+              <p
+                class="chakra-text css-0"
+              >
+                Hemat dari segi biaya rakit sendiri dan pengeluaran jika membeli peripheral secara terpisah.
+              </p>
+            </div>
+          </div>
+          <div
+            class="css-hl1idw"
+          >
+            <svg
+              class="chakra-icon css-ds7r2t"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              stroke="currentColor"
+              stroke-width="0"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M0 0h24v24H0z"
+                fill="none"
+              />
+              <path
+                d="M9 21h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.58 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2zM9 9l4.34-4.34L12 10h9v2l-3 7H9V9zM1 9h4v12H1V9z"
+              />
+            </svg>
+            <div
+              class="css-0"
+            >
+              <h2
+                class="chakra-heading css-0"
+              >
+                Kualitas
+              </h2>
+              <p
+                class="chakra-text css-0"
+              >
+                Dapatkan kualitas yang tinggi sama seperti custom PC.
+              </p>
+            </div>
+          </div>
+          <div
+            class="css-hl1idw"
+          >
+            <svg
+              class="chakra-icon css-ds7r2t"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              stroke="currentColor"
+              stroke-width="0"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M0 0h24v24H0z"
+                fill="none"
+              />
+              <path
+                d="M10 13c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1m0-2c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm8.5-2l1.09-2.41L22 5.5l-2.41-1.09L18.5 2l-1.09 2.41L15 5.5l2.41 1.09L18.5 9zm2.78 3.72L20.5 11l-.78 1.72-1.72.78 1.72.78.78 1.72.78-1.72L23 13.5l-1.72-.78zM16.25 14c0-.12 0-.25-.01-.37l1.94-1.47-2.5-4.33-2.24.94c-.2-.13-.42-.26-.64-.37L12.5 6h-5l-.3 2.41c-.22.11-.43.24-.64.37l-2.24-.95-2.5 4.33 1.94 1.47c-.01.12-.01.25-.01.37s0 .25.01.37l-1.94 1.47 2.5 4.33 2.24-.94c.2.13.42.26.64.37l.3 2.4h5l.3-2.41c.22-.11.43-.23.64-.37l2.24.94 2.5-4.33-1.94-1.47c.01-.11.01-.24.01-.36zm-1.42 3.64l-1.73-.73c-.56.6-1.3 1.04-2.13 1.23L10.73 20H9.27l-.23-1.86c-.83-.19-1.57-.63-2.13-1.23l-1.73.73-.73-1.27 1.49-1.13c-.12-.39-.18-.8-.18-1.23 0-.43.06-.84.18-1.23l-1.49-1.13.73-1.27 1.73.73c.56-.6 1.3-1.04 2.13-1.23L9.27 8h1.47l.23 1.86c.83.19 1.57.63 2.13 1.23l1.73-.73.73 1.27-1.49 1.13c.12.39.18.8.18 1.23 0 .43-.06.84-.18 1.23l1.49 1.13-.73 1.29z"
+              />
+            </svg>
+            <div
+              class="css-0"
+            >
+              <h2
+                class="chakra-heading css-0"
+              >
+                Nyaman
+              </h2>
+              <p
+                class="chakra-text css-0"
+              >
+                Dirakit dan setel serta optimalisasi dengan pilihan yang sederhana.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="css-5562ol"
+        data-testid="faq_section"
+      >
+        <div
+          class="css-1a5ib42"
+        >
+          <h2
+            class="chakra-heading css-0"
+          >
+            Prebuild PC FAQ
+          </h2>
+        </div>
+        <div
+          class="css-slx4tn"
+        >
+          <div
+            class="css-917k98"
+          >
+            <h2
+              class="chakra-heading css-acwcvw"
+            >
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, atque?
+            </h2>
+            <p
+              class="chakra-text css-0"
+            >
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. A eligendi dignissimos culpa exercitationem ex quasi hic nostrum repellat? Necessitatibus suscipit itaque non quaerat porro quas eligendi dignissimos eius asperiores corporis provident optio labore cum, rem soluta accusamus doloremque quam! Reprehenderit assumenda molestiae accusantium ipsum minus blanditiis facilis nihil, corporis cum minima sit beatae cupiditate consequatur officia, voluptatem, ipsam suscipit ipsa animi laudantium iste a laborum. Qui perferendis suscipit laborum ipsa autem vel itaque, velit excepturi amet facere aspernatur? Eveniet voluptatem esse quis odio, eligendi vero dolore quidem nulla officia expedita, sequi est quas dolores deleniti a, veniam in quae laudantium!
+            </p>
+          </div>
+          <div
+            class="css-917k98"
+          >
+            <h2
+              class="chakra-heading css-acwcvw"
+            >
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, atque?
+            </h2>
+            <p
+              class="chakra-text css-0"
+            >
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. A eligendi dignissimos culpa exercitationem ex quasi hic nostrum repellat? Necessitatibus suscipit itaque non quaerat porro quas eligendi dignissimos eius asperiores corporis provident optio labore cum, rem soluta accusamus doloremque quam! Reprehenderit assumenda molestiae accusantium ipsum minus blanditiis facilis nihil, corporis cum minima sit beatae cupiditate consequatur officia, voluptatem, ipsam suscipit ipsa animi laudantium iste a laborum. Qui perferendis suscipit laborum ipsa autem vel itaque, velit excepturi amet facere aspernatur? Eveniet voluptatem esse quis odio, eligendi vero dolore quidem nulla officia expedita, sequi est quas dolores deleniti a, veniam in quae laudantium!
+            </p>
+          </div>
+          <div
+            class="css-917k98"
+          >
+            <h2
+              class="chakra-heading css-acwcvw"
+            >
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, atque?
+            </h2>
+            <p
+              class="chakra-text css-acwcvw"
+            >
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur laboriosam enim dolorum explicabo. Doloremque molestias iure eaque suscipit voluptas magnam!
+            </p>
+            <p
+              class="chakra-text css-0"
+            >
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat repudiandae magnam excepturi quas culpa sapiente, a facilis magni unde aliquam error, saepe vel necessitatibus omnis fuga cupiditate. Voluptatem eveniet inventore, vero rerum itaque cum ullam debitis dignissimos. Accusamus perferendis corrupti facere ea ut optio, commodi et vero reiciendis assumenda similique.
+            </p>
+          </div>
+          <div
+            class="css-917k98"
+          >
+            <h2
+              class="chakra-heading css-acwcvw"
+            >
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, atque?
+            </h2>
+            <p
+              class="chakra-text css-0"
+            >
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa necessitatibus eveniet fugit commodi quae quisquam minus, suscipit molestiae dicta earum ut reiciendis eligendi quia qui consequatur. Repellendus earum ea facere, aut consequatur necessitatibus pariatur temporibus vero deserunt eveniet repudiandae quidem totam ipsa saepe suscipit itaque eius animi ut alias soluta?
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+`;
