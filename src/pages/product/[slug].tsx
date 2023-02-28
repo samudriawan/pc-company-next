@@ -425,10 +425,9 @@ export default function ProductInfo(props: slugProps) {
 					<Text fontSize={'4xl'} fontWeight={'bold'} mt={'4rem'} mb={'3rem'}>
 						Key Specs
 					</Text>
-					<Flex flexGrow={1} direction={'row'} gap={4}>
+					<Flex flexGrow={1} direction={{ base: 'column', md: 'row' }} gap={4}>
 						<Box
-							w={'700px'}
-							mx={'auto'}
+							maxW={'700px'}
 							px={'1.5rem'}
 							py="1.3rem"
 							bgColor="whiteAlpha.100"
