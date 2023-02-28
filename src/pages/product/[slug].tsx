@@ -427,7 +427,7 @@ export default function ProductInfo(props: slugProps) {
 					</Text>
 					<Flex flexGrow={1} direction={{ base: 'column', md: 'row' }} gap={4}>
 						<Box
-							maxW={'700px'}
+							w={'100%'}
 							px={'1.5rem'}
 							py="1.3rem"
 							bgColor="whiteAlpha.100"
