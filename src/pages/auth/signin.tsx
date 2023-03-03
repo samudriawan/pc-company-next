@@ -14,22 +14,32 @@ import {
 	Center,
 } from '@chakra-ui/react';
 import { default as NextLink } from 'next/link';
+import { signIn } from 'next-auth/react';
+import React from 'react';
 
 export default function SignIn() {
+	async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+		const formData = Object.fromEntries(new FormData(e.currentTarget));
+
+		const res = await signIn('credentials', { ...formData, redirect: false });
+		console.log(res);
+	}
+
 	return (
 		<Flex my={12} px={4} maxW="100%" align={'center'} justify={'center'}>
 			<Stack w={{ base: '100%', sm: 'sm' }} mx={'auto'} gap={4}>
 				<Center>
 					<Heading as="h1">DZ PC</Heading>
 				</Center>
-				<Box as="form" rounded={'lg'}>
-					<FormControl id="email" mt="6">
-						<FormLabel>Email address</FormLabel>
-						<Input type="email" />
+				<form onSubmit={handleSignIn}>
+					<FormControl mt="6">
+						<FormLabel id="email">Email address</FormLabel>
+						<Input type="email" name="email" id="email" />
 					</FormControl>
-					<FormControl id="password" mt="6">
-						<FormLabel>Password</FormLabel>
-						<Input type="password" />
+					<FormControl mt="6">
+						<FormLabel id="password">Password</FormLabel>
+						<Input type="password" name="password" id="password" />
 					</FormControl>
 					<Stack spacing={6} mt="6">
 						<Stack
@@ -41,6 +51,7 @@ export default function SignIn() {
 							<Link color={'blue.400'}>Forgot password?</Link>
 						</Stack>
 						<Button
+							type="submit"
 							size="lg"
 							bg={'neon.blue'}
 							transition="transform 200ms ease"
@@ -51,7 +62,7 @@ export default function SignIn() {
 							Sign in
 						</Button>
 					</Stack>
-				</Box>
+				</form>
 				<Center gap={4} letterSpacing=".5px">
 					<Text>Not a member?</Text>
 					<Link as={NextLink} href="/auth/signup" color={'neon.blue'}>
