@@ -16,6 +16,7 @@ import {
 import { default as NextLink } from 'next/link';
 import { signIn } from 'next-auth/react';
 import React from 'react';
+import ClientOnly from '@/components/ClientOnly';
 
 export default function SignIn() {
 	async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
@@ -27,49 +28,51 @@ export default function SignIn() {
 	}
 
 	return (
-		<Flex my={12} px={4} maxW="100%" align={'center'} justify={'center'}>
-			<Stack w={{ base: '100%', sm: 'sm' }} mx={'auto'} gap={4}>
-				<Center>
-					<Heading as="h1">DZ PC</Heading>
-				</Center>
-				<form onSubmit={handleSignIn}>
-					<FormControl mt="6">
-						<FormLabel id="email">Email address</FormLabel>
-						<Input type="email" name="email" id="email" />
-					</FormControl>
-					<FormControl mt="6">
-						<FormLabel id="password">Password</FormLabel>
-						<Input type="password" name="password" id="password" />
-					</FormControl>
-					<Stack spacing={6} mt="6">
-						<Stack
-							direction={{ base: 'column', sm: 'row' }}
-							align={'start'}
-							justify={'space-between'}
-						>
-							<Checkbox iconColor={'neon.blue'}>Remember me</Checkbox>
-							<Link color={'blue.400'}>Forgot password?</Link>
+		<ClientOnly>
+			<Flex my={12} px={4} maxW="100%" align={'center'} justify={'center'}>
+				<Stack w={{ base: '100%', sm: 'sm' }} mx={'auto'} gap={4}>
+					<Center>
+						<Heading as="h1">DZ PC</Heading>
+					</Center>
+					<form onSubmit={handleSignIn}>
+						<FormControl id="email" mt="6">
+							<FormLabel htmlFor="email">Email address</FormLabel>
+							<Input type="email" name="email" />
+						</FormControl>
+						<FormControl id="password" mt="6">
+							<FormLabel htmlFor="password">Password</FormLabel>
+							<Input type="password" name="password" />
+						</FormControl>
+						<Stack spacing={6} mt="6">
+							<Stack
+								direction={{ base: 'column', sm: 'row' }}
+								align={'start'}
+								justify={'space-between'}
+							>
+								<Checkbox iconColor={'neon.blue'}>Remember me</Checkbox>
+								<Link color={'blue.400'}>Forgot password?</Link>
+							</Stack>
+							<Button
+								type="submit"
+								size="lg"
+								bg={'neon.blue'}
+								transition="transform 200ms ease"
+								fontSize="1.1rem"
+								_hover={{ transform: 'scale(1.03)' }}
+								_active={{ transform: 'scale(0.97)' }}
+							>
+								Sign in
+							</Button>
 						</Stack>
-						<Button
-							type="submit"
-							size="lg"
-							bg={'neon.blue'}
-							transition="transform 200ms ease"
-							fontSize="1.1rem"
-							_hover={{ transform: 'scale(1.03)' }}
-							_active={{ transform: 'scale(0.97)' }}
-						>
-							Sign in
-						</Button>
-					</Stack>
-				</form>
-				<Center gap={4} letterSpacing=".5px">
-					<Text>Not a member?</Text>
-					<Link as={NextLink} href="/auth/signup" color={'neon.blue'}>
-						Create an account <ChevronRightIcon />
-					</Link>
-				</Center>
-			</Stack>
-		</Flex>
+					</form>
+					<Center gap={4} letterSpacing=".5px">
+						<Text>Not a member?</Text>
+						<Link as={NextLink} href="/auth/signup" color={'neon.blue'}>
+							Create an account <ChevronRightIcon />
+						</Link>
+					</Center>
+				</Stack>
+			</Flex>
+		</ClientOnly>
 	);
 }
