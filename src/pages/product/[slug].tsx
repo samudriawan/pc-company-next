@@ -1099,17 +1099,23 @@ export default function ProductInfo(props: slugProps) {
 
 				{/* recommend items */}
 				<Box mt={'4rem'}>
-					<Text fontSize={'5xl'} fontWeight={'bold'}>
+					<Text fontSize={'4xl'} fontWeight={'bold'}>
 						You may also like
 					</Text>
 					<Divider my={5} />
-					<Flex flexGrow={1} justifyContent={'center'} gap={7}>
+					<Flex
+						direction={{ base: 'column', md: 'row' }}
+						flexGrow={1}
+						justifyContent={'center'}
+						alignItems={'center'}
+						gap={5}
+					>
 						{Array(3)
 							.fill('')
 							.map((_, i) => (
 								<Card
-									maxW="300px"
-									my={'1rem'}
+									w={{ base: 'full', md: 'auto' }}
+									maxW={'100%'}
 									bg="transparent"
 									rounded="lg"
 									overflow="hidden"
