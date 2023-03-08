@@ -18,6 +18,7 @@ import { signIn } from 'next-auth/react';
 import React from 'react';
 import ClientOnly from '@/components/ClientOnly';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 export default function SignIn() {
 	const router = useRouter();
@@ -33,6 +34,9 @@ export default function SignIn() {
 
 	return (
 		<ClientOnly>
+			<Head>
+				<title>Sign In - DZPC</title>
+			</Head>
 			<Flex my={12} px={4} maxW="100%" align={'center'} justify={'center'}>
 				<Stack w={{ base: '100%', sm: 'sm' }} mx={'auto'} gap={4}>
 					<Center>
