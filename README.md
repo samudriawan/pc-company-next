@@ -1,28 +1,33 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+### Product Ordering App with Next.js 13.1.5 and MongoDB (Work In Progress)
 
-First, run the development server:
+## Introduction
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+`Still not completed yet.`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This app is part of my learning process of fullstack web app built using Next.js framework.
+I use Chakra UI for quick UI style. My focus for building the app learn about React.js, Typescript, NextAuth, other Backend side and some architecture such as Test Driven Development (TDD).
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## App Idea
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- User side
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+The idea is user can view products, add the product to cart (cart is persist whether the user is logged in or not). Make a payment and then can track the orders process. User also can submit and track progress a tickets for customer support.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- Admin side
 
-## Learn More
+Admin can do CRUD on product item, and add/remove discount prices. Process/update the orders status and support tickets status for customer based on it's progress. Create a reports such as sales report.
+
+## Tech Use
+
+- [Next.js](https://nextjs.org/)
+- TypeScript
+- [Chakra UI](https://chakra-ui.com/)
+- [Jest](https://jestjs.io/)
+- [NextAuth](https://next-auth.js.org/)
+
+## Learn Next.js
 
 To learn more about Next.js, take a look at the following resources:
 

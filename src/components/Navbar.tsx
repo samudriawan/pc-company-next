@@ -1,4 +1,5 @@
 import {
+	Avatar,
 	Box,
 	Button,
 	Container,
@@ -7,11 +8,16 @@ import {
 	DrawerCloseButton,
 	DrawerContent,
 	DrawerOverlay,
+	Flex,
 	Heading,
 	Icon,
 	Link,
 	LinkBox,
 	LinkOverlay,
+	Menu,
+	MenuButton,
+	MenuItem,
+	MenuList,
 	Stack,
 	useBreakpointValue,
 	useDisclosure,
@@ -21,8 +27,42 @@ import { FiUser } from 'react-icons/fi';
 import { default as NextLink } from 'next/link';
 import { useRef } from 'react';
 import CartButton from './CartButton';
+import { signOut, useSession } from 'next-auth/react';
+
+type UserAvatarProps = {
+	name: string;
+};
+
+function UserAvatar({ name }: UserAvatarProps) {
+	return (
+		<Flex alignItems={'center'}>
+			<Menu isLazy>
+				<MenuButton
+					as={Button}
+					rounded={'full'}
+					variant={'link'}
+					cursor={'pointer'}
+					minW={0}
+					title={name}
+				>
+					<Avatar size={'sm'} src={'https://bit.ly/broken-link'} />
+				</MenuButton>
+				<MenuList>
+					<MenuItem as={'a'} href={'/user/settings'} title="Settings">
+						Profile
+					</MenuItem>
+					<MenuItem title="Sign Out" onClick={() => signOut()}>
+						Sign Out
+					</MenuItem>
+				</MenuList>
+			</Menu>
+		</Flex>
+	);
+}
 
 function Navbar() {
+	const { data: session } = useSession();
+	console.log(session);
 	const btnRef = useRef();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const directionResp = useBreakpointValue(
@@ -78,13 +118,31 @@ function Navbar() {
 								flexDirection="column"
 								gap="5"
 							>
-								<Link as={NextLink} href="/" mr={3} onClick={onClose}>
+								<Link
+									as={NextLink}
+									href="/"
+									mr={3}
+									onClick={onClose}
+									title="Home"
+								>
 									Home
 								</Link>
-								<Link as={NextLink} href="/product" mr={3} onClick={onClose}>
+								<Link
+									as={NextLink}
+									href="/product"
+									mr={3}
+									onClick={onClose}
+									title="Prebuilt Gaming PCs"
+								>
 									Prebuilt Gaming PCs
 								</Link>
-								<Link as={NextLink} href="/about" mr={3} onClick={onClose}>
+								<Link
+									as={NextLink}
+									href="/about"
+									mr={3}
+									onClick={onClose}
+									title="About"
+								>
 									About
 								</Link>
 							</DrawerBody>
@@ -93,7 +151,7 @@ function Navbar() {
 				</Box>
 
 				<LinkBox h="100%">
-					<LinkOverlay as={NextLink} href="/">
+					<LinkOverlay as={NextLink} href="/" title="DZPC">
 						<Heading size="lg">DZ PC</Heading>
 					</LinkOverlay>
 				</LinkBox>
@@ -102,27 +160,38 @@ function Navbar() {
 					display={directionResp === 'row' ? 'flex' : 'none'}
 					justifySelf={'end'}
 					alignSelf="end"
+					spacing={4}
 				>
-					<Link as={NextLink} href="/product">
+					<Link as={NextLink} href="/product" title="Prebuilt Gaming PCs">
 						<Button variant="ghost" colorScheme="teal">
 							Prebuilt Gaming PCs
 						</Button>
 					</Link>
-					<Link as={NextLink} href="/about">
+					<Link as={NextLink} href="/about" title="About">
 						<Button variant="ghost" colorScheme="teal" m="auto">
 							About
 						</Button>
 					</Link>
-					<Link as={NextLink} href="/auth/signin">
-						<Button variant="unstyled" _hover={{ color: 'neon.blue' }}>
-							<Icon as={FiUser} fontSize="1.7rem" />
-						</Button>
-					</Link>
-					<CartButton direction={directionResp} />
+					{session?.user ? (
+						<UserAvatar name={session.user.name!} />
+					) : (
+						<Link as={NextLink} href="/auth/signin" title="Sign In">
+							<Button variant="unstyled" _hover={{ color: 'neon.blue' }}>
+								<Icon as={FiUser} fontSize="1.7rem" />
+							</Button>
+						</Link>
+					)}
+					<CartButton />
 				</Stack>
-				<Box display={directionResp === 'row' ? 'none' : 'block'} ms="auto">
-					<CartButton direction={directionResp} />
-				</Box>
+				<Flex
+					direction={'row'}
+					display={directionResp === 'row' ? 'none' : 'flex'}
+					ms="auto"
+					gap={4}
+				>
+					<UserAvatar name={session?.user.name!} />
+					<CartButton />
+				</Flex>
 			</Container>
 		</Box>
 	);

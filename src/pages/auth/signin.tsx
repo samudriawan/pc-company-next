@@ -17,13 +17,17 @@ import { default as NextLink } from 'next/link';
 import { signIn } from 'next-auth/react';
 import React from 'react';
 import ClientOnly from '@/components/ClientOnly';
+import { useRouter } from 'next/router';
 
 export default function SignIn() {
+	const router = useRouter();
+
 	async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		const formData = Object.fromEntries(new FormData(e.currentTarget));
 
 		const res = await signIn('credentials', { ...formData, redirect: false });
+		if (res?.ok) return router.back();
 		console.log(res);
 	}
 
