@@ -1,6 +1,27 @@
 import handler from '@/pages/api/account/users/register';
 import { mockRequestResponse } from '@/lib/test/types.mock';
-afterEach(() => jest.resetAllMocks());
+import mongoose from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import User from '@/mongodb/models/User';
+
+jest.setTimeout(60 * 1000);
+mongoose.set('strictQuery', true);
+
+let mongoServer: MongoMemoryServer;
+
+beforeAll(async () => {
+	mongoServer = await MongoMemoryServer.create();
+	await mongoose.connect(mongoServer.getUri(), { dbName: 'dzpc' });
+});
+
+afterAll(async () => {
+	await mongoose.disconnect();
+	await mongoServer.stop();
+});
+
+afterEach(async () => {
+	jest.resetAllMocks();
+});
 
 describe('/api/account/users/register API endpoint', () => {
 	function encodeData(username: string, email: string, password: string) {
@@ -12,6 +33,7 @@ describe('/api/account/users/register API endpoint', () => {
 		req.body = { user: encodeData('dayz', 'dayz@email.com', 'password') };
 
 		await handler(req, res);
+
 		expect(res.statusCode).toBe(200);
 	});
 
@@ -61,5 +83,21 @@ describe('/api/account/users/register API endpoint', () => {
 
 		await handler(req, res);
 		expect(res.statusCode).toBe(405);
+	});
+});
+
+describe('register', () => {
+	it('connect to mongo server', async () => {
+		const userTest = await User.create({
+			username: 'dayz',
+			email: 'dayz@email.com',
+			hash: 'randomstringhash',
+			role: 'member',
+			cartItem: [],
+			refreshToken: [],
+		});
+		console.log(userTest);
+
+		expect(await User.countDocuments({})).toBe(1);
 	});
 });

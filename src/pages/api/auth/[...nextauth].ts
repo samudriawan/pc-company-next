@@ -1,7 +1,10 @@
+import clientPromise from '@/mongodb/mongodb';
+import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
 import nextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 export default nextAuth({
+	adapter: MongoDBAdapter(clientPromise),
 	secret: process.env.NEXTAUTH_SECRET,
 	session: {
 		strategy: 'jwt',
@@ -10,19 +13,23 @@ export default nextAuth({
 		CredentialsProvider({
 			name: 'email',
 			type: 'credentials',
-			credentials: {},
+			credentials: {
+				email: { label: 'email', type: 'email' },
+				password: { label: 'password', type: 'password' },
+			},
 			async authorize(credentials, req) {
-				const { email, password } = credentials as {
-					email: string;
-					password: string;
-				};
+				// const decodedBody = Buffer.from(req.body?.data, 'base64').toString();
+				// const [email, password] = decodedBody.split(':');
 
-				if (email === 'email@email.com' && password === 'password') {
+				if (
+					credentials?.email === 'email@email.com' &&
+					credentials?.password === 'password'
+				) {
 					return {
 						id: '1',
 						name: 'dayz',
-						email: 'email@email.com',
-						role: 'member',
+						email: credentials?.email,
+						role: 'admin',
 						image: 'https://via.placeholder.com/24x24.png/09f/fff',
 					};
 				} else {

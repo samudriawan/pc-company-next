@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import Product from '../../../pages/product';
 import { render, screen } from '@testing-library/react';
 

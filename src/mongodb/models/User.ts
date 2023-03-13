@@ -24,7 +24,7 @@ const userSchema: Schema = new Schema(
 				productQty: { type: Number },
 			},
 		],
-		refresh_token: [String],
+		refreshToken: [String],
 	},
 	{ timestamps: true }
 );
