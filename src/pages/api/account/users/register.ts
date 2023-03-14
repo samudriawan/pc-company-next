@@ -1,22 +1,17 @@
+import User from '@/mongodb/models/User';
 import { NextApiRequest, NextApiResponse } from 'next';
+import bcrypt from 'bcrypt';
 
-type DataFromDbType = {
+interface DataFromDbType {
 	username: string;
 	email: string;
-	hash: string;
-};
+}
 
-type ResponseDataType = {
+interface ResponseDataType {
 	success: boolean;
 	error: string | null;
 	data: DataFromDbType | null;
-};
-
-const dataFromDb: DataFromDbType = {
-	username: 'dayz',
-	email: 'dayz@email.com',
-	hash: 'encrypted password',
-};
+}
 
 export default async function handler(
 	req: NextApiRequest,
@@ -24,23 +19,20 @@ export default async function handler(
 ) {
 	if (req.method !== 'POST') return res.status(405).end();
 
-	const { user } = req.body;
+	const { username, email, password } = req.body;
 	const regexEmail = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
 
-	if (!user)
+	if (!email || !password)
 		return res.status(400).json({
 			success: false,
 			error: 'email and password is missing.',
 			data: null,
 		});
 
-	if (typeof user !== 'string')
+	if (typeof email !== 'string')
 		return res
 			.status(400)
 			.json({ success: false, error: 'email is not valid type.', data: null });
-
-	const decodedBody = Buffer.from(user, 'base64').toString();
-	const [, email, password] = decodedBody.split(':');
 
 	if (!email || !password)
 		return res.status(400).json({
@@ -54,10 +46,24 @@ export default async function handler(
 			.status(400)
 			.json({ success: false, error: 'email is not valid.', data: null });
 
-	if (email === 'email@email.com')
+	const userDb = await User.findOne({ email }).exec();
+
+	if (userDb)
 		return res
 			.status(400)
 			.json({ success: false, error: 'email is already exist.', data: null });
 
-	res.json({ success: true, error: null, data: { ...dataFromDb } });
+	const hash = await bcrypt.hash(password, 10);
+
+	const newUser = await User.create({
+		username,
+		email,
+		hash,
+	});
+
+	res.json({
+		success: true,
+		error: null,
+		data: { username, email },
+	});
 }
