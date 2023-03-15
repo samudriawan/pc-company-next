@@ -1,7 +1,9 @@
+import User from '@/mongodb/models/User';
 import clientPromise from '@/mongodb/mongodb';
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
 import nextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import bcrypt from 'bcrypt';
 
 export default nextAuth({
 	adapter: MongoDBAdapter(clientPromise),
@@ -18,22 +20,25 @@ export default nextAuth({
 				password: { label: 'password', type: 'password' },
 			},
 			async authorize(credentials, req) {
-				// const decodedBody = Buffer.from(req.body?.data, 'base64').toString();
-				// const [email, password] = decodedBody.split(':');
+				const { email, password } = credentials as {
+					email: string;
+					password: string;
+				};
 
-				if (
-					credentials?.email === 'email@email.com' &&
-					credentials?.password === 'password'
-				) {
+				const foundUser = await User.findOne({ email }).exec();
+
+				if (!foundUser) throw new Error('email or password did not correct.');
+
+				const isValid = await bcrypt.compare(password, foundUser.hash);
+				if (isValid) {
 					return {
-						id: '1',
-						name: 'dayz',
-						email: credentials?.email,
-						role: 'admin',
-						image: 'https://via.placeholder.com/24x24.png/09f/fff',
+						id: foundUser._id,
+						name: foundUser.username,
+						email,
+						role: foundUser.role,
 					};
 				} else {
-					throw new Error('invalid email or password');
+					throw new Error('password did not correct.');
 				}
 			},
 		}),
@@ -49,7 +54,6 @@ export default nextAuth({
 			return params.token;
 		},
 		async session(params) {
-			// console.log('session callbacks');
 			params.session.user.role = params.token.role;
 			return params.session;
 		},

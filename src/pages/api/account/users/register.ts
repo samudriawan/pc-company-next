@@ -7,7 +7,7 @@ interface DataFromDbType {
 	email: string;
 }
 
-interface ResponseDataType {
+export interface ResponseDataType {
 	success: boolean;
 	error: string | null;
 	data: DataFromDbType | null;
@@ -55,7 +55,7 @@ export default async function handler(
 
 	const hash = await bcrypt.hash(password, 10);
 
-	const newUser = await User.create({
+	await User.create({
 		username,
 		email,
 		hash,

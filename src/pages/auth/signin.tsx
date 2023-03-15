@@ -1,7 +1,6 @@
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import {
 	Flex,
-	Box,
 	FormControl,
 	FormLabel,
 	Input,
@@ -15,12 +14,13 @@ import {
 } from '@chakra-ui/react';
 import { default as NextLink } from 'next/link';
 import { signIn } from 'next-auth/react';
-import React from 'react';
+import React, { useState } from 'react';
 import ClientOnly from '@/components/ClientOnly';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 
 export default function SignIn() {
+	const [respError, setRespError] = useState<string | undefined>('');
 	const router = useRouter();
 
 	async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
@@ -28,8 +28,13 @@ export default function SignIn() {
 		const formData = Object.fromEntries(new FormData(e.currentTarget));
 
 		const res = await signIn('credentials', { ...formData, redirect: false });
-		if (res?.ok) return router.back();
-		console.log(res);
+		if (res?.ok) {
+			setRespError('');
+			router.back();
+			return;
+		}
+
+		setRespError(res?.error);
 	}
 
 	return (
@@ -71,6 +76,7 @@ export default function SignIn() {
 							>
 								Sign in
 							</Button>
+							{respError && <Center color={'red.400'}>{respError}</Center>}
 						</Stack>
 					</form>
 					<Center gap={4} letterSpacing=".5px">

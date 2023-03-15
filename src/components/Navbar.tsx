@@ -31,9 +31,10 @@ import { signOut, useSession } from 'next-auth/react';
 
 type UserAvatarProps = {
 	name: string;
+	role: string;
 };
 
-function UserAvatar({ name }: UserAvatarProps) {
+function UserAvatar({ name, role }: UserAvatarProps) {
 	return (
 		<Flex alignItems={'center'}>
 			<Menu isLazy>
@@ -48,6 +49,11 @@ function UserAvatar({ name }: UserAvatarProps) {
 					<Avatar size={'sm'} src={'https://bit.ly/broken-link'} />
 				</MenuButton>
 				<MenuList>
+					{role === 'admin' && (
+						<MenuItem as={'a'} href={'/admin'} title="Admin Panel">
+							Admin Panel
+						</MenuItem>
+					)}
 					<MenuItem as={'a'} href={'/user/settings'} title="Settings">
 						Profile
 					</MenuItem>
@@ -173,7 +179,7 @@ function Navbar() {
 						</Button>
 					</Link>
 					{session?.user ? (
-						<UserAvatar name={session.user.name!} />
+						<UserAvatar name={session.user.name!} role={session.user.role} />
 					) : (
 						<Link as={NextLink} href="/auth/signin" title="Sign In">
 							<Button variant="unstyled" _hover={{ color: 'neon.blue' }}>
@@ -189,7 +195,7 @@ function Navbar() {
 					ms="auto"
 					gap={4}
 				>
-					<UserAvatar name={session?.user.name!} />
+					<UserAvatar name={session?.user.name!} role={session?.user.role!} />
 					<CartButton />
 				</Flex>
 			</Container>
