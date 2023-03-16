@@ -1,4 +1,18 @@
-import { Schema, model, models } from 'mongoose';
+import { Schema, model, models, Document } from 'mongoose';
+
+export interface IUser extends Document {
+	username: string;
+	email: string;
+	hash: string;
+	role: string;
+	cartItem: ICartItem[];
+	refreshToken: string[];
+}
+
+interface ICartItem {
+	productName: string;
+	productQty: number;
+}
 
 const userSchema: Schema = new Schema(
 	{
@@ -8,6 +22,7 @@ const userSchema: Schema = new Schema(
 		},
 		email: {
 			type: String,
+			unique: true,
 			required: true,
 		},
 		hash: {
@@ -18,7 +33,7 @@ const userSchema: Schema = new Schema(
 			type: String,
 			default: 'member',
 		},
-		cartItem: [
+		cartItems: [
 			{
 				productName: { type: String, trim: true },
 				productQty: { type: Number },
@@ -29,4 +44,4 @@ const userSchema: Schema = new Schema(
 	{ timestamps: true }
 );
 
-export default models.User || model('User', userSchema);
+export default models.User || model<IUser>('User', userSchema);
