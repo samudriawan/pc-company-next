@@ -5,13 +5,7 @@ export interface IUser extends Document {
 	email: string;
 	hash: string;
 	role: string;
-	cartItem: ICartItem[];
 	refreshToken: string[];
-}
-
-interface ICartItem {
-	productName: string;
-	productQty: number;
 }
 
 const userSchema: Schema = new Schema(
@@ -33,12 +27,6 @@ const userSchema: Schema = new Schema(
 			type: String,
 			default: 'member',
 		},
-		cartItems: [
-			{
-				productName: { type: String, trim: true },
-				productQty: { type: Number },
-			},
-		],
 		refreshToken: [String],
 	},
 	{ timestamps: true }

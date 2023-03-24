@@ -2,7 +2,6 @@ import { Document, model, models, Schema } from 'mongoose';
 
 export interface IProduct extends Document {
 	name: string;
-	category: string;
 	slug: string;
 	cpu: string;
 	graphic: string;
@@ -12,19 +11,19 @@ export interface IProduct extends Document {
 	cooler: string;
 	price: number;
 	performance: IPerformance[];
-	stock: number;
+	stock?: number;
+	ratingAverage?: number;
 }
 
 interface IPerformance {
-	name: string;
+	game: string;
 	fps: number;
 }
 
 const productSchema: Schema = new Schema(
 	{
-		name: String,
-		category: String,
-		slug: String,
+		name: { type: String, unique: true },
+		slug: { type: String, unique: true },
 		cpu: String,
 		graphic: String,
 		memory: String,
@@ -34,8 +33,9 @@ const productSchema: Schema = new Schema(
 		case: String,
 		cooler: String,
 		price: Number,
-		performance: [{ name: String, fps: Number }],
-		stock: Number,
+		performance: [{ game: String, fps: Number, _id: false }],
+		stock: { type: Number, default: 1 },
+		ratingAverage: { type: Number, default: 0 },
 	},
 	{ timestamps: true }
 );
