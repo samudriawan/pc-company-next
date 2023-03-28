@@ -41,7 +41,7 @@ afterEach(async () => {
 	jest.resetAllMocks();
 });
 
-describe('/api/account/users/register API endpoint', () => {
+describe('/api/product/create API endpoint', () => {
 	const productMockData = {
 		name: 'Streaming PC',
 		slug: 'streaming-pc',
