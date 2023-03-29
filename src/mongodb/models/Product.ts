@@ -1,11 +1,13 @@
-import { Document, model, models, Schema } from 'mongoose';
+import { Document, Model, model, models, Schema } from 'mongoose';
 
 export interface IProduct extends Document {
 	name: string;
 	slug: string;
 	cpu: string;
 	graphic: string;
+	motherboard: string;
 	memory: string;
+	storage: string;
 	power: string;
 	case: string;
 	cooler: string;
@@ -20,7 +22,7 @@ interface IPerformance {
 	fps: number;
 }
 
-const productSchema: Schema = new Schema(
+const productSchema: Schema = new Schema<IProduct>(
 	{
 		name: { type: String, unique: true },
 		slug: { type: String, unique: true },
@@ -40,4 +42,5 @@ const productSchema: Schema = new Schema(
 	{ timestamps: true }
 );
 
-export default models.Product || model<IProduct>('Product', productSchema);
+export default (models.Product as Model<IProduct>) ||
+	model<IProduct>('Product', productSchema);
