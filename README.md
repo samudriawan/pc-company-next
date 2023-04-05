@@ -7,7 +7,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 `Still not completed yet.`
 
 This app is part of my learning process of fullstack web app built using Next.js framework.
-I use Chakra UI for quick UI style. My focus for building the app learn about React.js, Typescript, NextAuth, other Backend side and some architecture such as Test Driven Development (TDD).
+I use Chakra UI for quick UI style. My focus for building the app learn about React.js, Typescript, NextAuth, other Backend side and some architecture such as Test Driven Development (TDD) and Event-Driven Architecture.
 
 ## App Idea
 
@@ -17,7 +17,7 @@ The idea is user can view products, add the product to cart (cart is persist whe
 
 - Admin side
 
-Admin can do CRUD on product item, and add/remove discount prices. Process/update the orders status and support tickets status for customer based on it's progress. Create a reports such as sales report.
+Admin can do CRUD on product item, and add/remove discount prices. Process/update the orders status and support tickets status based on it's progress for customer. Create a reports such as sales report.
 
 ## Tech Use
 
@@ -26,6 +26,8 @@ Admin can do CRUD on product item, and add/remove discount prices. Process/updat
 - [Chakra UI](https://chakra-ui.com/)
 - [Jest](https://jestjs.io/)
 - [NextAuth](https://next-auth.js.org/)
+- [MongoDB](https://www.mongodb.org/)
+- [SWR](https://swr.vercel.app/)
 
 ## Learn Next.js
 
