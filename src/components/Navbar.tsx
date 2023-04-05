@@ -50,7 +50,7 @@ function UserAvatar({ name, role }: UserAvatarProps) {
 				</MenuButton>
 				<MenuList>
 					{role === 'admin' && (
-						<MenuItem as={'a'} href={'/admin'} title="Admin Panel">
+						<MenuItem as={'a'} href={'/admin/product'} title="Admin Panel">
 							Admin Panel
 						</MenuItem>
 					)}
@@ -68,7 +68,7 @@ function UserAvatar({ name, role }: UserAvatarProps) {
 
 function Navbar() {
 	const { data: session } = useSession();
-	console.log(session);
+	// console.log(session);
 	const btnRef = useRef();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const directionResp = useBreakpointValue(

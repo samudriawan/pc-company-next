@@ -18,6 +18,7 @@ const theme = extendTheme({
 				position: 'relative',
 				bg: 'black',
 				color: 'white',
+				scrollBehavior: 'smooth',
 				overflowX: 'hidden',
 			},
 		},

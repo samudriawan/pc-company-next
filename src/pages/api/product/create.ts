@@ -26,7 +26,7 @@ export default async function createHandler(
 		if (foundProduct)
 			return res.status(400).json({
 				success: false,
-				error: 'product name is already exist.',
+				error: 'product name is already exist. Please choose another name.',
 				data: null,
 			});
 

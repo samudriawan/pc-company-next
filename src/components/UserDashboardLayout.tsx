@@ -15,48 +15,93 @@ import React from 'react';
 import { IconType } from 'react-icons';
 import { FiUser, FiInfo, FiSearch } from 'react-icons/fi';
 
-type UserDashboardLayoutProps = {
+type DashboardLayoutProps = {
 	children: React.ReactNode;
 };
 
 type SidebarNavLinkProps = {
 	href: string;
-	icon: IconType;
+	icon?: IconType;
 	text: string;
+	path: string;
+};
+
+const NavLink = ({ href = '#', icon, text, path }: SidebarNavLinkProps) => {
+	return (
+		<Link
+			as={NextLink}
+			href={href}
+			display={'flex'}
+			mt="1"
+			px="3"
+			py="2"
+			alignItems={'center'}
+			gap="4"
+			aria-current={path === href ? 'page' : 'false'}
+			borderLeftWidth={4}
+			borderLeftColor={'transparent'}
+			_hover={{
+				bg: 'hsl(240, 30%, 15%)',
+				svg: { color: 'neon.shadeBlue' },
+			}}
+			_activeLink={{ borderColor: 'neon.blue', bgColor: 'hsl(240, 30%, 15%)' }}
+		>
+			{icon && <Icon as={icon} boxSize={6} />}
+			<Text isTruncated={true}>{text}</Text>
+		</Link>
+	);
 };
 
 export default function UserDashboardLayout({
 	children,
-}: UserDashboardLayoutProps) {
+}: DashboardLayoutProps) {
 	const router = useRouter();
-	console.log(router);
 
-	function SidebarNavLink({ href = '#', icon, text }: SidebarNavLinkProps) {
-		return (
-			<Link
-				as={NextLink}
-				href={href}
-				display={'flex'}
-				mt="1"
-				px="3"
-				py="2"
-				alignItems={'center'}
-				gap="4"
-				aria-current={router.asPath === href && 'page'}
-				borderLeftWidth={4}
-				borderLeftColor={'transparent'}
-				_hover={{
-					bg: 'hsl(240, 30%, 15%)',
-					svg: { color: 'neon.shadeBlue' },
-				}}
-				_activeLink={{ borderColor: 'neon.blue' }}
-			>
-				<Icon as={icon} boxSize={6} />
-				<Text as="span" isTruncated={true}>
-					{text}
-				</Text>
-			</Link>
-		);
+	function SidebarNavLink() {
+		if (router.asPath.startsWith('/admin')) {
+			return (
+				<>
+					<NavLink
+						href="/admin/product"
+						text={'Product'}
+						path={router.asPath}
+					/>
+					<NavLink
+						href="/user/order-history"
+						text={'Order'}
+						path={router.asPath}
+					/>
+					<NavLink
+						href="/user/support"
+						text={'Support Ticket'}
+						path={router.asPath}
+					/>
+				</>
+			);
+		} else {
+			return (
+				<>
+					<NavLink
+						href="/user/settings"
+						icon={FiUser}
+						text={'Profile'}
+						path={router.asPath}
+					/>
+					<NavLink
+						href="/user/order-history"
+						icon={FiSearch}
+						text={'Order History'}
+						path={router.asPath}
+					/>
+					<NavLink
+						href="/user/support"
+						icon={FiInfo}
+						text={'Support'}
+						path={router.asPath}
+					/>
+				</>
+			);
+		}
 	}
 
 	return (
@@ -64,6 +109,7 @@ export default function UserDashboardLayout({
 			<Head>
 				<title>User | DZ PC Next App</title>
 			</Head>
+
 			<main>
 				<Container
 					as="section"
@@ -72,12 +118,15 @@ export default function UserDashboardLayout({
 					paddingBottom="3rem"
 				>
 					<Heading as="h1" mb="6">
-						Account
+						{router.asPath.startsWith('/admin') ? 'Admin' : 'Account'}
 					</Heading>
 					<Box shadow={'lg'} overflow="hidden">
 						<Grid
 							w="100%"
-							templateColumns={{ base: '1fr', md: 'repeat(12,minmax(0,1fr))' }}
+							templateColumns={{
+								base: '1fr',
+								md: 'repeat(12,minmax(0,1fr))',
+							}}
 							borderLeftWidth={1}
 							borderRightWidth={1}
 						>
@@ -86,29 +135,17 @@ export default function UserDashboardLayout({
 								gridColumn={{ md: '1/-1', lg: 'span 3' }}
 								py="6"
 								borderRightWidth={1}
+								borderBottomWidth={{ base: 1, lg: 0 }}
 							>
 								<Box as="nav" aria-label="Sidebar Navigation, Account">
-									<SidebarNavLink
-										href="/user/settings"
-										icon={FiUser}
-										text={'Profile'}
-									/>
-									<SidebarNavLink
-										href="/user/order-history"
-										icon={FiSearch}
-										text={'Order History'}
-									/>
-									<SidebarNavLink
-										href="/user/support"
-										icon={FiInfo}
-										text={'Support'}
-									/>
+									<SidebarNavLink />
 								</Box>
 							</GridItem>
 							<GridItem
 								gridColumn={{ md: '1/-1', lg: '4/-1' }}
-								px={{ base: '4', md: '6' }}
+								px={{ base: '0', md: '6' }}
 								py="8"
+								overflowX={'auto'}
 							>
 								{children}
 							</GridItem>

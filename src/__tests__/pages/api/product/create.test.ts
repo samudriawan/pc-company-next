@@ -112,7 +112,7 @@ describe('/api/product/create API endpoint', () => {
 		expect(res.statusCode).toBe(400);
 		expect(res._getJSONData()).toEqual({
 			success: false,
-			error: 'product name is already exist.',
+			error: 'product name is already exist. Please choose another name.',
 			data: null,
 		});
 	});
