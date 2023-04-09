@@ -1,6 +1,7 @@
 import { Document, Model, model, models, Schema } from 'mongoose';
 
 export interface IProduct extends Document {
+	[key: string]: any;
 	name: string;
 	slug: string;
 	cpu: string;
@@ -15,6 +16,8 @@ export interface IProduct extends Document {
 	performance: IPerformance[];
 	stock?: number;
 	ratingAverage?: number;
+	createdAt?: string;
+	updatedAt?: string;
 }
 
 interface IPerformance {
@@ -22,7 +25,7 @@ interface IPerformance {
 	fps: number;
 }
 
-const productSchema: Schema = new Schema<IProduct>(
+const productSchema: Schema = new Schema(
 	{
 		name: { type: String, unique: true },
 		slug: { type: String, unique: true },

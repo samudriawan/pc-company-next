@@ -20,9 +20,11 @@ import {
 	Center,
 	Collapse,
 	Spinner,
+	Link,
 } from '@chakra-ui/react';
 
 import Head from 'next/head';
+import { default as NextLink } from 'next/link';
 import React, { useRef } from 'react';
 import useSWR from 'swr';
 
@@ -112,7 +114,7 @@ export default function AdminProductSetting() {
 										</Td>
 									</Tr>
 								) : (
-									resp.data.map((item, index) => (
+									resp.data.map((item) => (
 										<Tr key={item.name} _hover={{ bg: 'whiteAlpha.100' }}>
 											<Td>
 												<Text title={item.name} isTruncated>
@@ -126,15 +128,17 @@ export default function AdminProductSetting() {
 												<Center>{item.stock}</Center>
 											</Td>
 											<Td maxW={'min-content'}>
-												<IconButton
-													variant="ghost"
-													colorScheme="teal"
-													aria-label="Edit"
-													title="Edit"
-													icon={<EditIcon />}
-													size="sm"
-													float={'right'}
-												/>
+												<Link as={NextLink} href={`/admin/product/${item._id}`}>
+													<IconButton
+														variant="ghost"
+														colorScheme="teal"
+														aria-label="Edit"
+														title="Edit"
+														icon={<EditIcon />}
+														size="sm"
+														float={'right'}
+													/>
+												</Link>
 											</Td>
 										</Tr>
 									))

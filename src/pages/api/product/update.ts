@@ -32,7 +32,7 @@ export default async function updateHandler(
 		if (foundProduct) {
 			const result = await Product.updateOne(
 				{ _id: foundProduct._id },
-				{ price: req.body.price, stock: req.body.stock }
+				req.body
 			);
 
 			return res.status(200).json({

@@ -17,7 +17,7 @@ export default async function getHandler(
 			return res.status(200).json({
 				success: true,
 				error: null,
-				data: foundProduct,
+				data: [foundProduct],
 			});
 		}
 	}

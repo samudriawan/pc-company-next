@@ -183,7 +183,7 @@ export default function ProductCreateNewForm({ onToggle }: Props) {
 							<FormLabel>{item}</FormLabel>
 							<Input
 								type={item === 'Price' || item === 'Stock' ? 'number' : 'text'}
-								name={item.toLowerCase()}
+								name={item === 'Processor' ? 'cpu' : item.toLowerCase()}
 								placeholder={item}
 								isRequired={item !== 'Stock' ? true : false}
 								errorBorderColor="crimson"
