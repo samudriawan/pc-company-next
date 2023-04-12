@@ -2,14 +2,33 @@
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import CartContextProvider from '@/context/cartContext';
-import { ChakraProvider, Collapse, CSSReset } from '@chakra-ui/react';
+import { ChakraProvider, CSSReset, Progress } from '@chakra-ui/react';
 import { SkipNavLink } from '@chakra-ui/skip-nav';
 import type { AppProps } from 'next/app';
 import theme from './theme';
 import { SessionProvider } from 'next-auth/react';
 import { SWRConfig } from 'swr';
+import { fetcher } from '@/lib/swrFetch';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
-export default function App({ Component, pageProps, router }: AppProps) {
+export default function App({ Component, pageProps }: AppProps) {
+	const [loadingBar, setLoadingBar] = useState(false);
+	const router = useRouter();
+
+	useEffect(() => {
+		const showProgress = () => setLoadingBar(true);
+		const hideProgress = () => setLoadingBar(false);
+
+		router.events.on('routeChangeStart', showProgress);
+		router.events.on('routeChangeComplete', hideProgress);
+
+		return () => {
+			router.events.off('routeChangeStart', showProgress);
+			router.events.off('routeChangeComplete', hideProgress);
+		};
+	}, []);
+
 	return (
 		<ChakraProvider theme={theme}>
 			<CSSReset />
@@ -18,14 +37,24 @@ export default function App({ Component, pageProps, router }: AppProps) {
 				<CartContextProvider>
 					<SWRConfig
 						value={{
-							fetcher: (resource, init) =>
-								fetch(resource, init).then((res) => res.json()),
+							fetcher: fetcher,
 						}}
 					>
+						{loadingBar && (
+							<Progress
+								size="xs"
+								isIndeterminate
+								sx={{
+									position: 'absolute',
+									top: 0,
+									left: 0,
+									right: 0,
+									zIndex: 9999,
+								}}
+							/>
+						)}
 						<Navbar />
-						<Collapse key={router.route} in={true} animateOpacity>
-							<Component {...pageProps} />
-						</Collapse>
+						<Component {...pageProps} />
 						<Footer />
 					</SWRConfig>
 				</CartContextProvider>
