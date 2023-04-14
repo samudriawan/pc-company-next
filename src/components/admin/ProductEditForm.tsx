@@ -268,6 +268,22 @@ export default function ProductEditForm({ productData, mutate }: Props) {
 					/>
 				</FormControl>
 				<FormControl mb="2">
+					<FormLabel>Storage</FormLabel>
+					<Input
+						type={'text'}
+						name={'storage'}
+						value={inputForm.storage}
+						onChange={(e) =>
+							setInputForm({
+								...inputForm,
+								[e.target.name]: e.target.value,
+							})
+						}
+						placeholder={'Storage'}
+						isRequired
+					/>
+				</FormControl>
+				<FormControl mb="2">
 					<FormLabel>Power</FormLabel>
 					<Input
 						type={'text'}

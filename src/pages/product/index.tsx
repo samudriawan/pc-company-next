@@ -4,23 +4,31 @@ import {
 	Button,
 	Card,
 	CardBody,
-	CardFooter,
 	CardHeader,
 	Container,
-	Heading,
 	Link,
-	LinkOverlay,
+	SimpleGrid,
 	Stack,
 	Text,
 } from '@chakra-ui/react';
 import Head from 'next/head';
 import Image from 'next/image';
+import useSWR from 'swr';
+import { ResponseData } from '@/lib/swrFetch';
 
-function Product() {
+type PageProps = {
+	fallback: ResponseData;
+};
+
+function Product({ fallback }: PageProps) {
+	const { data: resp } = useSWR<ResponseData>('/api/product', {
+		fallback,
+	});
+
 	return (
 		<>
 			<Head>
-				<title>Collection - DZ Prebuilt PC</title>
+				<title>Products - DZ Prebuilt PC</title>
 			</Head>
 			<main>
 				<Container
@@ -28,458 +36,81 @@ function Product() {
 					paddingTop="1rem"
 					paddingBottom="3rem"
 				>
-					{/* starter pc series card */}
-					<Box>
-						<Heading marginBottom="2rem">Starter Series</Heading>
-						<Stack
-							w="100%"
-							direction="row"
-							wrap="wrap"
-							justifyContent={{ sm: 'center', md: 'space-between' }}
-							gap="5"
-						>
-							<Card
-								maxW="300px"
-								bg="transparent"
-								rounded="lg"
-								overflow="hidden"
-								border="1px solid grey"
-								flex="1 0 100%"
-								data-testid="product-card"
+					<Text as="h1" mb="4" fontSize={'2xl'} fontWeight={'semibold'}>
+						Product
+					</Text>
+					<SimpleGrid columns={{ base: 2, md: 3, lg: 5 }} spacing={4}>
+						{resp.data.map((item) => (
+							<Link
+								as={NextLink}
+								href={`/product/${item.slug}`}
+								key={item.name}
+								_hover={{ textDecoration: 'none' }}
 							>
-								<CardHeader
-									position="relative"
-									w="70%"
-									h="250px"
-									marginInline="auto"
-									marginBlock="2rem"
-									padding="0"
-									data-testid="product-card-header"
+								<Card
+									maxH="300px"
+									bg="transparent"
+									rounded="lg"
+									overflow="hidden"
+									border="1px solid grey"
+									flex="1 0 100%"
+									data-testid="product-card"
 								>
-									<Image
-										src="https://images.unsplash.com/photo-1627281795244-0f5db916344a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-										alt="Green double couch with wooden legs"
-										// width={200}
-										// height={100}
-										fill
-										style={{
-											objectFit: 'cover',
-										}}
-									/>
-								</CardHeader>
-								<CardBody
-									paddingBlock="2"
-									bg="accent.shadeGrey"
-									data-testid="product-card-body"
-								>
-									<LinkOverlay as={NextLink} href={'/product/starter-pc'}>
-										<Stack>
-											<Heading size="md">Starter PC</Heading>
-											<Text>Mid-tower prebuild PC</Text>
-										</Stack>
-									</LinkOverlay>
-								</CardBody>
-								<CardFooter
-									paddingTop="3"
-									bg="accent.shadeGrey"
-									data-testid="product-card-footer"
-								>
-									<Text>
-										{new Intl.NumberFormat('id-ID', {
-											style: 'currency',
-											currency: 'IDR',
-										}).format(15000000)}
-									</Text>
-								</CardFooter>
-							</Card>
-							<Card
-								maxW="300px"
-								bg="transparent"
-								rounded="lg"
-								overflow="hidden"
-								border="1px solid grey"
-								flex="1 0 100%"
-							>
-								<CardHeader
-									position="relative"
-									w="70%"
-									h="250px"
-									marginInline="auto"
-									marginBlock="2rem"
-									padding="0"
-								>
-									<Image
-										src="https://images.unsplash.com/photo-1627281795244-0f5db916344a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-										alt="Green double couch with wooden legs"
-										// width={200}
-										// height={100}
-										fill
-										style={{
-											objectFit: 'cover',
-										}}
-									/>
-								</CardHeader>
-								<CardBody paddingBlock="2" bg="accent.shadeGrey">
-									<LinkOverlay as={NextLink} href={'/product/starter-plus-pc'}>
-										<Stack>
-											<Heading size="md">Starter Plus PC</Heading>
-											<Text>Mid-tower prebuild PC</Text>
-										</Stack>
-									</LinkOverlay>
-								</CardBody>
-								<CardFooter paddingTop="3" bg="accent.shadeGrey">
-									<Text>
-										{new Intl.NumberFormat('id-ID', {
-											style: 'currency',
-											currency: 'IDR',
-										}).format(17000000)}
-									</Text>
-								</CardFooter>
-							</Card>
-							<Card
-								maxW="300px"
-								bg="transparent"
-								rounded="lg"
-								overflow="hidden"
-								border="1px solid grey"
-								flex="1 0 100%"
-							>
-								<CardHeader
-									position="relative"
-									w="70%"
-									h="250px"
-									marginInline="auto"
-									marginBlock="2rem"
-									padding="0"
-								>
-									<Image
-										src="https://images.unsplash.com/photo-1627281795244-0f5db916344a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-										alt="Green double couch with wooden legs"
-										// width={200}
-										// height={100}
-										fill
-										style={{
-											objectFit: 'cover',
-										}}
-									/>
-								</CardHeader>
-								<CardBody paddingBlock="2" bg="accent.shadeGrey">
-									<LinkOverlay as={NextLink} href={'/product/starter-pro-pc'}>
-										<Stack>
-											<Heading size="md">Starter Pro PC</Heading>
-											<Text>Mid-tower prebuild PC</Text>
-										</Stack>
-									</LinkOverlay>
-								</CardBody>
-								<CardFooter paddingTop="3" bg="accent.shadeGrey">
-									<Text>
-										{new Intl.NumberFormat('id-ID', {
-											style: 'currency',
-											currency: 'IDR',
-										}).format(19000000)}
-									</Text>
-								</CardFooter>
-							</Card>
-						</Stack>
-					</Box>
-
-					{/* Streaming pc series card */}
-					<Box marginTop="3rem">
-						<Heading marginBottom="2rem">Streaming Series</Heading>
-						<Stack
-							w="100%"
-							direction="row"
-							wrap="wrap"
-							justifyContent={{ sm: 'center', md: 'space-between' }}
-							gap="5"
-						>
-							<Card
-								maxW="300px"
-								bg="transparent"
-								rounded="lg"
-								overflow="hidden"
-								border="1px solid grey"
-								flex="1 0 100%"
-							>
-								<CardHeader
-									position="relative"
-									w="70%"
-									h="250px"
-									marginInline="auto"
-									marginBlock="2rem"
-									padding="0"
-								>
-									<Image
-										src="https://images.unsplash.com/photo-1627281795244-0f5db916344a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-										alt="Green double couch with wooden legs"
-										// width={200}
-										// height={100}
-										fill
-										style={{
-											objectFit: 'cover',
-										}}
-									/>
-								</CardHeader>
-								<CardBody paddingBlock="2" bg="accent.shadeGrey">
-									<LinkOverlay as={NextLink} href={'/product/streaming-pc'}>
-										<Stack>
-											<Heading size="md">Streaming PC</Heading>
-											<Text>Mid-tower prebuild PC</Text>
-										</Stack>
-									</LinkOverlay>
-								</CardBody>
-								<CardFooter paddingTop="3" bg="accent.shadeGrey">
-									<Text>
-										{new Intl.NumberFormat('id-ID', {
-											style: 'currency',
-											currency: 'IDR',
-										}).format(20000000)}
-									</Text>
-								</CardFooter>
-							</Card>
-							<Card
-								maxW="300px"
-								bg="transparent"
-								rounded="lg"
-								overflow="hidden"
-								border="1px solid grey"
-								flex="1 0 100%"
-							>
-								<CardHeader
-									position="relative"
-									w="70%"
-									h="250px"
-									marginInline="auto"
-									marginBlock="2rem"
-									padding="0"
-								>
-									<Image
-										src="https://images.unsplash.com/photo-1627281795244-0f5db916344a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-										alt="Green double couch with wooden legs"
-										// width={200}
-										// height={100}
-										fill
-										style={{
-											objectFit: 'cover',
-										}}
-									/>
-								</CardHeader>
-								<CardBody paddingBlock="2" bg="accent.shadeGrey">
-									<LinkOverlay
-										as={NextLink}
-										href={'/product/streaming-plus-pc'}
+									<CardHeader
+										position="relative"
+										w="70%"
+										h="250px"
+										marginInline="auto"
+										marginBlock="2rem"
+										padding="0"
+										data-testid="product-card-header"
+									>
+										<Image
+											src="https://images.unsplash.com/photo-1627281795244-0f5db916344a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
+											alt="Green double couch with wooden legs"
+											fill
+											style={{
+												objectFit: 'cover',
+											}}
+										/>
+									</CardHeader>
+									<CardBody
+										paddingBlock="2"
+										bg="accent.shadeGrey"
+										data-testid="product-card-body"
 									>
 										<Stack>
-											<Heading size="md">Streaming Plus PC</Heading>
-											<Text>Mid-tower prebuild PC</Text>
+											<Text as={'h2'} title={item.name} isTruncated>
+												{item.name}
+											</Text>
+											<Text fontWeight={'bold'}>
+												{new Intl.NumberFormat('us-ID', {
+													style: 'currency',
+													currency: 'USD',
+												}).format(item.price)}
+											</Text>
 										</Stack>
-									</LinkOverlay>
-								</CardBody>
-								<CardFooter paddingTop="3" bg="accent.shadeGrey">
-									<Text>
-										{new Intl.NumberFormat('id-ID', {
-											style: 'currency',
-											currency: 'IDR',
-										}).format(23000000)}
-									</Text>
-								</CardFooter>
-							</Card>
-							<Card
-								maxW="300px"
-								bg="transparent"
-								rounded="lg"
-								overflow="hidden"
-								border="1px solid grey"
-								flex="1 0 100%"
-								ms="0"
-							>
-								<CardHeader
-									position="relative"
-									w="70%"
-									h="250px"
-									marginInline="auto"
-									marginBlock="2rem"
-									padding="0"
-								>
-									<Image
-										src="https://images.unsplash.com/photo-1627281795244-0f5db916344a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-										alt="Green double couch with wooden legs"
-										// width={200}
-										// height={100}
-										fill
-										style={{
-											objectFit: 'cover',
-										}}
-									/>
-								</CardHeader>
-								<CardBody paddingBlock="2" bg="accent.shadeGrey">
-									<LinkOverlay as={NextLink} href={'/product/streaming-pro-pc'}>
-										<Stack>
-											<Heading size="md">Streaming Pro PC</Heading>
-											<Text>Mid-tower prebuild PC</Text>
-										</Stack>
-									</LinkOverlay>
-								</CardBody>
-								<CardFooter paddingTop="3" bg="accent.shadeGrey">
-									<Text>
-										{new Intl.NumberFormat('id-ID', {
-											style: 'currency',
-											currency: 'IDR',
-										}).format(27000000)}
-									</Text>
-								</CardFooter>
-							</Card>
-						</Stack>
-					</Box>
-
-					{/* Creator pc series card */}
-					<Box marginTop="3rem">
-						<Heading marginBottom="2rem">Creator Series</Heading>
-						<Stack
-							w="100%"
-							direction="row"
-							wrap="wrap"
-							justifyContent={{ sm: 'center', md: 'space-between' }}
-							gap="5"
-						>
-							<Card
-								maxW="300px"
-								bg="transparent"
-								rounded="lg"
-								overflow="hidden"
-								border="1px solid grey"
-								flex="1 0 100%"
-							>
-								<CardHeader
-									position="relative"
-									w="70%"
-									h="250px"
-									marginInline="auto"
-									marginBlock="2rem"
-									padding="0"
-								>
-									<Image
-										src="https://images.unsplash.com/photo-1627281795244-0f5db916344a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-										alt="Green double couch with wooden legs"
-										// width={200}
-										// height={100}
-										fill
-										style={{
-											objectFit: 'cover',
-										}}
-									/>
-								</CardHeader>
-								<CardBody paddingBlock="2" bg="accent.shadeGrey">
-									<LinkOverlay as={NextLink} href={'/product/creator-pc'}>
-										<Stack>
-											<Heading size="md">Creator PC</Heading>
-											<Text>Mid-tower prebuild PC</Text>
-										</Stack>
-									</LinkOverlay>
-								</CardBody>
-								<CardFooter paddingTop="3" bg="accent.shadeGrey">
-									<Text>
-										{new Intl.NumberFormat('id-ID', {
-											style: 'currency',
-											currency: 'IDR',
-										}).format(30000000)}
-									</Text>
-								</CardFooter>
-							</Card>
-							<Card
-								maxW="300px"
-								bg="transparent"
-								rounded="lg"
-								overflow="hidden"
-								border="1px solid grey"
-								flex="1 0 100%"
-							>
-								<CardHeader
-									position="relative"
-									w="70%"
-									h="250px"
-									marginInline="auto"
-									marginBlock="2rem"
-									padding="0"
-								>
-									<Image
-										src="https://images.unsplash.com/photo-1627281795244-0f5db916344a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-										alt="Green double couch with wooden legs"
-										// width={200}
-										// height={100}
-										fill
-										style={{
-											objectFit: 'cover',
-										}}
-									/>
-								</CardHeader>
-								<CardBody paddingBlock="2" bg="accent.shadeGrey">
-									<LinkOverlay as={NextLink} href={'/product/creator-plus-pc'}>
-										<Stack>
-											<Heading size="md">Creator Plus PC</Heading>
-											<Text>Mid-tower prebuild PC</Text>
-										</Stack>
-									</LinkOverlay>
-								</CardBody>
-								<CardFooter paddingTop="3" bg="accent.shadeGrey">
-									<Text>
-										{new Intl.NumberFormat('id-ID', {
-											style: 'currency',
-											currency: 'IDR',
-										}).format(33000000)}
-									</Text>
-								</CardFooter>
-							</Card>
-							<Card
-								maxW="300px"
-								bg="transparent"
-								rounded="lg"
-								overflow="hidden"
-								border="1px solid grey"
-								flex="1 0 100%"
-								ms="0"
-							>
-								<CardHeader
-									position="relative"
-									w="70%"
-									h="250px"
-									marginInline="auto"
-									marginBlock="2rem"
-									padding="0"
-								>
-									<Image
-										src="https://images.unsplash.com/photo-1627281795244-0f5db916344a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-										alt="Green double couch with wooden legs"
-										// width={200}
-										// height={100}
-										fill
-										style={{
-											objectFit: 'cover',
-										}}
-									/>
-								</CardHeader>
-								<CardBody paddingBlock="2" bg="accent.shadeGrey">
-									<LinkOverlay as={NextLink} href={'/product/creator-pro-pc'}>
-										<Stack>
-											<Heading size="md">Creator Pro PC</Heading>
-											<Text>Mid-tower prebuild PC</Text>
-										</Stack>
-									</LinkOverlay>
-								</CardBody>
-								<CardFooter paddingTop="3" bg="accent.shadeGrey">
-									<Text>
-										{new Intl.NumberFormat('id-ID', {
-											style: 'currency',
-											currency: 'IDR',
-										}).format(36000000)}
-									</Text>
-								</CardFooter>
-							</Card>
-						</Stack>
-					</Box>
+									</CardBody>
+								</Card>
+							</Link>
+						))}
+					</SimpleGrid>
 				</Container>
 			</main>
 		</>
 	);
 }
 export default Product;
+
+export async function getStaticProps() {
+	const resp = await fetch('http://localhost:3000/api/product');
+	const allProducts: ResponseData = await resp.json();
+
+	return {
+		props: {
+			fallback: {
+				'/api/product': allProducts,
+			},
+		},
+	};
+}
