@@ -1,5 +1,6 @@
 import { ExternalLinkIcon, StarIcon } from '@chakra-ui/icons';
 import {
+	Alert,
 	Box,
 	Button,
 	Card,
@@ -9,18 +10,11 @@ import {
 	Center,
 	Container,
 	Divider,
-	Drawer,
-	DrawerBody,
-	DrawerCloseButton,
-	DrawerContent,
-	DrawerHeader,
-	DrawerOverlay,
 	Flex,
 	Grid,
 	GridItem,
 	Heading,
 	Icon,
-	LinkOverlay,
 	Popover,
 	PopoverBody,
 	PopoverContent,
@@ -42,196 +36,57 @@ import { FaTwitter, FaInstagram } from 'react-icons/fa';
 import Head from 'next/head';
 import Image from 'next/image';
 import { default as NextLink } from 'next/link';
-import { useRouter } from 'next/router';
-import { useRef, useState, useContext } from 'react';
+import { useRef, useContext } from 'react';
 import { GetStaticPropsContext, GetStaticPropsResult } from 'next';
 import { CartContext, CART_ACTION, Cart } from '@/context/cartContext';
+import { ResponseData } from '@/lib/swrFetch';
+import { IProduct } from '@/mongodb/models/Product';
 
-type slugProps = {
-	slug: string | undefined;
+type PageProps = {
+	product: IProduct | null;
 };
 type pageParams = {
 	slug: string | undefined;
 };
 
-export default function ProductInfo(props: slugProps) {
-	const [itemInfo, setItemInfo] = useState<Cart>({
-		productName: '',
-		productImgUrl: '',
-		productPrice: 0,
-		qty: 0,
-	});
-	const [reviewsLikeCount, setReviewsLikeCount] = useState(false);
-	const [reviewsDisikeCount, setReviewsDislikeCount] = useState(false);
+export default function ProductInfo({ product }: PageProps) {
 	const addToCartBtnRef = useRef(null);
 	const qtyRef = useRef<HTMLSelectElement>(null);
-	const router = useRouter();
-	const { isOpen, onOpen, onClose } = useDisclosure();
-	const { state: cartItems, dispatch } = useContext(CartContext);
-
-	const queryUrl = router.query.slug;
-	const series: string = (queryUrl as string).split('-')[0];
-	const seriesCapitalize: string =
-		series.charAt(0).toUpperCase() + series.slice(1);
-	// starter-plus-pc
-	// console.log(props?.slug?.includes('plus'));
-
-	const formatQueryString = (query: string | undefined): string => {
-		if (!query) return '';
-		const split: string[] = query.split('-');
-		let result: string[] = [];
-		split.forEach((str) => {
-			result.push(str.charAt(0).toUpperCase() + str.slice(1));
-		});
-
-		return result.join(' ');
-	};
+	const { isOpen, onOpen } = useDisclosure();
+	const { dispatch } = useContext(CartContext);
 
 	function handleAddToCart() {
 		if (qtyRef.current) {
 			let newItem: Cart = {
-				productName: formatQueryString(queryUrl as string),
+				productName: product.name,
 				productImgUrl: 'https://via.placeholder.com/1000x1000.png/09f/fff',
-				productPrice: 17000000,
+				productPrice: product.price,
 				qty: +qtyRef.current.value,
 			};
 			dispatch({ type: CART_ACTION.ADD_CART, payload: newItem });
-			setItemInfo(newItem);
 
-			if (parseInt(qtyRef?.current?.value) === 1) {
-				onOpen();
-				return;
-			} else {
-				router.push('/cart');
-				return;
-			}
+			onOpen();
 		}
-	}
-
-	const handleReviewsLikeBtn = (action: string): void => {
-		switch (action) {
-			case 'like':
-				setReviewsLikeCount((prev) => !prev);
-				if (reviewsDisikeCount) setReviewsDislikeCount(false);
-				break;
-
-			case 'dislike':
-				setReviewsDislikeCount((prev) => !prev);
-				if (reviewsLikeCount) setReviewsLikeCount(false);
-				break;
-
-			default:
-				break;
-		}
-	};
-
-	// TODO: refactor to own component
-	function recommendItems() {
-		const currentPage = props?.slug;
-		const items = {
-			text: [] as string[],
-			path: [] as string[],
-		};
-		if (!currentPage) return items;
-
-		if (currentPage.includes('starter')) {
-			if (currentPage.includes('plus')) {
-				items.text.push('Starter Pc');
-				items.text.push('Starter Pro Pc');
-				items.text.push('Streaming Pc');
-
-				items.path.push('starter-pc');
-				items.path.push('starter-pro-pc');
-				items.path.push('streaming-pc');
-			} else {
-				// current page is starter-pro-pc
-				items.text.push('Streaming Pc');
-				items.text.push('Streaming Plus Pc');
-				items.text.push('Creator Pc');
-
-				items.path.push('streaming-pc');
-				items.path.push('streaming-plus-pc');
-				items.path.push('creator-pc');
-			}
-
-			// current page is starter-pc
-			items.text.push('Starter Pro Pc');
-			items.text.push('Streaming Pc');
-			items.text.push('Creator Pc');
-
-			items.path.push('starter-pro-pc');
-			items.path.push('streaming-pc');
-			items.path.push('creator-pc');
-		} else if (currentPage.includes('streaming')) {
-			if (currentPage.includes('plus')) {
-				items.text.push('Starter Pro Pc');
-				items.text.push('Streaming Pro Pc');
-				items.text.push('Creator Pc');
-
-				items.path.push('starter-pro-pc');
-				items.path.push('streaming-pro-pc');
-				items.path.push('creator-pc');
-			} else {
-				// current page is streaming-pro-pc
-				items.text.push('Streaming Plus Pc');
-				items.text.push('Creator Pc');
-				items.text.push('Creator Plus Pc');
-
-				items.path.push('streaming-plus-pc');
-				items.path.push('creator-pc');
-				items.path.push('creator-plus-pc');
-			}
-			// current page is streaming-pc
-			items.text.push('Starter Pro Pc');
-			items.text.push('Streaming Plus Pc');
-			items.text.push('Creator Pc');
-
-			items.path.push('starter-pro-pc');
-			items.path.push('streaming-plus-pc');
-			items.path.push('creator-pc');
-		} else if (currentPage.includes('creator')) {
-			if (currentPage.includes('plus')) {
-				items.text.push('Starter Pro Pc');
-				items.text.push('Streaming Pro Pc');
-				items.text.push('Creator Pro Pc');
-
-				items.path.push('starter-pro-pc');
-				items.path.push('streaming-pro-pc');
-				items.path.push('creator-pro-pc');
-			} else {
-				// current page is creator-pro-pc
-				items.text.push('Streaming Plus Pc');
-				items.text.push('Streaming Pro Pc');
-				items.text.push('Creator Plus Pc');
-
-				items.path.push('streaming-plus-pc');
-				items.path.push('streaming-pro-pc');
-				items.path.push('creator-plus-pc');
-			}
-			// current page is creator-pc
-			items.text.push('Starter Pro Pc');
-			items.text.push('Streaming Pro Pc');
-			items.text.push('Creator Plus Pc');
-
-			items.path.push('starter-pro-pc');
-			items.path.push('streaming-pro-pc');
-			items.path.push('creator-plus-pc');
-		}
-
-		// console.log(items);
-		return items;
 	}
 
 	return (
 		<>
 			<Head>
-				<title>{formatQueryString(props?.slug)}</title>
+				<title>{`${product.name} - DZPC`}</title>
 			</Head>
 			<Container
 				maxW={{ sm: 'lg', md: '2xl', lg: 'container.lg', xl: '5xl' }}
 				paddingTop="1.5rem"
 				paddingBottom="3rem"
 			>
+				{isOpen && (
+					<Alert mb="4" status="success" variant="subtle" fontSize={'sm'}>
+						<Text>
+							<strong>{product.name}</strong> has been successfully added to
+							cart.
+						</Text>
+					</Alert>
+				)}
 				<Stack
 					direction={{ base: 'column', lg: 'row' }}
 					gap="1.5rem"
@@ -255,7 +110,7 @@ export default function ProductInfo(props: slugProps) {
 					</Box>
 					<Box flex={{ md: '1 0 40%' }}>
 						<VStack gap="0.5rem" alignItems="start">
-							<Heading>{formatQueryString(queryUrl as string)}</Heading>
+							<Heading as={'h1'}>{product.name}</Heading>
 							<Box display="flex" mt="2" alignItems="center">
 								{Array(5)
 									.fill('')
@@ -267,41 +122,13 @@ export default function ProductInfo(props: slugProps) {
 									))}
 							</Box>
 							<Box>
-								<Text>Mid-Tower PC</Text>
 								<Text fontWeight="bold" fontSize="3xl">
-									{new Intl.NumberFormat('id-ID', {
+									{new Intl.NumberFormat('us-ID', {
 										style: 'currency',
-										currency: 'IDR',
-									}).format(17000000)}
+										currency: 'USD',
+									}).format(product.price)}
 								</Text>
 							</Box>
-							<strong>Series</strong>
-							<Select defaultValue={props?.slug}>
-								<option
-									value={series + '-pc'}
-									onClick={(e) =>
-										router.push(`/product/${e.currentTarget.value}`)
-									}
-								>
-									{seriesCapitalize + ' Pc'}
-								</option>
-								<option
-									value={series + '-plus-pc'}
-									onClick={(e) =>
-										router.push(`/product/${e.currentTarget.value}`)
-									}
-								>
-									{seriesCapitalize + ' Plus Pc'}
-								</option>
-								<option
-									value={series + '-pro-pc'}
-									onClick={(e) =>
-										router.push(`/product/${e.currentTarget.value}`)
-									}
-								>
-									{seriesCapitalize + ' Pro Pc'}
-								</option>
-							</Select>
 							<Center alignSelf="center">
 								<Text>Buy</Text>
 							</Center>
@@ -318,11 +145,6 @@ export default function ProductInfo(props: slugProps) {
 									<option value="3">3</option>
 									<option value="4">4</option>
 									<option value="5">5</option>
-									<option value="6">6</option>
-									<option value="7">7</option>
-									<option value="8">8</option>
-									<option value="9">9</option>
-									<option value="10">10</option>
 								</Select>
 							</Stack>
 							<Button
@@ -339,77 +161,6 @@ export default function ProductInfo(props: slugProps) {
 							>
 								Add to cart
 							</Button>
-
-							{/* start of add to cart drawer */}
-							<Drawer
-								isOpen={isOpen}
-								placement="right"
-								onClose={onClose}
-								finalFocusRef={addToCartBtnRef}
-								size={{ base: 'xs', md: 'sm' }}
-							>
-								<DrawerOverlay />
-								<DrawerContent>
-									<DrawerHeader>
-										Added to cart
-										<DrawerCloseButton top="4" right="6" />
-									</DrawerHeader>
-									<Divider />
-
-									<DrawerBody position={'relative'} py="4">
-										<Flex
-											gap={{ base: 2, md: 8 }}
-											w="100%"
-											height={'max-content'}
-											justifyContent={'space-between'}
-										>
-											<Box w={'64px'} h="64px" position="relative">
-												<Image
-													alt="image placeholder"
-													fill
-													src={
-														'https://via.placeholder.com/1000x1000.png/09f/fff'
-													}
-												/>
-											</Box>
-											<Stack flexGrow={1}>
-												<Text
-													as={'span'}
-													fontSize={'1.1rem'}
-													fontWeight={'bold'}
-												>
-													{/* Product name */}
-													{itemInfo.productName}
-												</Text>
-											</Stack>
-											<Text color={'whiteAlpha.700'}>
-												{new Intl.NumberFormat('id-ID', {
-													style: 'currency',
-													currency: 'IDR',
-												}).format(itemInfo.productPrice)}
-											</Text>
-										</Flex>
-										<Button
-											position={'fixed'}
-											bottom="5.5rem"
-											w="calc(100% - 48px)"
-											bg="neon.blue"
-											transition="transform 200ms ease"
-											fontSize="1.1rem"
-											size="lg"
-											_hover={{ transform: 'scale(1.02)' }}
-											_active={{ transform: 'scale(0.97)' }}
-											onClick={() => {
-												router.push('/cart');
-												onClose();
-											}}
-										>
-											View Cart
-										</Button>
-									</DrawerBody>
-								</DrawerContent>
-							</Drawer>
-							{/* end of add to cart drawer */}
 
 							<Box alignSelf="center">
 								<Stack direction="row" justifyContent="center" fontSize="lg">
@@ -437,138 +188,41 @@ export default function ProductInfo(props: slugProps) {
 								Performance
 							</Text>
 							<Grid templateColumns="1fr 1fr" gap="0.7rem">
-								<Flex
-									flex="1 0"
-									w="100%"
-									rounded="md"
-									overflow="hidden"
-									textAlign="center"
-								>
-									<Box
+								{product.performance.map((item, index) => (
+									<Flex
+										key={index}
+										flex="1 0"
 										w="100%"
-										h="100%"
-										paddingBlock="1rem"
-										margin="auto"
-										bgColor="grey"
+										rounded="md"
+										overflow="hidden"
+										textAlign="center"
 									>
-										<Text fontSize="1.5rem">Game</Text>
-									</Box>
-									<Box
-										w="100%"
-										h="100%"
-										paddingBlock="1rem"
-										margin="auto"
-										bgColor="white"
-									>
-										<Flex direction="column" lineHeight="1.1">
-											<Text fontSize="1.5rem" fontWeight="bold" color="green">
-												80
-											</Text>
-											<Text color="blackAlpha.900" fontSize="1.1rem">
-												FPS
-											</Text>
+										<Flex
+											w="100%"
+											bgColor="grey"
+											justifyContent={'center'}
+											alignItems={'center'}
+										>
+											<Text fontWeight={'bold'}>{item.game}</Text>
 										</Flex>
-									</Box>
-								</Flex>
-								<Flex
-									flex="1 0"
-									w="100%"
-									rounded="md"
-									overflow="hidden"
-									textAlign="center"
-								>
-									<Box
-										w="100%"
-										h="100%"
-										paddingBlock="1rem"
-										margin="auto"
-										bgColor="grey"
-									>
-										<Text fontSize="1.5rem">Game</Text>
-									</Box>
-									<Box
-										w="100%"
-										h="100%"
-										paddingBlock="1rem"
-										margin="auto"
-										bgColor="white"
-									>
-										<Flex direction="column" lineHeight="1.1">
-											<Text fontSize="1.5rem" fontWeight="bold" color="green">
-												80
-											</Text>
-											<Text color="blackAlpha.900" fontSize="1.1rem">
-												FPS
-											</Text>
-										</Flex>
-									</Box>
-								</Flex>
-								<Flex
-									flex="1 0"
-									w="100%"
-									rounded="md"
-									overflow="hidden"
-									textAlign="center"
-								>
-									<Box
-										w="100%"
-										h="100%"
-										paddingBlock="1rem"
-										margin="auto"
-										bgColor="grey"
-									>
-										<Text fontSize="1.5rem">Game</Text>
-									</Box>
-									<Box
-										w="100%"
-										h="100%"
-										paddingBlock="1rem"
-										margin="auto"
-										bgColor="white"
-									>
-										<Flex direction="column" lineHeight="1.1">
-											<Text fontSize="1.5rem" fontWeight="bold" color="green">
-												80
-											</Text>
-											<Text color="blackAlpha.900" fontSize="1.1rem">
-												FPS
-											</Text>
-										</Flex>
-									</Box>
-								</Flex>
-								<Flex
-									flex="1 0"
-									w="100%"
-									rounded="md"
-									overflow="hidden"
-									textAlign="center"
-								>
-									<Box
-										w="100%"
-										h="100%"
-										paddingBlock="1rem"
-										margin="auto"
-										bgColor="grey"
-									>
-										<Text fontSize="1.5rem">Game</Text>
-									</Box>
-									<Box
-										w="100%"
-										h="100%"
-										paddingBlock="1rem"
-										margin="auto"
-										bgColor="white"
-									>
-										<Flex direction="column" lineHeight="1.1">
-											<Text fontSize="1.5rem" fontWeight="bold" color="green">
-												80
-											</Text>
-											<Text color="blackAlpha.900" fontSize="1.1rem">
-												FPS
-											</Text>
-										</Flex>
-									</Box>
-								</Flex>
+										<Box
+											w="100%"
+											h="100%"
+											paddingBlock="1rem"
+											margin="auto"
+											bgColor="white"
+										>
+											<Flex direction="column" lineHeight="1.1">
+												<Text fontSize="2xl" fontWeight="bold" color="green">
+													{item.fps}
+												</Text>
+												<Text color="blackAlpha.900" fontSize="1.1rem">
+													FPS
+												</Text>
+											</Flex>
+										</Box>
+									</Flex>
+								))}
 							</Grid>
 							<Flex justifyContent={'end'}>
 								<Text
@@ -589,70 +243,25 @@ export default function ProductInfo(props: slugProps) {
 							rounded="md"
 						>
 							<Grid rowGap={'0.3rem'}>
-								<GridItem
-									paddingBottom={'0.5rem'}
-									borderBottom={'1px solid'}
-									borderBottomColor={'whiteAlpha.300'}
-								>
-									<Text
-										fontSize={'1.1rem'}
-										fontWeight={'bold'}
-										letterSpacing={'0.1rem'}
+								{['CPU', 'Graphic', 'Memory', 'Storage'].map((item, index) => (
+									<GridItem
+										key={index}
+										paddingBottom={'0.5rem'}
+										borderBottom={'1px solid'}
+										borderBottomColor={'whiteAlpha.300'}
 									>
-										Intel Core i5-10400F
-									</Text>
-									<Text letterSpacing="1px" color="whiteAlpha.800">
-										CPU
-									</Text>
-								</GridItem>
-								<GridItem
-									paddingBottom={'0.5rem'}
-									borderBottom={'1px solid'}
-									borderBottomColor={'whiteAlpha.300'}
-								>
-									<Text
-										fontSize={'1.1rem'}
-										fontWeight={'bold'}
-										letterSpacing={'0.1rem'}
-									>
-										NVIDIA GeForce® RTX™ 3060 Ti
-									</Text>
-									<Text letterSpacing="1px" color="whiteAlpha.800">
-										GPU
-									</Text>
-								</GridItem>
-								<GridItem
-									paddingBottom={'0.5rem'}
-									borderBottom={'1px solid'}
-									borderBottomColor={'whiteAlpha.300'}
-								>
-									<Text
-										fontSize={'1.1rem'}
-										fontWeight={'bold'}
-										letterSpacing={'0.1rem'}
-									>
-										3200 MHz 16 GB (2 x 8 GB)
-									</Text>
-									<Text letterSpacing="1px" color="whiteAlpha.800">
-										RAM
-									</Text>
-								</GridItem>
-								<GridItem
-									paddingBottom={'0.5rem'}
-									borderBottom={'1px solid'}
-									borderBottomColor={'whiteAlpha.300'}
-								>
-									<Text
-										fontSize={'1.1rem'}
-										fontWeight={'bold'}
-										letterSpacing={'0.1rem'}
-									>
-										SSD NVMe M.2 1 TB
-									</Text>
-									<Text letterSpacing="1px" color="whiteAlpha.800">
-										Storage
-									</Text>
-								</GridItem>
+										<Text
+											fontSize={'1.1rem'}
+											fontWeight={'bold'}
+											letterSpacing={'0.1rem'}
+										>
+											{product[item.toLowerCase()]}
+										</Text>
+										<Text letterSpacing="1px" color="whiteAlpha.800">
+											{item}
+										</Text>
+									</GridItem>
+								))}
 							</Grid>
 						</Box>
 					</Flex>
@@ -662,7 +271,7 @@ export default function ProductInfo(props: slugProps) {
 				<Tabs mt={'3rem'}>
 					<TabList>
 						<Tab>Overview</Tab>
-						<Tab>Spesifikasi</Tab>
+						<Tab>Specification</Tab>
 						<Tab>Reviews</Tab>
 					</TabList>
 
@@ -691,7 +300,7 @@ export default function ProductInfo(props: slugProps) {
 										In the box
 									</Text>
 								</GridItem>
-								<GridItem>{props?.slug}</GridItem>
+								<GridItem>{product.slug}</GridItem>
 								<GridItem>1</GridItem>
 							</Grid>
 						</TabPanel>
@@ -704,225 +313,73 @@ export default function ProductInfo(props: slugProps) {
 								marginBottom="1rem"
 								letterSpacing="2px"
 							>
-								Spesifikasi
+								Full Specs
 							</Text>
-							<Grid
-								templateColumns={{ sm: '1fr', md: '1fr 1fr' }}
-								gridAutoFlow={'row dense'}
-								columnGap="3rem"
-							>
-								<GridItem mb="2rem">
-									<Text
-										fontSize="1.1rem"
-										fontWeight="bold"
-										letterSpacing="2px"
-										color="whiteAlpha.800"
+							<Flex direction="column" fontSize={'lg'}>
+								{[
+									'CPU',
+									'Graphic',
+									'Memory',
+									'Storage',
+									'Motherboard',
+									'Power',
+									'Cooler',
+									'Case',
+								].map((item, index) => (
+									<Box
+										key={item + index}
+										w={'full'}
+										py={'2'}
+										borderBottom={'1px solid'}
+										borderBottomColor={'whiteAlpha.300'}
 									>
-										Key Specs
-									</Text>
-									<Divider marginBlock="3" />
-									<Text>
-										<strong>CPU:</strong> Intel i5-10400F
-									</Text>
-									<Text>
-										<strong>GPU:</strong> GeForce® RTX™ 3060 Ti
-									</Text>
-									<Text>
-										<strong>RAM:</strong> 3200 MHz (max speed) 16 GB (2 x 8 GB)
-									</Text>
-									<Text>
-										<strong>Storage:</strong> SSD M.2 1 TB
-									</Text>
-								</GridItem>
-								<GridItem mb="2rem">
+										<Text
+											fontSize={'1.1rem'}
+											fontWeight={'bold'}
+											letterSpacing={'0.1rem'}
+										>
+											{product[item.toLowerCase()]}
+										</Text>
+										<Text letterSpacing="1px" color="whiteAlpha.800">
+											{item}
+										</Text>
+									</Box>
+								))}
+								<Box
+									w={'full'}
+									py={'2'}
+									borderBottom={'1px solid'}
+									borderBottomColor={'whiteAlpha.300'}
+								>
 									<Text
-										fontSize="1.1rem"
-										fontWeight="bold"
-										letterSpacing="2px"
-										color="whiteAlpha.800"
+										fontSize={'1.1rem'}
+										fontWeight={'bold'}
+										letterSpacing={'0.1rem'}
 									>
+										Windows 11 Home
+									</Text>
+									<Text letterSpacing="1px" color="whiteAlpha.800">
 										Software
 									</Text>
-									<Divider marginBlock="3" />
-									<Text>
-										<strong>Operating System:</strong> Windows 11 Home
-									</Text>
-								</GridItem>
-								<GridItem mb="2rem">
+								</Box>
+								<Box
+									w={'full'}
+									py={'2'}
+									borderBottom={'1px solid'}
+									borderBottomColor={'whiteAlpha.300'}
+								>
 									<Text
-										fontSize="1.1rem"
-										fontWeight="bold"
-										letterSpacing="2px"
-										color="whiteAlpha.800"
+										fontSize={'1.1rem'}
+										fontWeight={'bold'}
+										letterSpacing={'0.1rem'}
 									>
-										Processor
+										2 Years (Parts & Services)
 									</Text>
-									<Divider marginBlock="3" />
-									<Text>
-										<strong>Brand:</strong> Intel
-									</Text>
-									<Text>
-										<strong>Series:</strong> i5-10400F
-									</Text>
-									<Text>
-										<strong>Number of Cores:</strong> 6
-									</Text>
-								</GridItem>
-								<GridItem mb="2rem">
-									<Text
-										fontSize="1.1rem"
-										fontWeight="bold"
-										letterSpacing="2px"
-										color="whiteAlpha.800"
-									>
-										Graphic
-									</Text>
-									<Divider marginBlock="3" />
-									<Text>
-										<strong>Series:</strong> GeForce® RTX™ 3060 Ti
-									</Text>
-									<Text>
-										<strong>Manufactures:</strong> NVIDIA
-									</Text>
-								</GridItem>
-								<GridItem mb="2rem">
-									<Text
-										fontSize="1.1rem"
-										fontWeight="bold"
-										letterSpacing="2px"
-										color="whiteAlpha.800"
-									>
-										Memory
-									</Text>
-									<Divider marginBlock="3" />
-									<Text>
-										<strong>Model:</strong> Team T-FORCE Vulcan Z
-									</Text>
-									<Text>
-										<strong>Capacity:</strong> 16 GB (2x8GB)
-									</Text>
-									<Text>
-										<strong>Speed: </strong> 3200 MHz
-									</Text>
-									<Text>
-										<strong>Interface:</strong> DDR4
-									</Text>
-								</GridItem>
-								<GridItem mb="2rem">
-									<Text
-										fontSize="1.1rem"
-										fontWeight="bold"
-										letterSpacing="2px"
-										color="whiteAlpha.800"
-									>
-										Storage
-									</Text>
-									<Divider marginBlock="3" />
-									<Text>
-										<strong>Model:</strong> Product brand may vary
-									</Text>
-									<Text>
-										<strong>Capacity:</strong> 1 TB
-									</Text>
-									<Text>
-										<strong>Form Factor: </strong> NVMe M.2 SSD
-									</Text>
-								</GridItem>
-								<GridItem mb="2rem">
-									<Text
-										fontSize="1.1rem"
-										fontWeight="bold"
-										letterSpacing="2px"
-										color="whiteAlpha.800"
-									>
-										Motherboard
-									</Text>
-									<Divider marginBlock="3" />
-									<Text>
-										<strong>Model:</strong> ASUS Prime B560-PLUS AC-HES
-									</Text>
-									<Text>
-										<strong>Form Factor:</strong> ATX
-									</Text>
-									<Text>
-										<strong>Wi-Fi:</strong> Included
-									</Text>
-								</GridItem>
-								<GridItem mb="2rem">
-									<Text
-										fontSize="1.1rem"
-										fontWeight="bold"
-										letterSpacing="2px"
-										color="whiteAlpha.800"
-									>
-										CPU Cooler
-									</Text>
-									<Divider marginBlock="3" />
-									<Text>
-										<strong>Model:</strong> DEEPCOOL GAMMAX GTE V2
-									</Text>
-								</GridItem>
-								<GridItem mb="2rem">
-									<Text
-										fontSize="1.1rem"
-										fontWeight="bold"
-										letterSpacing="2px"
-										color="whiteAlpha.800"
-									>
-										Power
-									</Text>
-									<Divider marginBlock="3" />
-									<Text>
-										<strong>Model:</strong> Product brand may vary
-									</Text>
-									<Text>
-										<strong>Wattage:</strong> 650 W
-									</Text>
-									<Text>
-										<strong>Rating:</strong> 80+ Bronze
-									</Text>
-								</GridItem>
-								<GridItem mb="2rem">
-									<Text
-										fontSize="1.1rem"
-										fontWeight="bold"
-										letterSpacing="2px"
-										color="whiteAlpha.800"
-									>
-										Case
-									</Text>
-									<Divider marginBlock="3" />
-									<Text>
-										<strong>Model:</strong> Product brand may vary
-									</Text>
-									<Text>
-										<strong>Motherboard Support:</strong> Mini-ITX, MicroATX,
-										ATX
-									</Text>
-									<Text>
-										<strong>Front I/O: </strong>
-										1x USB 3.2 Gen 1 Type-A / 1x USB 3.2 Gen 2 Type-C / 1x
-										Headset Audio Jack
-									</Text>
-								</GridItem>
-								<GridItem mb="2rem">
-									<Text
-										fontSize="1.1rem"
-										fontWeight="bold"
-										letterSpacing="2px"
-										color="whiteAlpha.800"
-									>
+									<Text letterSpacing="1px" color="whiteAlpha.800">
 										Warranty
 									</Text>
-									<Divider marginBlock="3" />
-									<Text>
-										<strong>Part:</strong> 2 Years
-									</Text>
-									<Text>
-										<strong>Service:</strong> 2 Years
-									</Text>
-								</GridItem>
-							</Grid>
+								</Box>
+							</Flex>
 						</TabPanel>
 
 						{/* reviews */}
@@ -965,7 +422,7 @@ export default function ProductInfo(props: slugProps) {
 								gap="1rem"
 								my="1.5rem"
 							>
-								{Array(10)
+								{Array(2)
 									.fill('')
 									.map((_, i) => (
 										<GridItem key={i}>
@@ -1065,13 +522,10 @@ export default function ProductInfo(props: slugProps) {
 																size="sm"
 																role="button"
 																alignSelf="center"
-																onClick={(e) => handleReviewsLikeBtn('like')}
 															>
 																Like
 															</Icon>
-															<Text alignSelf="center">
-																{reviewsLikeCount ? 1 : 0}
-															</Text>
+															<Text alignSelf="center">0</Text>
 														</Flex>
 														<Flex gap={1}>
 															<Icon
@@ -1079,13 +533,10 @@ export default function ProductInfo(props: slugProps) {
 																size="sm"
 																role="button"
 																alignSelf="center"
-																onClick={(e) => handleReviewsLikeBtn('dislike')}
 															>
 																Dislike
 															</Icon>
-															<Text alignSelf="center">
-																{reviewsDisikeCount ? 1 : 0}
-															</Text>
+															<Text alignSelf="center">0</Text>
 														</Flex>
 													</Flex>
 												</CardFooter>
@@ -1096,73 +547,6 @@ export default function ProductInfo(props: slugProps) {
 						</TabPanel>
 					</TabPanels>
 				</Tabs>
-
-				{/* recommend items */}
-				<Box mt={'4rem'}>
-					<Text fontSize={'4xl'} fontWeight={'bold'}>
-						You may also like
-					</Text>
-					<Divider my={5} />
-					<Flex
-						direction={{ base: 'column', md: 'row' }}
-						flexGrow={1}
-						justifyContent={'center'}
-						alignItems={'center'}
-						gap={5}
-					>
-						{Array(3)
-							.fill('')
-							.map((_, i) => (
-								<Card
-									w={{ base: 'full', md: 'auto' }}
-									maxW={'100%'}
-									bg="transparent"
-									rounded="lg"
-									overflow="hidden"
-									border="1px solid grey"
-									flexGrow={1}
-									key={i}
-								>
-									<CardHeader
-										position="relative"
-										w="70%"
-										h="250px"
-										marginInline="auto"
-										marginBlock="2rem"
-										padding="0"
-									>
-										<Image
-											src="https://images.unsplash.com/photo-1627281795244-0f5db916344a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-											alt="Green double couch with wooden legs"
-											fill
-											style={{
-												objectFit: 'cover',
-											}}
-										/>
-									</CardHeader>
-									<CardBody paddingBlock="2" bg="accent.shadeGrey">
-										<LinkOverlay
-											as={NextLink}
-											href={`/product/${recommendItems().path[i]}`}
-										>
-											<Stack>
-												<Heading size="md">{recommendItems().text[i]}</Heading>
-												<Text>Mid-tower prebuild PC</Text>
-											</Stack>
-										</LinkOverlay>
-									</CardBody>
-									<CardFooter paddingTop="3" bg="accent.shadeGrey">
-										<Text>
-											{new Intl.NumberFormat('id-ID', {
-												style: 'currency',
-												currency: 'IDR',
-											}).format(15000000)}
-										</Text>
-									</CardFooter>
-								</Card>
-							))}
-					</Flex>
-				</Box>
 			</Container>
 		</>
 	);
@@ -1171,27 +555,22 @@ export default function ProductInfo(props: slugProps) {
 export async function getStaticProps({
 	params,
 }: GetStaticPropsContext<pageParams>): Promise<
-	GetStaticPropsResult<slugProps>
+	GetStaticPropsResult<PageProps>
 > {
-	const slug = params?.slug;
+	const resp = await fetch('http://localhost:3000/api/product/' + params.slug);
+	const productJson: ResponseData = await resp.json();
 
 	return {
-		props: { slug },
+		props: { product: productJson.data[0] },
 	};
 }
 
 export async function getStaticPaths() {
-	const series: string[] = [
-		'starter-pc',
-		'starter-plus-pc',
-		'starter-pro-pc',
-		'streaming-pc',
-		'streaming-plus-pc',
-		'streaming-pro-pc',
-		'creator-pc',
-		'creator-plus-pc',
-		'creator-pro-pc',
-	];
+	const resp = await fetch('http://localhost:3000/api/product');
+	const allProducts: ResponseData = await resp.json();
+
+	const series: string[] = allProducts.data.map((item) => item.slug);
+
 	const paths = series.map((item) => ({
 		params: {
 			slug: item,
