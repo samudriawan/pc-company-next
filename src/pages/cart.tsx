@@ -30,18 +30,21 @@ import { CartContext, CART_ACTION } from '@/context/cartContext';
 
 export default function Cart() {
 	const { state: cartItems, dispatch } = useContext(CartContext);
-	// const [price, setPrice] = useState(() =>
-	// 	cartItems.map((item) => item.productPrice)
-	// );
 	const [subTotal, setSubTotal] = useState(0);
 	const qtyInputRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
-		setSubTotal(() => {
-			return cartItems
-				.map((item) => item.qty * item.productPrice)
-				.reduce((acc, curr) => acc + curr, 0);
-		});
+		const calculateSubTotal = async () => {
+			const result = await fetch('http://localhost:3000/api/cart', {
+				method: 'POST',
+				body: JSON.stringify({ cart: cartItems }),
+				headers: { 'Content-type': 'application/json' },
+			}).then((res) => res.json());
+			setSubTotal(result);
+			return result;
+		};
+
+		calculateSubTotal();
 	}, [cartItems]);
 
 	if (cartItems.length === 0)
@@ -62,7 +65,7 @@ export default function Cart() {
 							alignItems={'center'}
 						>
 							<Heading as={'h3'}>Your cart is empty</Heading>
-							<NextLink href={'/'}>
+							<NextLink href={'/product'}>
 								<Button
 									maxW="100%"
 									bg="neon.blue"
@@ -76,140 +79,6 @@ export default function Cart() {
 								</Button>
 							</NextLink>
 						</Flex>
-
-						<Stack
-							direction={{ base: 'column', md: 'row' }}
-							justifyContent={'space-between'}
-							alignItems="center"
-							spacing={4}
-						>
-							<Card
-								w="300px"
-								h="392px"
-								bg="transparent"
-								border="1px solid grey"
-								textAlign={'center'}
-							>
-								<CardHeader
-									position="relative"
-									w="50%"
-									h="200px"
-									marginInline="auto"
-									marginBlock="2rem"
-									padding="0"
-								>
-									<Image
-										src="https://images.unsplash.com/photo-1627281795244-0f5db916344a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-										alt="Green double couch with wooden legs"
-										fill
-										style={{
-											objectFit: 'cover',
-										}}
-									/>
-								</CardHeader>
-								<CardBody paddingBlock="2">
-									<Stack>
-										<Heading as={'h3'} fontSize={'2xl'}>
-											Starter PC Series
-										</Heading>
-									</Stack>
-								</CardBody>
-								<CardFooter paddingTop={2}>
-									<Link
-										as={NextLink}
-										href="/product"
-										mx="auto"
-										color={'neon.shadeBlue'}
-									>
-										Shop Starter PCs <ChevronRightIcon />
-									</Link>
-								</CardFooter>
-							</Card>
-							<Card
-								w="300px"
-								h="392px"
-								bg="transparent"
-								border="1px solid grey"
-								textAlign={'center'}
-							>
-								<CardHeader
-									position="relative"
-									w="50%"
-									h="200px"
-									marginInline="auto"
-									marginBlock="2rem"
-									padding="0"
-								>
-									<Image
-										src="https://images.unsplash.com/photo-1627281795244-0f5db916344a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-										alt="Green double couch with wooden legs"
-										fill
-										style={{
-											objectFit: 'cover',
-										}}
-									/>
-								</CardHeader>
-								<CardBody paddingBlock="2">
-									<Stack>
-										<Heading as={'h3'} fontSize={'2xl'}>
-											Streaming PC Series
-										</Heading>
-									</Stack>
-								</CardBody>
-								<CardFooter paddingTop={2}>
-									<Link
-										as={NextLink}
-										href="/product"
-										mx="auto"
-										color={'neon.shadeBlue'}
-									>
-										Shop Streaming PCs <ChevronRightIcon />
-									</Link>
-								</CardFooter>
-							</Card>
-							<Card
-								w="300px"
-								h="392px"
-								bg="transparent"
-								border="1px solid grey"
-								textAlign={'center'}
-							>
-								<CardHeader
-									position="relative"
-									w="50%"
-									h="200px"
-									marginInline="auto"
-									marginBlock="2rem"
-									padding="0"
-								>
-									<Image
-										src="https://images.unsplash.com/photo-1627281795244-0f5db916344a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-										alt="Green double couch with wooden legs"
-										fill
-										style={{
-											objectFit: 'cover',
-										}}
-									/>
-								</CardHeader>
-								<CardBody paddingBlock="2">
-									<Stack>
-										<Heading as={'h3'} fontSize={'2xl'}>
-											Creator PC Series
-										</Heading>
-									</Stack>
-								</CardBody>
-								<CardFooter paddingTop={2}>
-									<Link
-										as={NextLink}
-										href="/product"
-										mx="auto"
-										color={'neon.shadeBlue'}
-									>
-										Shop Creator PCs <ChevronRightIcon />
-									</Link>
-								</CardFooter>
-							</Card>
-						</Stack>
 					</Container>
 				</main>
 			</>
@@ -259,7 +128,6 @@ export default function Cart() {
 									key={i}
 									gap={{ base: 4, md: 8 }}
 									w="100%"
-									// mb="4"
 									pt={i === 0 ? 0 : 6}
 									pb={6}
 									height={'max-content'}
@@ -364,9 +232,9 @@ export default function Cart() {
 											}
 										></Button>
 										<Text color={'whiteAlpha.700'}>
-											{new Intl.NumberFormat('id-ID', {
+											{new Intl.NumberFormat('us-ID', {
 												style: 'currency',
-												currency: 'IDR',
+												currency: 'USD',
 											}).format(item.productPrice)}
 										</Text>
 									</Stack>
@@ -391,32 +259,11 @@ export default function Cart() {
 												Subtotal
 											</Text>
 											<Text as={'span'}>
-												{new Intl.NumberFormat('id-ID', {
+												{new Intl.NumberFormat('us-ID', {
 													style: 'currency',
-													currency: 'IDR',
+													currency: 'USD',
 												}).format(subTotal)}
 											</Text>
-										</Stack>
-									</ListItem>
-									<Divider />
-									<ListItem>
-										<Stack
-											direction={'row'}
-											justifyContent={'space-between'}
-											alignItems={'center'}
-										>
-											<Text as={'span'}>Taxes</Text>
-											<Text as={'span'}>Calculated at checkout</Text>
-										</Stack>
-									</ListItem>
-									<ListItem>
-										<Stack
-											direction={'row'}
-											justifyContent={'space-between'}
-											alignItems={'center'}
-										>
-											<Text as={'span'}>Estimated Shipping</Text>
-											<Text as={'span'}>Calculated at checkout</Text>
 										</Stack>
 									</ListItem>
 								</List>
@@ -430,7 +277,7 @@ export default function Cart() {
 									fontSize="1.1rem"
 									_hover={{ transform: 'scale(1.02)' }}
 								>
-									Proceed to Chekcout
+									Chekcout
 								</Button>
 							</Box>
 						</GridItem>

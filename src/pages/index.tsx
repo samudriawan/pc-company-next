@@ -59,113 +59,24 @@ export default function Home() {
 						Prebuilt PC Collection
 					</Heading>
 					<SimpleGrid
-						columns={{ sm: 1, lg: 3 }}
+						columns={1}
 						spacing="1rem"
-						paddingTop="2rem"
 						marginTop="2rem"
+						placeItems={'center'}
 					>
-						<Card
-							maxW="100%"
-							textAlign="center"
-							border="1px"
-							bg="transparent"
-							color="white"
-							data-testid="product_card"
-						>
-							<CardHeader>
-								<Stack mt="6" spacing="3">
-									<Heading size="md">Starter Series</Heading>
-									<Text>
-										Competitive gaming dan yang membutuhkan PC pertama untuk
-										memulai perjalanan gaming dengan ruang untuk upgrade.
-									</Text>
-								</Stack>
-							</CardHeader>
-							<CardBody>
-								<Image
-									src="https://images.unsplash.com/photo-1627281795244-0f5db916344a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-									alt="Green double couch with wooden legs"
-									width={200}
-									height={100}
-									style={{
-										objectFit: 'contain',
-										marginInline: 'auto',
-									}}
-								/>
-							</CardBody>
-							<CardFooter mx="auto">
-								<Link href={'/product/starter-pc'}>
-									<Button variant="outline">Buy now</Button>
-								</Link>
-							</CardFooter>
-						</Card>
-						<Card
-							maxW="100%"
-							textAlign="center"
-							border="1px"
-							bg="transparent"
-							color="white"
-						>
-							<CardHeader>
-								<Stack mt="6" spacing="3">
-									<Heading size="md">Streaming Series</Heading>
-									<Text>
-										Gaming dan streaming bersamaan secara terus menerus.
-									</Text>
-								</Stack>
-							</CardHeader>
-							<CardBody display="flex" alignItems="end">
-								<Image
-									src="https://images.unsplash.com/photo-1627281795244-0f5db916344a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-									alt="Green double couch with wooden legs"
-									width={200}
-									height={100}
-									style={{
-										objectFit: 'contain',
-										marginInline: 'auto',
-									}}
-								/>
-							</CardBody>
-							<CardFooter mx="auto">
-								<Link href={'/product/streaming-pc'}>
-									<Button variant="outline">Buy now</Button>
-								</Link>
-							</CardFooter>
-						</Card>
-						<Card
-							maxW="100%"
-							textAlign="center"
-							border="1px"
-							bg="transparent"
-							color="white"
-						>
-							<CardHeader>
-								<Stack mt="6" spacing="3">
-									<Heading size="md">Creator Series</Heading>
-									<Text>
-										Competitive gaming dan yang membutuhkan PC pertama untuk
-										memulai perjalanan gaming dengan ruang untuk upgrade.
-									</Text>
-								</Stack>
-							</CardHeader>
-							<CardBody display="flex" alignItems="end">
-								<Image
-									src="https://images.unsplash.com/photo-1627281795244-0f5db916344a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzR8fGNvbXB1dGVyJTIwaGFyZHdhcmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-									alt="Green double couch with wooden legs"
-									width={200}
-									height={70}
-									style={{
-										objectFit: 'contain',
-										marginInline: 'auto',
-									}}
-								/>
-							</CardBody>
-							<CardFooter mx="auto">
-								<Link href={'/product/creator-pc'}>
-									<Button variant="outline">Buy now</Button>
-								</Link>
-							</CardFooter>
-						</Card>
+						<Link href={'/product'}>
+							<Button
+								maxW="100%"
+								bg="neon.blue"
+								paddingBlock="1.4rem"
+								my={6}
+								transition="transform 200ms ease"
+								fontSize="1.1rem"
+								_hover={{ transform: 'scale(1.02)' }}
+							>
+								Browse Product
+							</Button>
+						</Link>
 					</SimpleGrid>
 
 					{/* why choose prebuild section */}
