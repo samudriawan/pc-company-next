@@ -27,24 +27,30 @@ import Image from 'next/image';
 import { default as NextLink } from 'next/link';
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { CartContext, CART_ACTION } from '@/context/cartContext';
+import PaypalButton from '@/components/PaypalButton';
+import { PayPalScriptProvider } from '@paypal/react-paypal-js';
+import { useSession } from 'next-auth/react';
 
 export default function Cart() {
 	const { state: cartItems, dispatch } = useContext(CartContext);
 	const [subTotal, setSubTotal] = useState(0);
+	const [showPaypalButton, setShowPaypalButton] = useState(false);
 	const qtyInputRef = useRef<HTMLInputElement>(null);
+	const { data: session } = useSession();
+
+	const purchaseItems: any[] = []
+	cartItems.map(item => {
+		purchaseItems.push({
+			name: item.productName,
+			description: item.productName,
+			quantity: item.qty,
+			unit_amount: { value: item.productPrice.toString(), currency_code: 'USD' }
+		})
+	})
 
 	useEffect(() => {
-		const calculateSubTotal = async () => {
-			const result = await fetch('http://localhost:3000/api/cart', {
-				method: 'POST',
-				body: JSON.stringify({ cart: cartItems }),
-				headers: { 'Content-type': 'application/json' },
-			}).then((res) => res.json());
-			setSubTotal(result);
-			return result;
-		};
-
-		calculateSubTotal();
+		setShowPaypalButton(false);
+		setSubTotal(0)
 	}, [cartItems]);
 
 	if (cartItems.length === 0)
@@ -259,10 +265,12 @@ export default function Cart() {
 												Subtotal
 											</Text>
 											<Text as={'span'}>
-												{new Intl.NumberFormat('us-ID', {
-													style: 'currency',
-													currency: 'USD',
-												}).format(subTotal)}
+												{subTotal ? 
+													new Intl.NumberFormat('us-ID', {
+														style: 'currency',
+														currency: 'USD',
+													}).format(subTotal)
+													: "Calculate on checkout."}
 											</Text>
 										</Stack>
 									</ListItem>
@@ -276,9 +284,28 @@ export default function Cart() {
 									transition="transform 200ms ease"
 									fontSize="1.1rem"
 									_hover={{ transform: 'scale(1.02)' }}
+									onClick={() => {
+										fetch('http://localhost:3000/api/cart', {
+											method: 'POST',
+											body: JSON.stringify({ cart: cartItems }),
+											headers: { 'Content-type': 'application/json' },
+										}).then((res) => res.json()).then(total => setSubTotal(total)).finally(() => setShowPaypalButton(true));
+									}}
 								>
 									Chekcout
 								</Button>
+								<PayPalScriptProvider
+									options={{
+										'client-id': process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+										currency: 'USD',
+										'disable-funding': 'card',
+									}}
+								>
+									{showPaypalButton ? 
+										<PaypalButton total={subTotal.toString()} items={purchaseItems} userEmail={session.user?.email} />
+										: null
+									}
+								</PayPalScriptProvider>
 							</Box>
 						</GridItem>
 					</Grid>

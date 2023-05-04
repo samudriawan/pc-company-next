@@ -17,6 +17,7 @@ export const enum CART_ACTION {
 	SUBSTRACT_QTY = 'SUBSTRACT_QTY',
 	SET_QTY = 'SET_QTY',
 	DELETE_ITEM = 'DELETE_ITEM',
+	CLEAR_CART = 'CLEAR_CART'
 }
 
 export interface Cart {
@@ -28,7 +29,7 @@ export interface Cart {
 
 type CartAction = {
 	type: CART_ACTION;
-	payload: Cart;
+	payload?: Cart;
 };
 
 function cartReducer(state: Cart[], action: CartAction): Cart[] {
@@ -94,6 +95,9 @@ function cartReducer(state: Cart[], action: CartAction): Cart[] {
 				return item.productName !== action.payload.productName;
 			});
 			return newState;
+
+		case CART_ACTION.CLEAR_CART:
+			return [];
 
 		default:
 			return state;

@@ -88,12 +88,12 @@ export default function ProductCreateNewForm({ onToggle }: Props) {
 			performanceData as unknown as [Object]
 		);
 
-		console.log('formdata ', formData.entries());
-		console.log('final data ', {
-			...spreadFormData,
-			...productSlug,
-			performance,
-		});
+		// console.log('formdata ', formData.entries());
+		// console.log('final data ', {
+		// 	...spreadFormData,
+		// 	...productSlug,
+		// 	performance,
+		// });
 
 		try {
 			const resp = await fetch('http://localhost:3000/api/product/create', {
@@ -107,7 +107,7 @@ export default function ProductCreateNewForm({ onToggle }: Props) {
 			});
 			const { error, ...other } = await resp.json();
 
-			console.log(resp);
+			// console.log(resp);
 			if (error) {
 				if (!toast.isActive('error-resp-toast')) {
 					toast({

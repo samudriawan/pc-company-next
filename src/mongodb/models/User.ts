@@ -1,11 +1,26 @@
-import { Schema, model, models, Document } from 'mongoose';
+import { Schema, model, models, Document, Model } from 'mongoose';
 
 export interface IUser extends Document {
 	username: string;
 	email: string;
 	hash: string;
 	role: string;
+	orders: Order[];
 	refreshToken: string[];
+}
+
+export interface Order {
+	orderId: string
+	status: string
+	items: OrderItems[]
+	total: number
+	createTime: string
+}
+
+interface OrderItems {
+	name: string
+	price: number
+	quantity: number
 }
 
 const userSchema: Schema = new Schema(
@@ -27,9 +42,21 @@ const userSchema: Schema = new Schema(
 			type: String,
 			default: 'member',
 		},
+		orders: [{
+			orderId: String,
+			status: String,
+			items: [{
+				name: String,
+				price: Number,
+				quantity: Number,
+			}],
+			total: Number,
+			createTime: String,
+			_id: false
+		}],
 		refreshToken: [String],
 	},
 	{ timestamps: true }
 );
 
-export default models.User || model<IUser>('User', userSchema);
+export default (models.User as Model<IUser>) || model<IUser>('User', userSchema);
