@@ -7,10 +7,19 @@ import {
 	CardBody,
 	CardHeader,
 	Center,
+	ListItem,
+	Modal,
+	ModalBody,
+	ModalCloseButton,
+	ModalContent,
+	ModalHeader,
+	ModalOverlay,
 	SimpleGrid,
 	Spinner,
 	Text,
+	UnorderedList,
 	useBreakpointValue,
+	useDisclosure,
 	useMediaQuery,
 } from '@chakra-ui/react';
 import { useSession } from 'next-auth/react';
@@ -32,13 +41,11 @@ export default function OrderHistory() {
 	const [showMoreItems, setShowMoreItems] = useState<{
 		[index: string]: boolean;
 	}>({});
+	const [statusHistoryLogs, setStatusHistoryLogs] = useState([]);
 	const { data: session } = useSession();
+	const { isOpen, onClose, onToggle } = useDisclosure();
 
-	const {
-		data: resp,
-		isLoading,
-		error,
-	} = useSWR<ResponseData>(
+	const { data: resp, isLoading } = useSWR<ResponseData>(
 		`/api/account/users/orders/${session?.user ? session?.user?.id : ''}`,
 		{
 			revalidateIfStale: false,
@@ -46,8 +53,6 @@ export default function OrderHistory() {
 			revalidateOnReconnect: false,
 		}
 	);
-	// console.log('response ', error);
-	// console.log('orders data ', resp);
 
 	const [isMobile] = useMediaQuery('(max-width: 576px)');
 	const fontSize = useBreakpointValue(
@@ -165,6 +170,51 @@ export default function OrderHistory() {
 											<Box>
 												<Text>Status</Text>
 												<Text fontWeight={'bold'}>{order.status}</Text>
+												<Button
+													onClick={() => {
+														setStatusHistoryLogs(order.statusLogs);
+														onToggle();
+													}}
+													variant={'link'}
+													size={'sm'}
+													color={'accent.green'}
+												>
+													Details
+												</Button>
+												<Modal
+													isOpen={isOpen}
+													onClose={onClose}
+													scrollBehavior={'inside'}
+													isCentered
+												>
+													<ModalOverlay bg="blackAlpha.300" />
+													<ModalContent
+														bg={'black'}
+														border={'1px solid'}
+														borderColor={'whiteAlpha.400'}
+													>
+														<ModalHeader
+															borderBottom={'1px solid'}
+															borderColor={'whiteAlpha.200'}
+														>
+															Status Details
+														</ModalHeader>
+														<ModalCloseButton />
+														<ModalBody>
+															<UnorderedList>
+																{statusHistoryLogs.map((log) => (
+																	<ListItem key={log.updatedTime} mb={'2'}>
+																		{new Date(log.updatedTime).toLocaleString()}{' '}
+																		-{' '}
+																		<span style={{ fontWeight: 'bold' }}>
+																			{log.status}
+																		</span>
+																	</ListItem>
+																))}
+															</UnorderedList>
+														</ModalBody>
+													</ModalContent>
+												</Modal>
 											</Box>
 										</SimpleGrid>
 									</CardBody>
