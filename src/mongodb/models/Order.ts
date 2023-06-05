@@ -2,24 +2,23 @@ import { Document, model, models, Schema } from 'mongoose';
 import { IProduct } from './Product';
 import { IUser } from './User';
 
-export interface IOrder extends Document {
+export interface Order extends Document {
 	userId: IUser['_id'];
-	products: IProductInfo[];
+	products: ProductInfo[];
 	sumTotal: number;
-	statusLog: IStatusLog[];
-	currentStatus: string;
-	shippedDate: string;
+	statusLog: StatusLog[];
+	status: string;
 }
 
-interface IProductInfo {
+interface ProductInfo {
 	name: IProduct['name'];
 	price: IProduct['price'];
 	qty: number;
 }
 
-interface IStatusLog {
+interface StatusLog {
 	status: string;
-	datetime: Date;
+	updatedTime: string;
 }
 
 const orderSchema: Schema = new Schema(
@@ -27,11 +26,10 @@ const orderSchema: Schema = new Schema(
 		userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 		products: [{ name: String, price: Number, qty: Number }],
 		sumTotal: Number,
-		statusLog: [{ status: String, datetime: Date }],
-		currentStatus: String,
-		shippedDate: String,
+		statusLog: [{ status: String, updatedTime: String }],
+		status: String,
 	},
 	{ timestamps: true }
 );
 
-export default models.Order || model<IOrder>('Order', orderSchema);
+export default models.Order || model<Order>('Order', orderSchema);

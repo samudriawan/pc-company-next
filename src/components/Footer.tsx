@@ -74,17 +74,16 @@ export default function Footer() {
 						<ListHeader>Contact</ListHeader>
 						<Link href={'/about'}>About</Link>
 						<Link href={'/support'}>Customer Support</Link>
-						<Link href={'#'}>Submit a Request</Link>
+						{/* <Link href={'#'}>Submit a Request</Link> */}
 					</Stack>
 					<Stack align={'flex-start'}>
 						<ListHeader>Product</ListHeader>
 						<Link href={'/product'}>Prebuilt PC</Link>
-						{/* <Link href={'#'}>FAQ</Link> */}
 						<Link href={'/reviews'}>Reviews</Link>
 					</Stack>
 					<Stack align={'flex-start'}>
 						<ListHeader>Account</ListHeader>
-						<Link href={'#'}>Manage Your Account</Link>
+						<Link href={'/user/settings'}>Manage Your Account</Link>
 					</Stack>
 				</SimpleGrid>
 			</Container>

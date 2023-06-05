@@ -20,19 +20,13 @@ export default async function captureOrderHandler(
 	try {
 		await dbConnect();
 
-		const result = await User.updateOne({
-			email: body.userEmail,
-		},
-			{ $push: { "orders": body.orders } },
+		const result = await User.updateOne(
+			{
+				email: body.userEmail,
+			},
+			{ $push: { orders: body.orders } },
 			{ upsert: true, new: true }
 		);
-
-		// const doc = await User.findOne({
-		// 	email: body.userEmail,
-		// }
-		// );
-
-		// console.log(doc);
 
 		if (!result.modifiedCount)
 			return res.status(400).json({
@@ -44,7 +38,7 @@ export default async function captureOrderHandler(
 		res.status(200).json({
 			success: true,
 			error: null,
-			data: "Order checkout success.",
+			data: 'Order checkout success.',
 		});
 	} catch (err) {
 		return res.status(500).json({ success: false, error: err, data: null });

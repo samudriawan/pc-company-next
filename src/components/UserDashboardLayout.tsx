@@ -13,7 +13,7 @@ import { default as NextLink } from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { IconType } from 'react-icons';
-import { FiUser, FiInfo, FiSearch } from 'react-icons/fi';
+import { FiUser, FiSearch } from 'react-icons/fi';
 
 type DashboardLayoutProps = {
 	children: React.ReactNode;
@@ -32,7 +32,6 @@ const NavLink = ({ href = '#', icon, text, path }: SidebarNavLinkProps) => {
 			as={NextLink}
 			href={href}
 			display={'flex'}
-			mt="1"
 			px="3"
 			py="2"
 			alignItems={'center'}
@@ -66,16 +65,7 @@ export default function UserDashboardLayout({
 						text={'Product'}
 						path={router.asPath}
 					/>
-					<NavLink
-						href="/user/order-history"
-						text={'Order'}
-						path={router.asPath}
-					/>
-					<NavLink
-						href="/user/support"
-						text={'Support Ticket'}
-						path={router.asPath}
-					/>
+					<NavLink href="/admin/orders" text={'Order'} path={router.asPath} />
 				</>
 			);
 		} else {
@@ -93,12 +83,6 @@ export default function UserDashboardLayout({
 						text={'Order History'}
 						path={router.asPath}
 					/>
-					<NavLink
-						href="/user/support"
-						icon={FiInfo}
-						text={'Support'}
-						path={router.asPath}
-					/>
 				</>
 			);
 		}
@@ -113,14 +97,14 @@ export default function UserDashboardLayout({
 			<main>
 				<Container
 					as="section"
-					maxW={{ sm: 'lg', md: '2xl', lg: 'container.lg', xl: '5xl' }}
+					maxW={{ sm: 'lg', md: '2xl', lg: 'container.lg', xl: '6xl' }}
 					pt="3rem"
 					paddingBottom="3rem"
 				>
 					<Heading as="h1" mb="6">
 						{router.asPath.startsWith('/admin') ? 'Admin' : 'Account'}
 					</Heading>
-					<Box shadow={'lg'} overflow="hidden">
+					<Box shadow={'lg'} overflow="auto">
 						<Grid
 							w="100%"
 							templateColumns={{

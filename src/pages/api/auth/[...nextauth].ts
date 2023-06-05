@@ -4,6 +4,7 @@ import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
 import nextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcrypt';
+import dbConnect from '@/mongodb/dbConnect';
 
 export default nextAuth({
 	adapter: MongoDBAdapter(clientPromise),
@@ -25,7 +26,9 @@ export default nextAuth({
 					password: string;
 				};
 
-				const foundUser = await User.findOne({ email }).exec();
+				await dbConnect();
+
+				const foundUser = await User.findOne({ email });
 
 				if (!foundUser) throw new Error('email or password did not correct.');
 
@@ -50,11 +53,13 @@ export default nextAuth({
 		async jwt(params) {
 			if (params.user?.role) {
 				params.token.role = params.user.role;
+				params.token.id = params.user.id;
 			}
 			return params.token;
 		},
 		async session(params) {
 			params.session.user.role = params.token.role;
+			params.session.user.id = params.token.id;
 			return params.session;
 		},
 	},

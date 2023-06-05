@@ -1,11 +1,8 @@
-import { ChevronRightIcon, DeleteIcon } from '@chakra-ui/icons';
+import { DeleteIcon } from '@chakra-ui/icons';
 import {
+	Alert,
 	Box,
 	Button,
-	Card,
-	CardBody,
-	CardFooter,
-	CardHeader,
 	Container,
 	Divider,
 	Flex,
@@ -16,7 +13,6 @@ import {
 	InputGroup,
 	InputLeftAddon,
 	InputRightAddon,
-	Link,
 	List,
 	ListItem,
 	Stack,
@@ -25,7 +21,13 @@ import {
 import Head from 'next/head';
 import Image from 'next/image';
 import { default as NextLink } from 'next/link';
-import React, { useState, useRef, useEffect, useContext } from 'react';
+import React, {
+	useState,
+	useRef,
+	useEffect,
+	useContext,
+	useCallback,
+} from 'react';
 import { CartContext, CART_ACTION } from '@/context/cartContext';
 import PaypalButton from '@/components/PaypalButton';
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
@@ -35,23 +37,34 @@ export default function Cart() {
 	const { state: cartItems, dispatch } = useContext(CartContext);
 	const [subTotal, setSubTotal] = useState(0);
 	const [showPaypalButton, setShowPaypalButton] = useState(false);
+	const [paymentSuccess, setPaymentSuccess] = useState(false);
 	const qtyInputRef = useRef<HTMLInputElement>(null);
 	const { data: session } = useSession();
 
-	const purchaseItems: any[] = []
-	cartItems.map(item => {
+	const purchaseItems: any[] = [];
+	cartItems.map((item) => {
 		purchaseItems.push({
 			name: item.productName,
 			description: item.productName,
 			quantity: item.qty,
-			unit_amount: { value: item.productPrice.toString(), currency_code: 'USD' }
-		})
-	})
+			unit_amount: {
+				value: item.productPrice.toString(),
+				currency_code: 'USD',
+			},
+		});
+	});
 
 	useEffect(() => {
 		setShowPaypalButton(false);
-		setSubTotal(0)
+		setSubTotal(0);
 	}, [cartItems]);
+
+	const paymentSuccessHandler = useCallback(
+		(isSuccess: boolean) => {
+			setPaymentSuccess(isSuccess);
+		},
+		[paymentSuccess]
+	);
 
 	if (cartItems.length === 0)
 		return (
@@ -70,6 +83,11 @@ export default function Cart() {
 							justifyContent="center"
 							alignItems={'center'}
 						>
+							{paymentSuccess && (
+								<Alert mb="4" status="success" variant="subtle">
+									<Text>Your payment is successful, thank you.</Text>
+								</Alert>
+							)}
 							<Heading as={'h3'}>Your cart is empty</Heading>
 							<NextLink href={'/product'}>
 								<Button
@@ -265,12 +283,12 @@ export default function Cart() {
 												Subtotal
 											</Text>
 											<Text as={'span'}>
-												{subTotal ? 
-													new Intl.NumberFormat('us-ID', {
-														style: 'currency',
-														currency: 'USD',
-													}).format(subTotal)
-													: "Calculate on checkout."}
+												{subTotal
+													? new Intl.NumberFormat('us-ID', {
+															style: 'currency',
+															currency: 'USD',
+													  }).format(subTotal)
+													: 'Calculate on checkout.'}
 											</Text>
 										</Stack>
 									</ListItem>
@@ -289,7 +307,10 @@ export default function Cart() {
 											method: 'POST',
 											body: JSON.stringify({ cart: cartItems }),
 											headers: { 'Content-type': 'application/json' },
-										}).then((res) => res.json()).then(total => setSubTotal(total)).finally(() => setShowPaypalButton(true));
+										})
+											.then((res) => res.json())
+											.then((total) => setSubTotal(total))
+											.finally(() => setShowPaypalButton(true));
 									}}
 								>
 									Chekcout
@@ -301,10 +322,14 @@ export default function Cart() {
 										'disable-funding': 'card',
 									}}
 								>
-									{showPaypalButton ? 
-										<PaypalButton total={subTotal.toString()} items={purchaseItems} userEmail={session.user?.email} />
-										: null
-									}
+									{showPaypalButton ? (
+										<PaypalButton
+											total={subTotal.toString()}
+											items={purchaseItems}
+											userEmail={session.user?.email}
+											paymentSuccessHandler={paymentSuccessHandler}
+										/>
+									) : null}
 								</PayPalScriptProvider>
 							</Box>
 						</GridItem>

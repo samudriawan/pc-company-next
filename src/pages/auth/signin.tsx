@@ -42,8 +42,37 @@ export default function SignIn() {
 			<Head>
 				<title>Sign In - DZPC</title>
 			</Head>
-			<Flex my={12} px={4} maxW="100%" align={'center'} justify={'center'}>
-				<Stack w={{ base: '100%', sm: 'sm' }} mx={'auto'} gap={4}>
+			<Flex
+				my={12}
+				px={4}
+				maxW="100%"
+				direction={'column'}
+				align={'center'}
+				justify={'center'}
+			>
+				<Flex direction={'column'}>
+					<Text>
+						admin email:{' '}
+						<code>
+							<strong>admin@email.com</strong>
+						</code>{' '}
+						password:{' '}
+						<code>
+							<strong>password</strong>
+						</code>
+					</Text>
+					<Text>
+						member email:{' '}
+						<code>
+							<strong>member1@email.com</strong>
+						</code>{' '}
+						password:{' '}
+						<code>
+							<strong>password</strong>
+						</code>
+					</Text>
+				</Flex>
+				<Stack w={{ base: '100%', sm: 'sm' }} mx={'auto'} my={'4'} gap={0}>
 					<Center>
 						<Heading as="h1">DZ PC</Heading>
 					</Center>

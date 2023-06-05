@@ -11,9 +11,10 @@ export interface IUser extends Document {
 
 export interface Order {
 	orderId: string
-	status: string
 	items: OrderItems[]
 	total: number
+	status: string
+	statusLogs: StatusLog[]
 	createTime: string
 }
 
@@ -21,6 +22,11 @@ interface OrderItems {
 	name: string
 	price: number
 	quantity: number
+}
+
+interface StatusLog {
+	status: string;
+	updatedTime: string;
 }
 
 const userSchema: Schema = new Schema(
@@ -45,10 +51,12 @@ const userSchema: Schema = new Schema(
 		orders: [{
 			orderId: String,
 			status: String,
+			statusLogs: [{ status: String, updatedTime: String, _id: false }],
 			items: [{
+				_id: false,
 				name: String,
 				price: Number,
-				quantity: Number,
+				quantity: Number
 			}],
 			total: Number,
 			createTime: String,
