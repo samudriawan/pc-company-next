@@ -1,12 +1,18 @@
 import User from '@/mongodb/models/User';
 import clientPromise from '@/mongodb/mongodb';
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
-import nextAuth from 'next-auth';
+import { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcrypt';
 import dbConnect from '@/mongodb/dbConnect';
+import NextAuth from 'next-auth/next';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-export default nextAuth({
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+	return NextAuth(req, res, createOptions(req));
+};
+
+export const createOptions = (req: NextApiRequest): AuthOptions => ({
 	adapter: MongoDBAdapter(clientPromise),
 	secret: process.env.NEXTAUTH_SECRET,
 	session: {
@@ -39,6 +45,7 @@ export default nextAuth({
 						name: foundUser.username,
 						email,
 						role: foundUser.role,
+						image: null,
 					};
 				} else {
 					throw new Error('password did not correct.');
@@ -51,16 +58,27 @@ export default nextAuth({
 	},
 	callbacks: {
 		async jwt(params) {
-			if (params.user?.role) {
+			// If the specific query param(s) exist(s), we know it's
+			// an update. So we add it to the token
+			// This is the best place to make an API request so you
+			// can complete the data
+			if (req.query?.name) {
+				params.token.name = req.query.name as string;
+			}
+
+			if (params.user) {
 				params.token.role = params.user.role;
 				params.token.id = params.user.id;
 			}
 			return params.token;
 		},
 		async session(params) {
+			params.session.user.name = params.token.name;
 			params.session.user.role = params.token.role;
 			params.session.user.id = params.token.id;
 			return params.session;
 		},
 	},
 });
+
+export default handler;
