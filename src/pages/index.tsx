@@ -1,10 +1,6 @@
 import {
 	Box,
 	Button,
-	Card,
-	CardBody,
-	CardFooter,
-	CardHeader,
 	Center,
 	Container,
 	Flex,
@@ -12,6 +8,7 @@ import {
 	GridItem,
 	Heading,
 	Icon,
+	Link,
 	SimpleGrid,
 	Stack,
 	Text,
@@ -23,8 +20,8 @@ import {
 } from 'react-icons/md';
 import { SkipNavContent } from '@chakra-ui/skip-nav';
 import Head from 'next/head';
-import Image from 'next/image';
-import Link from 'next/link';
+import { default as NextLink } from 'next/link';
+import { BsGithub } from 'react-icons/bs';
 
 export default function Home() {
 	return (
@@ -38,14 +35,31 @@ export default function Home() {
 			<main>
 				{/* header section */}
 				<Center
+					display={'flex'}
+					flexDirection={'column'}
 					w="100%"
 					h="calc(100vh - 2rem)"
 					paddingBlock="3rem"
 					bgColor="neon.blue"
 				>
-					<Heading fontSize="5xl" textAlign="center" data-testid="hero_text">
-						Prebuilt Gaming PCs
+					<Heading fontSize="6xl" textAlign="center" data-testid="hero_text">
+						Next.js product order apps
 					</Heading>
+					<Text mt={6} w={'md'}>
+						Simple Next.js app that have member and admin role which for changes
+						the order status with PayPal sandbox integration.
+					</Text>
+					<Link
+						as={NextLink}
+						href={'https://github.com/samudriawan/pc-company-next'}
+						aria-label="Github repo"
+						isExternal
+						mt={6}
+					>
+						<Button leftIcon={<BsGithub />} variant="solid">
+							Github
+						</Button>
+					</Link>
 				</Center>
 
 				{/* Product collection section */}
@@ -64,7 +78,7 @@ export default function Home() {
 						marginTop="2rem"
 						placeItems={'center'}
 					>
-						<Link href={'/product'}>
+						<Link as={NextLink} href={'/product'}>
 							<Button
 								maxW="100%"
 								bg="neon.blue"
