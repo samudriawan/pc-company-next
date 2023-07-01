@@ -13,7 +13,7 @@ import {
 	Center,
 } from '@chakra-ui/react';
 import { default as NextLink } from 'next/link';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import React, { useState } from 'react';
 import ClientOnly from '@/components/ClientOnly';
 import { useRouter } from 'next/router';
@@ -21,6 +21,7 @@ import Head from 'next/head';
 
 export default function SignIn() {
 	const [respError, setRespError] = useState<string | undefined>('');
+	const { status } = useSession();
 	const router = useRouter();
 
 	async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
@@ -35,6 +36,13 @@ export default function SignIn() {
 		}
 
 		setRespError(res?.error);
+	}
+
+	if (status === 'loading') return;
+
+	if (status === 'authenticated') {
+		router.push('/');
+		return;
 	}
 
 	return (
