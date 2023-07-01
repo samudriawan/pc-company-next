@@ -3,6 +3,7 @@ import {
 	Alert,
 	Box,
 	Button,
+	Center,
 	Container,
 	Divider,
 	Flex,
@@ -13,6 +14,7 @@ import {
 	InputGroup,
 	InputLeftAddon,
 	InputRightAddon,
+	Link,
 	List,
 	ListItem,
 	Stack,
@@ -301,6 +303,7 @@ export default function Cart() {
 									mb={4}
 									transition="transform 200ms ease"
 									fontSize="1.1rem"
+									isDisabled={showPaypalButton}
 									_hover={{ transform: 'scale(1.02)' }}
 									onClick={() => {
 										fetch('http://localhost:3000/api/cart', {
@@ -323,12 +326,22 @@ export default function Cart() {
 									}}
 								>
 									{showPaypalButton ? (
-										<PaypalButton
-											total={subTotal.toString()}
-											items={purchaseItems}
-											userEmail={session.user?.email}
-											paymentSuccessHandler={paymentSuccessHandler}
-										/>
+										session ? (
+											<PaypalButton
+												total={subTotal.toString()}
+												items={purchaseItems}
+												userEmail={session.user?.email}
+												paymentSuccessHandler={paymentSuccessHandler}
+											/>
+										) : (
+											<Center>
+												<Link as={NextLink} href="/auth/signin" title="Sign In">
+													<Button variant="link">
+														Sign in to continue checkout
+													</Button>
+												</Link>
+											</Center>
+										)
 									) : null}
 								</PayPalScriptProvider>
 							</Box>
