@@ -13,7 +13,7 @@ import {
 	Container,
 	FormErrorMessage,
 } from '@chakra-ui/react';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { default as NextLink } from 'next/link';
 import { useRouter } from 'next/router';
@@ -25,6 +25,7 @@ export default function SignUp() {
 	const [btnDisabled, setBtnDisabled] = useState(false);
 	const [respError, setRespError] = useState<string | null>(null);
 	const router = useRouter();
+	const { status } = useSession();
 
 	async function handleSignUp(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
@@ -69,6 +70,13 @@ export default function SignUp() {
 			setPwdMatch(false);
 			setBtnDisabled(false);
 		}
+	}
+
+	if (status === 'loading') return;
+
+	if (status === 'authenticated') {
+		router.push('/');
+		return;
 	}
 
 	return (

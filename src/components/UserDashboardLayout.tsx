@@ -12,7 +12,6 @@ import Head from 'next/head';
 import { default as NextLink } from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useSession } from 'next-auth/react';
 import { IconType } from 'react-icons';
 import { FiUser, FiSearch } from 'react-icons/fi';
 
@@ -55,10 +54,7 @@ const NavLink = ({ href = '#', icon, text, path }: SidebarNavLinkProps) => {
 export default function UserDashboardLayout({
 	children,
 }: DashboardLayoutProps) {
-	const { status } = useSession();
 	const router = useRouter();
-
-	if (status === 'loading' || status === 'unauthenticated') return;
 
 	function SidebarNavLink() {
 		if (router.asPath.startsWith('/admin')) {
