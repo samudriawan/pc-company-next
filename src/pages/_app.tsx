@@ -5,7 +5,7 @@ import CartContextProvider from '@/context/cartContext';
 import { ChakraProvider, CSSReset, Progress } from '@chakra-ui/react';
 import { SkipNavLink } from '@chakra-ui/skip-nav';
 import type { AppProps } from 'next/app';
-import theme from './theme';
+import theme from '../lib/theme';
 import { SessionProvider } from 'next-auth/react';
 import { SWRConfig } from 'swr';
 import { fetcher } from '@/lib/swrFetch';
