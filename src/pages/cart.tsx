@@ -335,7 +335,11 @@ export default function Cart() {
 											/>
 										) : (
 											<Center>
-												<Link as={NextLink} href="/auth/signin" title="Sign In">
+												<Link
+													as={NextLink}
+													href="/auth/signin?callbackUrl=/cart"
+													title="Sign In"
+												>
 													<Button variant="link">
 														Sign in to continue checkout
 													</Button>
