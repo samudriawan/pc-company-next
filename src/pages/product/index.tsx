@@ -1,7 +1,5 @@
 import { default as NextLink } from 'next/link';
 import {
-	Box,
-	Button,
 	Card,
 	CardBody,
 	CardHeader,
@@ -15,12 +13,14 @@ import Head from 'next/head';
 import Image from 'next/image';
 import useSWR from 'swr';
 import { ResponseData } from '@/lib/swrFetch';
+import Product, { IProduct } from '@/mongodb/models/Product';
+import dbConnect from '@/mongodb/dbConnect';
 
 type PageProps = {
 	fallback: ResponseData;
 };
 
-function Product({ fallback }: PageProps) {
+export default function ProductHomePage({ fallback }: PageProps) {
 	const { data: resp } = useSWR<ResponseData>('/api/product', {
 		fallback,
 	});
@@ -100,16 +100,21 @@ function Product({ fallback }: PageProps) {
 		</>
 	);
 }
-export default Product;
 
 export async function getStaticProps() {
-	const resp = await fetch('http://localhost:3000/api/product');
-	const allProducts: ResponseData = await resp.json();
+	await dbConnect();
+
+	const allProducts: IProduct[] = await Product.find();
+	const result: ResponseData = {
+		success: true,
+		error: null,
+		data: JSON.parse(JSON.stringify(allProducts)),
+	};
 
 	return {
 		props: {
 			fallback: {
-				'/api/product': allProducts,
+				'/api/product': result,
 			},
 		},
 	};

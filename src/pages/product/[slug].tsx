@@ -39,8 +39,8 @@ import { default as NextLink } from 'next/link';
 import { useRef, useContext } from 'react';
 import { GetStaticPropsContext, GetStaticPropsResult } from 'next';
 import { CartContext, CART_ACTION, Cart } from '@/context/cartContext';
-import { ResponseData } from '@/lib/swrFetch';
-import { IProduct } from '@/mongodb/models/Product';
+import Product, { IProduct } from '@/mongodb/models/Product';
+import dbConnect from '@/mongodb/dbConnect';
 
 type PageProps = {
 	product: IProduct | null;
@@ -111,7 +111,7 @@ export default function ProductInfo({ product }: PageProps) {
 					<Box flex={{ md: '1 0 40%' }}>
 						<VStack gap="0.5rem" alignItems="start">
 							<Heading as={'h1'}>{product.name}</Heading>
-							<Box display="flex" mt="2" alignItems="center">
+							{/* <Box display="flex" mt="2" alignItems="center">
 								{Array(5)
 									.fill('')
 									.map((_, i) => (
@@ -120,7 +120,7 @@ export default function ProductInfo({ product }: PageProps) {
 											color={i < 1 ? 'neon.blue' : 'gray.300'}
 										/>
 									))}
-							</Box>
+							</Box> */}
 							<Box>
 								<Text fontWeight="bold" fontSize="3xl">
 									{new Intl.NumberFormat('us-ID', {
@@ -272,7 +272,7 @@ export default function ProductInfo({ product }: PageProps) {
 					<TabList>
 						<Tab>Overview</Tab>
 						<Tab>Specification</Tab>
-						<Tab>Reviews</Tab>
+						{/* <Tab>Reviews</Tab> */}
 					</TabList>
 
 					<TabPanels>
@@ -383,7 +383,7 @@ export default function ProductInfo({ product }: PageProps) {
 						</TabPanel>
 
 						{/* reviews */}
-						<TabPanel>
+						{/* <TabPanel>
 							<Stack direction="row" alignItems="center" gap="2">
 								<Text fontSize={'2.5rem'} fontWeight={'bold'}>
 									4
@@ -544,7 +544,7 @@ export default function ProductInfo({ product }: PageProps) {
 										</GridItem>
 									))}
 							</Grid>
-						</TabPanel>
+						</TabPanel> */}
 					</TabPanels>
 				</Tabs>
 			</Container>
@@ -557,21 +557,25 @@ export async function getStaticProps({
 }: GetStaticPropsContext<pageParams>): Promise<
 	GetStaticPropsResult<PageProps>
 > {
-	const resp = await fetch('http://localhost:3000/api/product/' + params.slug);
-	const productJson: ResponseData = await resp.json();
+	await dbConnect();
+
+	const allProducts: IProduct[] = await Product.find();
+	const matchProduct: IProduct = allProducts.find(
+		(x) => x.slug === params.slug
+	);
 
 	return {
-		props: { product: productJson.data[0] },
+		props: { product: JSON.parse(JSON.stringify(matchProduct)) },
 	};
 }
 
 export async function getStaticPaths() {
-	const resp = await fetch('http://localhost:3000/api/product');
-	const allProducts: ResponseData = await resp.json();
+	await dbConnect();
 
-	const series: string[] = allProducts.data.map((item) => item.slug);
+	const allProd: IProduct[] = await Product.find();
+	const productsSlug: string[] = allProd.map((x) => x.slug);
 
-	const paths = series.map((item) => ({
+	const paths = productsSlug.map((item) => ({
 		params: {
 			slug: item,
 		},
