@@ -13,19 +13,24 @@ import {
 	Container,
 	FormErrorMessage,
 } from '@chakra-ui/react';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import Head from 'next/head';
 import { default as NextLink } from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { ResponseDataType } from '../api/account/users/register';
+import { createOptions } from '../api/auth/[...nextauth]';
+import { getServerSession } from 'next-auth/next';
 
-export default function SignUp() {
+type Props = {
+	callbackUrl: string | undefined;
+};
+
+export default function SignUp({ callbackUrl }: Props) {
 	const [pwdMatch, setPwdMatch] = useState(false);
 	const [btnDisabled, setBtnDisabled] = useState(false);
 	const [respError, setRespError] = useState<string | null>(null);
 	const router = useRouter();
-	const { status } = useSession();
 
 	async function handleSignUp(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
@@ -61,22 +66,22 @@ export default function SignUp() {
 				redirect: false,
 			});
 
-			if (login?.ok) {
-				router.push('/');
+			if (!login?.ok) {
+				router.push('/auth/signin');
+			}
+
+			if (callbackUrl) {
+				router.push(callbackUrl);
+			} else {
+				router.back();
 			}
 		} catch (err) {
 			console.error(err);
+			throw new Error(err as string);
 		} finally {
 			setPwdMatch(false);
 			setBtnDisabled(false);
 		}
-	}
-
-	if (status === 'loading') return;
-
-	if (status === 'authenticated') {
-		router.push('/');
-		return;
 	}
 
 	return (
@@ -162,4 +167,25 @@ export default function SignUp() {
 			</main>
 		</ClientOnly>
 	);
+}
+
+export async function getServerSideProps(context: any) {
+	const session = await getServerSession(
+		context.req,
+		context.res,
+		createOptions(context.req)
+	);
+
+	if (session) {
+		return {
+			redirect: {
+				destination: '/',
+				permanent: false,
+			},
+		};
+	}
+
+	return {
+		props: context.query,
+	};
 }

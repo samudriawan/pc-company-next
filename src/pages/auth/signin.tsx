@@ -13,15 +13,20 @@ import {
 	Center,
 } from '@chakra-ui/react';
 import { default as NextLink } from 'next/link';
-import { signIn, useSession } from 'next-auth/react';
 import React, { useState } from 'react';
 import ClientOnly from '@/components/ClientOnly';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import { signIn } from 'next-auth/react';
+import { createOptions } from '../api/auth/[...nextauth]';
+import { getServerSession } from 'next-auth/next';
 
-export default function SignIn() {
+type Props = {
+	callbackUrl: string | undefined;
+};
+
+export default function SignIn({ callbackUrl }: Props) {
 	const [respError, setRespError] = useState<string | undefined>('');
-	const { status } = useSession();
 	const router = useRouter();
 
 	async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
@@ -31,18 +36,15 @@ export default function SignIn() {
 		const res = await signIn('credentials', { ...formData, redirect: false });
 		if (res?.ok) {
 			setRespError('');
-			router.back();
+			if (callbackUrl) {
+				router.push(callbackUrl);
+			} else {
+				router.back();
+			}
 			return;
 		}
 
 		setRespError(res?.error);
-	}
-
-	if (status === 'loading') return;
-
-	if (status === 'authenticated') {
-		router.push('/');
-		return;
 	}
 
 	return (
@@ -126,4 +128,25 @@ export default function SignIn() {
 			</Flex>
 		</ClientOnly>
 	);
+}
+
+export async function getServerSideProps(context: any) {
+	const session = await getServerSession(
+		context.req,
+		context.res,
+		createOptions(context.req)
+	);
+
+	if (session) {
+		return {
+			redirect: {
+				destination: '/',
+				permanent: false,
+			},
+		};
+	}
+
+	return {
+		props: context.query,
+	};
 }
