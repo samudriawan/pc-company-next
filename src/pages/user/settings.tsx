@@ -66,17 +66,14 @@ export default function UserSettings() {
 
 		setUserBtnLoading(true);
 		try {
-			const resp = await fetch(
-				'http://localhost:3000/api/account/users/update',
-				{
-					method: 'PUT',
-					body: JSON.stringify({
-						username: usernameInput.username.trim(),
-						id: session.user.id,
-					}),
-					headers: { 'Content-type': 'application/json' },
-				}
-			);
+			const resp = await fetch('/api/account/users/update', {
+				method: 'PUT',
+				body: JSON.stringify({
+					username: usernameInput.username.trim(),
+					id: session.user.id,
+				}),
+				headers: { 'Content-type': 'application/json' },
+			});
 			const { error, data } = await resp.json();
 			if (error) {
 				setUsernameInput({

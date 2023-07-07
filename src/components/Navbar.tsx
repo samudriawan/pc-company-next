@@ -48,16 +48,33 @@ function UserAvatar({ name, role }: UserAvatarProps) {
 				>
 					<Avatar size={'sm'} src={'https://bit.ly/broken-link'} />
 				</MenuButton>
-				<MenuList>
+				<MenuList bg={'blackAlpha.700'}>
 					{role === 'admin' && (
-						<MenuItem as={'a'} href={'/admin/product'} title="Admin Panel">
+						<MenuItem
+							as={'a'}
+							href={'/admin/product'}
+							bg={'blackAlpha.700'}
+							_hover={{ bg: 'whiteAlpha.400' }}
+							title="Admin Panel"
+						>
 							Admin Panel
 						</MenuItem>
 					)}
-					<MenuItem as={'a'} href={'/user/settings'} title="Settings">
+					<MenuItem
+						as={'a'}
+						href={'/user/settings'}
+						bg={'blackAlpha.700'}
+						_hover={{ bg: 'whiteAlpha.400' }}
+						title="Settings"
+					>
 						Profile
 					</MenuItem>
-					<MenuItem title="Sign Out" onClick={() => signOut()}>
+					<MenuItem
+						bg={'blackAlpha.700'}
+						_hover={{ bg: 'whiteAlpha.400' }}
+						title="Sign Out"
+						onClick={() => signOut()}
+					>
 						Sign Out
 					</MenuItem>
 				</MenuList>
@@ -68,7 +85,6 @@ function UserAvatar({ name, role }: UserAvatarProps) {
 
 function Navbar() {
 	const { data: session } = useSession();
-	// console.log(session);
 	const btnRef = useRef();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const directionResp = useBreakpointValue(

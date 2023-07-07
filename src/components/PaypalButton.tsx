@@ -62,7 +62,7 @@ export default function PaypalButton({
 						};
 
 						try {
-							fetch('http://localhost:3000/api/paypal/captureOrder', {
+							fetch('/api/paypal/captureOrder', {
 								method: 'POST',
 								body: JSON.stringify({ orders, userEmail }),
 								headers: { 'Content-type': 'application/json' },

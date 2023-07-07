@@ -306,7 +306,7 @@ export default function Cart() {
 									isDisabled={showPaypalButton}
 									_hover={{ transform: 'scale(1.02)' }}
 									onClick={() => {
-										fetch('http://localhost:3000/api/cart', {
+										fetch('/api/cart', {
 											method: 'POST',
 											body: JSON.stringify({ cart: cartItems }),
 											headers: { 'Content-type': 'application/json' },

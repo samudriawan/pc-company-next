@@ -130,6 +130,7 @@ export default function ManageOrder() {
 							mb={'2'}
 							size={'sm'}
 							variant={'outline'}
+							color={'white'}
 							bg={'transparent'}
 							key={order.orderId}
 							fontSize={fontSizeResponsive}
@@ -182,13 +183,11 @@ export default function ManageOrder() {
 															};
 														delete removeOrderId[order.orderId];
 														setShowMoreItems(removeOrderId);
-														console.log(showMoreItems);
 													} else {
 														setShowMoreItems({
 															...showMoreItems,
 															[order.orderId]: true,
 														});
-														console.log(showMoreItems);
 													}
 												}}
 												variant={'link'}
@@ -319,10 +318,9 @@ export default function ManageOrder() {
 																...changeStatusParams,
 																changedStatus: null,
 															});
-															console.log(changeStatusParams);
 															try {
 																fetch(
-																	'http://localhost:3000/api/account/users/orders/updateOrderStatus',
+																	'/api/account/users/orders/updateOrderStatus',
 																	{
 																		method: 'POST',
 																		body: JSON.stringify(changeStatusParams),
@@ -335,14 +333,14 @@ export default function ManageOrder() {
 																	.then(({ error, data }) => {
 																		if (error) {
 																			console.log(error);
+																			throw new Error(error as string);
 																		}
-																		console.log(data);
 																	});
 															} catch (err) {
 																console.log(err);
+																throw new Error(err as string);
 															}
 															mutate(async (data) => {
-																console.log(data);
 																return {
 																	...data,
 																	orders: data.data

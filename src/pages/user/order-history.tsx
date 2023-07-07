@@ -92,6 +92,7 @@ export default function OrderHistory() {
 									mb={'2'}
 									size={'sm'}
 									variant={'outline'}
+									color={'white'}
 									bg={'transparent'}
 									key={order.orderId}
 									fontSize={fontSize}
@@ -144,13 +145,11 @@ export default function OrderHistory() {
 																};
 																delete removeOrderId[order.orderId];
 																setShowMoreItems(removeOrderId);
-																console.log(showMoreItems);
 															} else {
 																setShowMoreItems({
 																	...showMoreItems,
 																	[order.orderId]: true,
 																});
-																console.log(showMoreItems);
 															}
 														}}
 														variant={'link'}
