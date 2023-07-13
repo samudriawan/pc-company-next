@@ -111,8 +111,8 @@ export default function UserDashboardLayout({
 								base: '1fr',
 								md: 'repeat(12,minmax(0,1fr))',
 							}}
-							borderLeftWidth={1}
-							borderRightWidth={1}
+							// borderLeftWidth={1}
+							// borderRightWidth={1}
 						>
 							<GridItem
 								as="aside"

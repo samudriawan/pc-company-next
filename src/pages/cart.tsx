@@ -186,6 +186,7 @@ export default function Cart() {
 														variant={'unstyled'}
 														roundedRight={0}
 														lineHeight="2"
+														bg={'blackAlpha.600'}
 														onClick={() => {
 															if (item.qty === 1) return;
 
@@ -226,6 +227,7 @@ export default function Cart() {
 													<Button
 														variant={'unstyled'}
 														roundedLeft={0}
+														bg={'blackAlpha.600'}
 														onClick={() =>
 															dispatch({
 																type: CART_ACTION.ADD_QTY,
@@ -244,6 +246,7 @@ export default function Cart() {
 											rightIcon={<DeleteIcon />}
 											variant={'ghost'}
 											alignSelf="end"
+											color={'white'}
 											_hover={{
 												bgColor: 'none',
 											}}

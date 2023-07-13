@@ -30,7 +30,7 @@ type Props = {
 };
 
 export default function ProductEditForm({ productData, mutate }: Props) {
-	const { _id, ratingAverage, __v, createdAt, updatedAt, ...productObj } =
+	const { _id, ratingAverage, __v, createdAt, updatedAt, slug, ...productObj } =
 		productData;
 	const [btnLoading, setBtnLoading] = useState(false);
 	const [inputForm, setInputForm] = useState(() => productObj);
@@ -53,18 +53,15 @@ export default function ProductEditForm({ productData, mutate }: Props) {
 		setBtnLoading(true);
 
 		try {
-			const resp = await fetch(
-				`http://localhost:3000/api/product/update/?id=${_id}`,
-				{
-					method: 'PUT',
-					body: JSON.stringify({
-						...inputForm,
-						performance: performanceForm,
-						slug: getProductSlug(inputForm.name),
-					}),
-					headers: { 'Content-type': 'application/json' },
-				}
-			);
+			const resp = await fetch(`/api/product/update/?id=${_id}`, {
+				method: 'PUT',
+				body: JSON.stringify({
+					...inputForm,
+					performance: performanceForm,
+					slug: getProductSlug(inputForm.name),
+				}),
+				headers: { 'Content-type': 'application/json' },
+			});
 			const { error } = await resp.json();
 
 			if (error) {
@@ -110,12 +107,9 @@ export default function ProductEditForm({ productData, mutate }: Props) {
 	async function handleDelete() {
 		setBtnLoading(true);
 		try {
-			const resp = await fetch(
-				`http://localhost:3000/api/product/delete/?id=${_id}`,
-				{
-					method: 'DELETE',
-				}
-			);
+			const resp = await fetch(`/api/product/delete/?id=${_id}`, {
+				method: 'DELETE',
+			});
 			const { error } = await resp.json();
 
 			if (error) {
@@ -414,6 +408,11 @@ export default function ProductEditForm({ productData, mutate }: Props) {
 					colorScheme={'red'}
 					float="right"
 					onClick={onOpen}
+					isDisabled={
+						slug === 'starter-pc' ||
+						slug === 'streaming-pc' ||
+						slug === 'creator-pc'
+					}
 				>
 					Delete
 				</Button>
@@ -435,6 +434,11 @@ export default function ProductEditForm({ productData, mutate }: Props) {
 								mr={3}
 								onClick={handleDelete}
 								isLoading={btnLoading}
+								isDisabled={
+									slug === 'starter-pc' ||
+									slug === 'streaming-pc' ||
+									slug === 'creator-pc'
+								}
 							>
 								Delete
 							</Button>

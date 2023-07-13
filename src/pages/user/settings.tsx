@@ -121,19 +121,16 @@ export default function UserSettings() {
 
 		setChangePwdBtnLoading(true);
 		try {
-			const resp = await fetch(
-				'http://localhost:3000/api/account/users/update',
-				{
-					method: 'PUT',
-					body: JSON.stringify({
-						current: changePasswordInput.current,
-						new: changePasswordInput.new,
-						retype: changePasswordInput.retype,
-						id: session.user.id,
-					}),
-					headers: { 'Content-type': 'application/json' },
-				}
-			);
+			const resp = await fetch('/api/account/users/update', {
+				method: 'PUT',
+				body: JSON.stringify({
+					current: changePasswordInput.current,
+					new: changePasswordInput.new,
+					retype: changePasswordInput.retype,
+					id: session.user.id,
+				}),
+				headers: { 'Content-type': 'application/json' },
+			});
 			const { error, data } = await resp.json();
 			if (error) {
 				setChangePasswordInput({
@@ -184,6 +181,7 @@ export default function UserSettings() {
 								})
 							}
 							placeholder="Username"
+							isDisabled={session?.user.role === 'admin'}
 						/>
 					</FormControl>
 				</GridItem>
@@ -210,6 +208,7 @@ export default function UserSettings() {
 					<Button
 						minW={'140px'}
 						me={{ base: '2', md: '0' }}
+						color="white"
 						bg="neon.blue"
 						letterSpacing={'1px'}
 						onClick={updateUserHandler}
@@ -296,6 +295,7 @@ export default function UserSettings() {
 					<Button
 						minW={'140px'}
 						me={{ base: '2', md: '0' }}
+						color="white"
 						bg="neon.blue"
 						letterSpacing={'1px'}
 						onClick={changePasswordHandler}
