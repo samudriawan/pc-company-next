@@ -61,6 +61,7 @@ export default function SignIn({ callbackUrl }: Props) {
 				justify={'center'}
 			>
 				<Flex direction={'column'}>
+					<Text>Test account</Text>
 					<Text>
 						admin email:{' '}
 						<code>
@@ -96,14 +97,6 @@ export default function SignIn({ callbackUrl }: Props) {
 							<Input type="password" name="password" />
 						</FormControl>
 						<Stack spacing={6} mt="6">
-							<Stack
-								direction={{ base: 'column', sm: 'row' }}
-								align={'start'}
-								justify={'space-between'}
-							>
-								<Checkbox iconColor={'neon.blue'}>Remember me</Checkbox>
-								<Link color={'blue.400'}>Forgot password?</Link>
-							</Stack>
 							<Button
 								type="submit"
 								size="lg"
@@ -118,7 +111,7 @@ export default function SignIn({ callbackUrl }: Props) {
 							{respError && <Center color={'red.400'}>{respError}</Center>}
 						</Stack>
 					</form>
-					<Center gap={4} letterSpacing=".5px">
+					<Center gap={4} mt="4" letterSpacing=".5px">
 						<Text>Not a member?</Text>
 						<Link as={NextLink} href="/auth/signup" color={'neon.blue'}>
 							Create an account <ChevronRightIcon />

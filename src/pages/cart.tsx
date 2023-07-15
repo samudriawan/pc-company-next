@@ -186,7 +186,7 @@ export default function Cart() {
 														variant={'unstyled'}
 														roundedRight={0}
 														lineHeight="2"
-														bg={'blackAlpha.600'}
+														bg={'blackAlpha.800'}
 														onClick={() => {
 															if (item.qty === 1) return;
 
@@ -227,7 +227,7 @@ export default function Cart() {
 													<Button
 														variant={'unstyled'}
 														roundedLeft={0}
-														bg={'blackAlpha.600'}
+														bg={'blackAlpha.800'}
 														onClick={() =>
 															dispatch({
 																type: CART_ACTION.ADD_QTY,
@@ -319,7 +319,7 @@ export default function Cart() {
 											.finally(() => setShowPaypalButton(true));
 									}}
 								>
-									Chekcout
+									Checkout
 								</Button>
 								<PayPalScriptProvider
 									options={{

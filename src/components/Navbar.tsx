@@ -84,7 +84,7 @@ function UserAvatar({ name, role }: UserAvatarProps) {
 }
 
 function Navbar() {
-	const { data: session } = useSession();
+	const { data: session, status } = useSession();
 	const btnRef = useRef();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const directionResp = useBreakpointValue(
@@ -194,7 +194,8 @@ function Navbar() {
 							About
 						</Button>
 					</Link>
-					{session?.user ? (
+					{/* {session?.user ? ( */}
+					{status === 'authenticated' ? (
 						<UserAvatar name={session.user.name!} role={session.user.role} />
 					) : (
 						<Link as={NextLink} href="/auth/signin" title="Sign In">

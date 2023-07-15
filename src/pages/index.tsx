@@ -45,7 +45,7 @@ export default function Home() {
 					<Heading fontSize="6xl" textAlign="center" data-testid="hero_text">
 						Next.js product order apps
 					</Heading>
-					<Text mt={6} w={'md'}>
+					<Text mt={6} mx={'6'} maxW={'md'} textAlign={'center'}>
 						Simple Next.js app that have member and admin role which for changes
 						the order status with PayPal sandbox integration.
 					</Text>

@@ -77,6 +77,7 @@ export default function ProductHomePage({ fallback }: PageProps) {
 									<CardBody
 										paddingBlock="2"
 										bg="accent.shadeGrey"
+										color={'white'}
 										data-testid="product-card-body"
 									>
 										<Stack>
