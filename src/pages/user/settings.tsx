@@ -248,6 +248,7 @@ export default function UserSettings() {
 									})
 								}
 								placeholder="Your current password"
+								isDisabled={session?.user.role === 'admin'}
 							/>
 						</FormControl>
 					</Box>
@@ -265,6 +266,7 @@ export default function UserSettings() {
 								})
 							}
 							placeholder="Your new password"
+							isDisabled={session?.user.role === 'admin'}
 						/>
 					</FormControl>
 				</GridItem>
@@ -281,6 +283,7 @@ export default function UserSettings() {
 								})
 							}
 							placeholder="Type your new password again"
+							isDisabled={session?.user.role === 'admin'}
 						/>
 					</FormControl>
 				</GridItem>
