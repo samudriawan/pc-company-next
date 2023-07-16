@@ -86,7 +86,7 @@ export default function Cart() {
 							alignItems={'center'}
 						>
 							{paymentSuccess && (
-								<Alert mb="4" status="success" variant="subtle">
+								<Alert mb="4" status="success" variant="solid" color={'black'}>
 									<Text>Your payment is successful, thank you.</Text>
 								</Alert>
 							)}

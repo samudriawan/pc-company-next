@@ -80,7 +80,13 @@ export default function ProductInfo({ product }: PageProps) {
 				paddingBottom="3rem"
 			>
 				{isOpen && (
-					<Alert mb="4" status="success" variant="subtle" fontSize={'sm'}>
+					<Alert
+						mb="4"
+						status="success"
+						variant="solid"
+						fontSize={'sm'}
+						color={'black'}
+					>
 						<Text>
 							<strong>{product.name}</strong> has been successfully added to
 							cart.
