@@ -65,6 +65,53 @@ export default function ManageOrder() {
 		{ fallback: 'md' }
 	);
 
+	async function changeOrderStatus() {
+		setChangeStatusParams({
+			...changeStatusParams,
+			changedStatus: null,
+		});
+
+		try {
+			fetch('/api/account/users/orders/updateOrderStatus', {
+				method: 'POST',
+				body: JSON.stringify(changeStatusParams),
+				headers: {
+					'Content-type': 'application/json',
+				},
+			})
+				.then((res) => res.json())
+				.then(({ error, data }) => {
+					if (error) {
+						console.log(error);
+						return;
+					}
+
+					mutate(async (data) => {
+						return {
+							...data,
+							orders: data.data
+								.map((x) => x.orders)
+								.flat(1)
+								.map((order) => {
+									if (order.orderId === changeStatusParams.orderId) {
+										return {
+											...order,
+											status: changeStatusParams.changedStatus,
+										};
+									} else {
+										return order;
+									}
+								}),
+						};
+					});
+				});
+		} catch (err) {
+			console.log(err);
+			throw new Error(err as string);
+		}
+		onClose();
+	}
+
 	function disabledOption(status: string): boolean {
 		switch (status) {
 			case 'PAID':
@@ -256,6 +303,8 @@ export default function ManageOrder() {
 														size="sm"
 														mt="2"
 														maxW={'max-content'}
+														bg={'black'}
+														color={'white'}
 														onChange={(e) => {
 															setChangeStatusParams({
 																...changeStatusParams,
@@ -266,30 +315,35 @@ export default function ManageOrder() {
 														<option
 															disabled={disabledOption('PAID')}
 															value="PAID"
+															style={{ background: 'black' }}
 														>
 															PAID
 														</option>
 														<option
 															disabled={disabledOption('PROCESSING')}
 															value="PROCESSING"
+															style={{ background: 'black' }}
 														>
 															PROCESSING
 														</option>
 														<option
 															disabled={disabledOption('SHIPPED')}
 															value="SHIPPED"
+															style={{ background: 'black' }}
 														>
 															SHIPPED
 														</option>
 														<option
 															disabled={disabledOption('DELIVERED')}
 															value="DELIVERED"
+															style={{ background: 'black' }}
 														>
 															DELIVERED
 														</option>
 														<option
 															disabled={disabledOption('COMPLETED')}
 															value="COMPLETED"
+															style={{ background: 'black' }}
 														>
 															COMPLETED
 														</option>
@@ -313,57 +367,7 @@ export default function ManageOrder() {
 														size={'sm'}
 														colorScheme="blue"
 														mr={3}
-														onClick={async () => {
-															setChangeStatusParams({
-																...changeStatusParams,
-																changedStatus: null,
-															});
-															try {
-																fetch(
-																	'/api/account/users/orders/updateOrderStatus',
-																	{
-																		method: 'POST',
-																		body: JSON.stringify(changeStatusParams),
-																		headers: {
-																			'Content-type': 'application/json',
-																		},
-																	}
-																)
-																	.then((res) => res.json())
-																	.then(({ error, data }) => {
-																		if (error) {
-																			console.log(error);
-																			throw new Error(error as string);
-																		}
-																	});
-															} catch (err) {
-																console.log(err);
-																throw new Error(err as string);
-															}
-															mutate(async (data) => {
-																return {
-																	...data,
-																	orders: data.data
-																		.map((x) => x.orders)
-																		.flat(1)
-																		.map((order) => {
-																			if (
-																				order.orderId ===
-																				changeStatusParams.orderId
-																			) {
-																				return {
-																					...order,
-																					status:
-																						changeStatusParams.changedStatus,
-																				};
-																			} else {
-																				return order;
-																			}
-																		}),
-																};
-															});
-															onClose();
-														}}
+														onClick={changeOrderStatus}
 														isDisabled={
 															changeStatusParams.currentStatus ===
 															changeStatusParams.changedStatus

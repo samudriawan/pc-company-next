@@ -145,12 +145,22 @@ export default function ProductInfo({ product }: PageProps) {
 								marginBlock="3rem"
 							>
 								<Center>Qty:</Center>
-								<Select ref={qtyRef} defaultValue={'1'}>
-									<option value="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
-									<option value="4">4</option>
-									<option value="5">5</option>
+								<Select ref={qtyRef} defaultValue={'1'} bg={'black'}>
+									<option value="1" style={{ background: 'black' }}>
+										1
+									</option>
+									<option value="2" style={{ background: 'black' }}>
+										2
+									</option>
+									<option value="3" style={{ background: 'black' }}>
+										3
+									</option>
+									<option value="4" style={{ background: 'black' }}>
+										4
+									</option>
+									<option value="5" style={{ background: 'black' }}>
+										5
+									</option>
 								</Select>
 							</Stack>
 							<Button

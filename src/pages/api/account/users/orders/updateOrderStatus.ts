@@ -42,6 +42,13 @@ export default async function updateOrderStatusHandler(
 		});
 		// .select('orders -_id');
 
+		let addedStatus = [
+			{
+				status: body.changedStatus,
+				updatedTime: new Date().toISOString(),
+			},
+		];
+
 		let isChangeStatusSuccess: boolean = true;
 		let responseData: ResponseJson = {
 			status: 200,
@@ -81,6 +88,7 @@ export default async function updateOrderStatusHandler(
 				};
 				isChangeStatusSuccess = false;
 				break;
+
 			case 'PROCESSING':
 				if (userStatus !== 'PAID') {
 					responseData.status = 400;
@@ -92,6 +100,7 @@ export default async function updateOrderStatusHandler(
 					isChangeStatusSuccess = false;
 				}
 				break;
+
 			case 'SHIPPED':
 				if (userStatus === 'DELIVERED' || userStatus === 'COMPLETED') {
 					responseData.status = 400;
@@ -101,8 +110,17 @@ export default async function updateOrderStatusHandler(
 						data: null,
 					};
 					isChangeStatusSuccess = false;
+					break;
+				}
+
+				if (userStatus === 'PAID') {
+					addedStatus.unshift({
+						status: 'PROCESSING',
+						updatedTime: new Date().toISOString(),
+					});
 				}
 				break;
+
 			case 'DELIVERED':
 				if (userStatus === 'COMPLETED') {
 					responseData.status = 400;
@@ -112,8 +130,62 @@ export default async function updateOrderStatusHandler(
 						data: null,
 					};
 					isChangeStatusSuccess = false;
+					break;
+				}
+				if (userStatus === 'PAID') {
+					addedStatus.unshift(
+						{
+							status: 'PROCESSING',
+							updatedTime: new Date().toISOString(),
+						},
+						{
+							status: 'SHIPPED',
+							updatedTime: new Date().toISOString(),
+						}
+					);
+				} else if (userStatus === 'PROCESSING') {
+					addedStatus.unshift({
+						status: 'SHIPPED',
+						updatedTime: new Date().toISOString(),
+					});
 				}
 				break;
+
+			case 'COMPLETED':
+				if (userStatus === 'PAID') {
+					addedStatus.unshift(
+						{
+							status: 'PROCESSING',
+							updatedTime: new Date().toISOString(),
+						},
+						{
+							status: 'SHIPPED',
+							updatedTime: new Date().toISOString(),
+						},
+						{
+							status: 'DELIVERED',
+							updatedTime: new Date().toISOString(),
+						}
+					);
+				} else if (userStatus === 'PROCESSING') {
+					addedStatus.unshift(
+						{
+							status: 'SHIPPED',
+							updatedTime: new Date().toISOString(),
+						},
+						{
+							status: 'DELIVERED',
+							updatedTime: new Date().toISOString(),
+						}
+					);
+				} else if (userStatus === 'SHIPPED') {
+					addedStatus.unshift({
+						status: 'DELIVERED',
+						updatedTime: new Date().toISOString(),
+					});
+				}
+				break;
+
 			default:
 				responseData.status = 400;
 				responseData.responseJson = {
@@ -134,8 +206,7 @@ export default async function updateOrderStatusHandler(
 					$set: { 'orders.$[b].status': body.changedStatus },
 					$push: {
 						'orders.$[a].statusLogs': {
-							status: body.changedStatus,
-							updatedTime: new Date().toISOString(),
+							$each: addedStatus,
 						},
 					},
 				},
