@@ -14,7 +14,7 @@ const theme = extendTheme({
 	...config,
 	styles: {
 		global: {
-			body: {
+			'html, body': {
 				position: 'relative',
 				bg: 'black',
 				color: 'white',
