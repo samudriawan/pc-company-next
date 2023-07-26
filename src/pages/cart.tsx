@@ -40,6 +40,7 @@ export default function Cart() {
 	const [subTotal, setSubTotal] = useState(0);
 	const [showPaypalButton, setShowPaypalButton] = useState(false);
 	const [paymentSuccess, setPaymentSuccess] = useState(false);
+	const [checkoutError, setCheckoutError] = useState('');
 	const qtyInputRef = useRef<HTMLInputElement>(null);
 	const { data: session } = useSession();
 
@@ -309,18 +310,27 @@ export default function Cart() {
 									isDisabled={showPaypalButton}
 									_hover={{ transform: 'scale(1.02)' }}
 									onClick={() => {
+										setCheckoutError('');
 										fetch('/api/cart', {
 											method: 'POST',
 											body: JSON.stringify({ cart: cartItems }),
 											headers: { 'Content-type': 'application/json' },
 										})
 											.then((res) => res.json())
-											.then((total) => setSubTotal(total))
-											.finally(() => setShowPaypalButton(true));
+											.then((result) => {
+												if (result.success) {
+													setSubTotal(result.data);
+													setShowPaypalButton(true);
+												} else {
+													setCheckoutError(result.error);
+												}
+											})
+											.catch((err) => console.log('/api/cart error: ', err));
 									}}
 								>
 									Checkout
 								</Button>
+								{checkoutError ? <Text>{checkoutError}</Text> : null}
 								<PayPalScriptProvider
 									options={{
 										'client-id': process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
