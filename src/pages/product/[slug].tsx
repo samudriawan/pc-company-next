@@ -139,6 +139,7 @@ export default function ProductInfo({ product }: PageProps) {
 								<Text>Buy</Text>
 							</Center>
 							<Divider />
+							<Text>Stock: {product.stock}</Text>
 							<Stack
 								direction="row"
 								w={{ base: '100%', lg: 'fit-content' }}
@@ -146,19 +147,39 @@ export default function ProductInfo({ product }: PageProps) {
 							>
 								<Center>Qty:</Center>
 								<Select ref={qtyRef} defaultValue={'1'} bg={'black'}>
-									<option value="1" style={{ background: 'black' }}>
+									<option
+										value="1"
+										disabled={product.stock === 0}
+										style={{ background: 'black' }}
+									>
 										1
 									</option>
-									<option value="2" style={{ background: 'black' }}>
+									<option
+										value="2"
+										disabled={product.stock < 2}
+										style={{ background: 'black' }}
+									>
 										2
 									</option>
-									<option value="3" style={{ background: 'black' }}>
+									<option
+										value="3"
+										disabled={product.stock < 3}
+										style={{ background: 'black' }}
+									>
 										3
 									</option>
-									<option value="4" style={{ background: 'black' }}>
+									<option
+										value="4"
+										disabled={product.stock < 4}
+										style={{ background: 'black' }}
+									>
 										4
 									</option>
-									<option value="5" style={{ background: 'black' }}>
+									<option
+										value="5"
+										disabled={product.stock < 5}
+										style={{ background: 'black' }}
+									>
 										5
 									</option>
 								</Select>

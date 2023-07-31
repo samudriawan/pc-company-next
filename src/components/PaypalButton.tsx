@@ -71,12 +71,16 @@ export default function PaypalButton({
 								.then(({ error, data }) => {
 									if (error) {
 										setCheckoutError(error);
+										return;
 									}
 									dispatch({ type: CART_ACTION.CLEAR_CART });
 									paymentSuccessHandler(true);
 								});
 						} catch (err) {
-							setCheckoutError(err);
+							console.log('paypal capture order error: ', err);
+							setCheckoutError(
+								'Error occurs on server when accessing database.'
+							);
 						}
 					});
 				}}

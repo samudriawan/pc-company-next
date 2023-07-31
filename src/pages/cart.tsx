@@ -66,7 +66,7 @@ export default function Cart() {
 		(isSuccess: boolean) => {
 			setPaymentSuccess(isSuccess);
 		},
-		[paymentSuccess]
+		[setPaymentSuccess]
 	);
 
 	if (cartItems.length === 0)
