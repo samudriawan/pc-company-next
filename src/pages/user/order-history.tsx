@@ -202,7 +202,7 @@ export default function OrderHistory() {
 														<ModalBody>
 															<UnorderedList>
 																{statusHistoryLogs.map((log) => (
-																	<ListItem key={log.updatedTime} mb={'2'}>
+																	<ListItem key={log.status} mb={'2'}>
 																		{new Date(log.updatedTime).toLocaleString()}{' '}
 																		-{' '}
 																		<span style={{ fontWeight: 'bold' }}>
