@@ -4,12 +4,14 @@ import {
 	Alert,
 	Box,
 	Button,
+	Center,
 	Divider,
 	FormControl,
 	FormLabel,
 	Grid,
 	GridItem,
 	Input,
+	Spinner,
 	Text,
 } from '@chakra-ui/react';
 import useSWR from 'swr';
@@ -37,7 +39,11 @@ export default function UserSettings() {
 	const [changePwdBtnLoading, setChangePwdBtnLoading] = useState(false);
 	const [updateSuccess, setUpdateSuccess] = useState('');
 	const { data: session } = useSession({ required: true });
-	const { data: resp, mutate } = useSWR<ResponseData>(
+	const {
+		data: resp,
+		isLoading,
+		mutate,
+	} = useSWR<ResponseData>(
 		session && session.user
 			? `/api/account/users/?id=${session?.user ? session?.user?.id : ''}`
 			: null,
@@ -162,167 +168,173 @@ export default function UserSettings() {
 				Profile
 			</Text>
 			<Divider my="2rem" />
-			<Grid
-				as="form"
-				w="100%"
-				templateColumns={{ base: '1fr', md: 'repeat(12,minmax(0,1fr))' }}
-				gap="6"
-			>
-				<GridItem gridColumn={{ base: 'span 12', lg: 'span 6' }}>
-					<FormControl>
-						<FormLabel>Username</FormLabel>
-						<Input
-							type="text"
-							value={usernameInput.username}
-							onChange={(e) =>
-								setUsernameInput({
-									...usernameInput,
-									username: e.target.value,
-								})
-							}
-							placeholder="Username"
-							isDisabled={session?.user.role === 'admin'}
-						/>
-					</FormControl>
-				</GridItem>
-				<GridItem gridColumn={{ base: 'span 12', lg: 'span 6' }}>
-					<FormControl>
-						<FormLabel>Email address</FormLabel>
-						<Input
-							type="email"
-							value={session?.user.email}
-							errorBorderColor="red.300"
-							placeholder="Email Address"
-							isDisabled
-						/>
-					</FormControl>
-				</GridItem>
-				{usernameInput.errorMsg && (
-					<GridItem gridColumn={'span 12'} ms={'auto'}>
-						<Text fontSize={'sm'} color={'red'}>
-							{usernameInput.errorMsg}
-						</Text>
-					</GridItem>
-				)}
-				<GridItem gridColumn={'span 12'} ms="auto" me="0">
-					<Button
-						minW={'140px'}
-						me={{ base: '2', md: '0' }}
-						color="white"
-						bg="neon.blue"
-						letterSpacing={'1px'}
-						onClick={updateUserHandler}
-						isDisabled={resp?.data.username === usernameInput.username.trim()}
-						_disabled={{
-							color: 'grey',
-							bg: 'whiteAlpha.400',
-							opacity: '0.4',
-							boxShadow: 'md',
-							cursor: 'not-allowed',
-						}}
-						isLoading={userBtnLoading}
-						transition="transform 200ms ease"
-						_hover={{ transform: 'scale(1.03)' }}
-						_active={{ transform: 'scale(0.97)' }}
-					>
-						Save
-					</Button>
-				</GridItem>
-				<GridItem gridColumn={'span 12'}>
-					<Text>Change Password</Text>
-				</GridItem>
-				<GridItem gridColumn={'span 12'}>
-					<Divider />
-				</GridItem>
-				<GridItem gridColumn={'span 12'}>
-					<Box w={{ base: 'full', lg: '50%' }} pe={{ base: '0', lg: '3' }}>
-						<FormControl mx={'auto'}>
-							<FormLabel>Current Password</FormLabel>
+			{isLoading ? (
+				<Center my="4">
+					<Spinner />
+				</Center>
+			) : (
+				<Grid
+					as="form"
+					w="100%"
+					templateColumns={{ base: '1fr', md: 'repeat(12,minmax(0,1fr))' }}
+					gap="6"
+				>
+					<GridItem gridColumn={{ base: 'span 12', lg: 'span 6' }}>
+						<FormControl>
+							<FormLabel>Username</FormLabel>
 							<Input
-								type="password"
-								value={changePasswordInput.current}
+								type="text"
+								value={usernameInput.username}
 								onChange={(e) =>
-									setChangePasswordInput({
-										...changePasswordInput,
-										current: e.target.value,
+									setUsernameInput({
+										...usernameInput,
+										username: e.target.value,
 									})
 								}
-								placeholder="Your current password"
+								placeholder="Username"
 								isDisabled={session?.user.role === 'admin'}
 							/>
 						</FormControl>
-					</Box>
-				</GridItem>
-				<GridItem gridColumn={{ base: 'span 12', lg: 'span 6' }}>
-					<FormControl>
-						<FormLabel>New Password</FormLabel>
-						<Input
-							type="password"
-							value={changePasswordInput.new}
-							onChange={(e) =>
-								setChangePasswordInput({
-									...changePasswordInput,
-									new: e.target.value,
-								})
-							}
-							placeholder="Your new password"
-							isDisabled={session?.user.role === 'admin'}
-						/>
-					</FormControl>
-				</GridItem>
-				<GridItem gridColumn={{ base: 'span 12', lg: 'span 6' }}>
-					<FormControl>
-						<FormLabel>Retype New Password</FormLabel>
-						<Input
-							type="password"
-							value={changePasswordInput.retype}
-							onChange={(e) =>
-								setChangePasswordInput({
-									...changePasswordInput,
-									retype: e.target.value,
-								})
-							}
-							placeholder="Type your new password again"
-							isDisabled={session?.user.role === 'admin'}
-						/>
-					</FormControl>
-				</GridItem>
-				{changePasswordInput.errorMsg && (
-					<GridItem gridColumn={'span 12'} ms={'auto'}>
-						<Text fontSize={'sm'} color={'red'}>
-							{changePasswordInput.errorMsg}
-						</Text>
 					</GridItem>
-				)}
-				<GridItem gridColumn={'span 12'} ms="auto" me="0">
-					<Button
-						minW={'140px'}
-						me={{ base: '2', md: '0' }}
-						color="white"
-						bg="neon.blue"
-						letterSpacing={'1px'}
-						onClick={changePasswordHandler}
-						isDisabled={
-							!changePasswordInput.current ||
-							!changePasswordInput.new ||
-							!changePasswordInput.retype
-						}
-						_disabled={{
-							color: 'grey',
-							bg: 'whiteAlpha.400',
-							opacity: '0.4',
-							boxShadow: 'md',
-							cursor: 'not-allowed',
-						}}
-						isLoading={changePwdBtnLoading}
-						transition="transform 200ms ease"
-						_hover={{ transform: 'scale(1.03)' }}
-						_active={{ transform: 'scale(0.97)' }}
-					>
-						Change Password
-					</Button>
-				</GridItem>
-			</Grid>
+					<GridItem gridColumn={{ base: 'span 12', lg: 'span 6' }}>
+						<FormControl>
+							<FormLabel>Email address</FormLabel>
+							<Input
+								type="email"
+								value={session?.user.email}
+								errorBorderColor="red.300"
+								placeholder="Email Address"
+								isDisabled
+							/>
+						</FormControl>
+					</GridItem>
+					{usernameInput.errorMsg && (
+						<GridItem gridColumn={'span 12'} ms={'auto'}>
+							<Text fontSize={'sm'} color={'red'}>
+								{usernameInput.errorMsg}
+							</Text>
+						</GridItem>
+					)}
+					<GridItem gridColumn={'span 12'} ms="auto" me="0">
+						<Button
+							minW={'140px'}
+							me={{ base: '2', md: '0' }}
+							color="white"
+							bg="neon.blue"
+							letterSpacing={'1px'}
+							onClick={updateUserHandler}
+							isDisabled={resp?.data.username === usernameInput.username.trim()}
+							_disabled={{
+								color: 'grey',
+								bg: 'whiteAlpha.400',
+								opacity: '0.4',
+								boxShadow: 'md',
+								cursor: 'not-allowed',
+							}}
+							isLoading={userBtnLoading}
+							transition="transform 200ms ease"
+							_hover={{ transform: 'scale(1.03)' }}
+							_active={{ transform: 'scale(0.97)' }}
+						>
+							Save
+						</Button>
+					</GridItem>
+					<GridItem gridColumn={'span 12'}>
+						<Text>Change Password</Text>
+					</GridItem>
+					<GridItem gridColumn={'span 12'}>
+						<Divider />
+					</GridItem>
+					<GridItem gridColumn={'span 12'}>
+						<Box w={{ base: 'full', lg: '50%' }} pe={{ base: '0', lg: '3' }}>
+							<FormControl mx={'auto'}>
+								<FormLabel>Current Password</FormLabel>
+								<Input
+									type="password"
+									value={changePasswordInput.current}
+									onChange={(e) =>
+										setChangePasswordInput({
+											...changePasswordInput,
+											current: e.target.value,
+										})
+									}
+									placeholder="Your current password"
+									isDisabled={session?.user.role === 'admin'}
+								/>
+							</FormControl>
+						</Box>
+					</GridItem>
+					<GridItem gridColumn={{ base: 'span 12', lg: 'span 6' }}>
+						<FormControl>
+							<FormLabel>New Password</FormLabel>
+							<Input
+								type="password"
+								value={changePasswordInput.new}
+								onChange={(e) =>
+									setChangePasswordInput({
+										...changePasswordInput,
+										new: e.target.value,
+									})
+								}
+								placeholder="Your new password"
+								isDisabled={session?.user.role === 'admin'}
+							/>
+						</FormControl>
+					</GridItem>
+					<GridItem gridColumn={{ base: 'span 12', lg: 'span 6' }}>
+						<FormControl>
+							<FormLabel>Retype New Password</FormLabel>
+							<Input
+								type="password"
+								value={changePasswordInput.retype}
+								onChange={(e) =>
+									setChangePasswordInput({
+										...changePasswordInput,
+										retype: e.target.value,
+									})
+								}
+								placeholder="Type your new password again"
+								isDisabled={session?.user.role === 'admin'}
+							/>
+						</FormControl>
+					</GridItem>
+					{changePasswordInput.errorMsg && (
+						<GridItem gridColumn={'span 12'} ms={'auto'}>
+							<Text fontSize={'sm'} color={'red'}>
+								{changePasswordInput.errorMsg}
+							</Text>
+						</GridItem>
+					)}
+					<GridItem gridColumn={'span 12'} ms="auto" me="0">
+						<Button
+							minW={'140px'}
+							me={{ base: '2', md: '0' }}
+							color="white"
+							bg="neon.blue"
+							letterSpacing={'1px'}
+							onClick={changePasswordHandler}
+							isDisabled={
+								!changePasswordInput.current ||
+								!changePasswordInput.new ||
+								!changePasswordInput.retype
+							}
+							_disabled={{
+								color: 'grey',
+								bg: 'whiteAlpha.400',
+								opacity: '0.4',
+								boxShadow: 'md',
+								cursor: 'not-allowed',
+							}}
+							isLoading={changePwdBtnLoading}
+							transition="transform 200ms ease"
+							_hover={{ transform: 'scale(1.03)' }}
+							_active={{ transform: 'scale(0.97)' }}
+						>
+							Change Password
+						</Button>
+					</GridItem>
+				</Grid>
+			)}
 		</UserDashboardLayout>
 	);
 }
