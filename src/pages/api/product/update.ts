@@ -25,6 +25,20 @@ export default async function updateHandler(
 	await dbConnect();
 
 	if (req.query.id && req.body) {
+		if (req.body.price <= 0)
+			return res.status(400).json({
+				success: false,
+				error: 'Product price must be above 0.',
+				data: null,
+			});
+
+		if (req.body.stock < 0)
+			return res.status(400).json({
+				success: false,
+				error: 'Product stock can not be negative value.',
+				data: null,
+			});
+
 		const foundProduct = await Product.findOne({
 			_id: req.query.id,
 		});

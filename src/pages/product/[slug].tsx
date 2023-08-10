@@ -195,6 +195,7 @@ export default function ProductInfo({ product }: PageProps) {
 								_active={{ transform: 'scale(0.97)' }}
 								ref={addToCartBtnRef}
 								onClick={handleAddToCart}
+								isDisabled={product.stock === 0}
 							>
 								Add to cart
 							</Button>

@@ -45,7 +45,7 @@ export default function ProductEditForm({ productData, mutate }: Props) {
 		// forcing rerender with latest value
 		setInputForm(() => productObj);
 		setPerformanceForm(() => productObj.performance);
-	}, [productData]);
+	}, []);
 
 	async function handleSave(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
@@ -349,7 +349,10 @@ export default function ProductEditForm({ productData, mutate }: Props) {
 							name={'stock'}
 							value={inputForm.stock}
 							onChange={(e) =>
-								setInputForm({ ...inputForm, [e.target.name]: e.target.value })
+								setInputForm({
+									...inputForm,
+									[e.target.name]: parseInt(e.target.value),
+								})
 							}
 							placeholder={'Stock'}
 							isRequired
